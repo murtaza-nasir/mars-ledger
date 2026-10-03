@@ -1,0 +1,107 @@
+site_name: Mars Ledger
+site_description: An unofficial table companion for the Terraforming Mars board game. Phones for every player, a living planet on the TV.
+site_url: https://murtaza-nasir.github.io/mars-ledger/
+repo_url: https://github.com/murtaza-nasir/mars-ledger
+copyright: Copyright © 2026 Murtaza Nasir, Beth Nguyen and Mars Ledger contributors.
+repo_name: mars-ledger
+edit_uri: ""
+docs_dir: docs
+
+theme:
+  name: material
+  favicon: assets/images/favicon.svg
+  logo: assets/images/favicon.svg
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.sections
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+
+validation:
+  anchors: warn
+  unrecognized_links: warn
+
+plugins:
+  - search:
+      separator: '[\s\-\.\_]+'
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      title: On this page
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/murtaza-nasir/mars-ledger
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Installation: installation.md
+  - Configuration: configuration.md
+  - Playing:
+    - Phones: playing-phones.md
+    - The TV: playing-tv.md
+    - Game modes: game-modes.md
+    - Bots: bots.md
+  - Optional AI features: optional-ai.md
+  - Troubleshooting: troubleshooting.md
+  - Development: development.md
+  - Legal and notice: legal.md
