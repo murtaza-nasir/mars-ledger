@@ -1,0 +1,113 @@
+@import '@fontsource-variable/saira/wdth.css';
+
+:root {
+  /* oxide dusk */
+  --dusk-0: #1A0D0A;
+  --dusk-1: #24130F;
+  --dusk-2: #341A14;
+  --dusk-3: #4A2218;
+  --rim: rgba(255, 196, 160, 0.10);
+  --rim-strong: rgba(255, 196, 160, 0.22);
+  --ice: #EAF2F4;
+  --ice-dim: rgba(234, 242, 244, 0.62);
+  --ice-faint: rgba(234, 242, 244, 0.34);
+  --ocean: #2F82C0;
+  --ember: #E2502E;
+
+  /* resources, from the physical player board */
+  --mc: #F2C230;
+  --steel: #B07A45;
+  --titanium: #9AA3B8;
+  --plants: #5BBE6A;
+  --energy: #A765DB;
+  --heat: #F0643A;
+  --tr: #6FB8E8;
+
+  /* player colours */
+  --p-red: #E0493A;
+  --p-green: #4FB35E;
+  --p-blue: #3E8FE0;
+  --p-yellow: #F2C230;
+  --p-black: #8A8F9C;
+
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 26px;
+  --ease-out: cubic-bezier(.2, .9, .25, 1);
+  --font: 'Saira Variable', 'Saira', system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body, #root { height: 100%; margin: 0; }
+body {
+  background: var(--dusk-1);
+  color: var(--ice);
+  font-family: var(--font);
+  font-variation-settings: 'wdth' 100;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--tr); outline-offset: 2px; border-radius: 6px; }
+
+/* numerals: the hero type. Wide, heavy, tabular. */
+.num { font-variation-settings: 'wdth' 125; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1; }
+.cond { font-variation-settings: 'wdth' 62; }
+.muted { color: var(--ice-dim); }
+.faint { color: var(--ice-faint); }
+
+/* the grain that sits over every surface, like dust on glass */
+.grain::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 52px; padding: 0 22px; border-radius: var(--radius-m);
+  font-weight: 650; font-variation-settings: 'wdth' 88; font-size: 17px;
+  background: var(--ice); color: var(--dusk-1);
+  transition: transform .15s var(--ease-out), opacity .2s;
+}
+.btn:active { transform: scale(.97); }
+.btn[disabled] { opacity: .35; pointer-events: none; }
+.btn.ghost { background: transparent; color: var(--ice); box-shadow: inset 0 0 0 1.5px var(--rim-strong); }
+.btn.warm { background: var(--mc); color: #2A1A04; }
+.btn.danger { background: var(--ember); color: #fff; }
+
+/* iPhone and iPad browsers (WebKit): no blended full-screen grain, no glass blur, and a plain-blended card
+   sheen. Each of these made layers flicker while cards moved; the panels' own tinted backgrounds stay. */
+body.ios.grain::after { display: none; }
+body.ios * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+body.ios .tm-sheen { mix-blend-mode: normal !important; opacity: calc(var(--sheen, .55) * .42) !important; }
+/* While the lifted card view covers the phone, the page under it is not painted at all on iPhones: its pulses,
+   clock ring and rolling numbers cannot repaint (or keep layers busy) behind the cards (src/client/ui/deck/cover.ts). */
+body.ios.tm-viewer-covered [data-under-viewer] { visibility: hidden; }
+
+/* No stray text caret or selection where someone last clicked: Chrome's caret browsing (F7 key) and TV browsers' caret
+   modes draw a blinking caret in plain text. The TV has no text to copy, so nothing on it selects; phones keep their
+   selection behaviour but hide the caret outside fields. Fields keep their own caret. */
+body.tv { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; caret-color: transparent; }
+body.phone { caret-color: transparent; }
+body.tv :is(input, textarea, [contenteditable]:not([contenteditable="false"])) { -webkit-user-select: text; user-select: text; }
+body :is(input, textarea, [contenteditable]:not([contenteditable="false"])) { caret-color: auto; }
+
+/* TV remote focus: a clear ring on whatever the arrows have reached */
+.tv-focus:focus-visible { outline: 0.2vw solid var(--tr); outline-offset: 0.25vw; }
+
+/* phone tab panels (src/client/ui/Tabs.tsx) */
+@keyframes tm-tab-in { from { opacity: .55; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* The phone's Table tab: slimmer collection chips, so the cards get the room (the chips live in ui/deck/Piles.tsx). */
+.tm-table [data-testid=table-collections] { padding-bottom: 6px !important; }
+.tm-table [data-testid=table-collections] > button { min-height: 34px !important; font-size: 14px !important; padding: 0 12px 0 10px !important; gap: 6px !important; }
+.tm-table [data-testid=table-collections] + p { font-size: 13px !important; margin-bottom: 0 !important; }

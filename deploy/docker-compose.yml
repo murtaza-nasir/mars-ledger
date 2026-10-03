@@ -1,0 +1,53 @@
+# Mars Ledger: the app and the full-game engine. From this folder:
+#   cp ../.env.example .env      # optional; every setting has a default
+#   docker compose up -d
+# Then open http://<your-server>:8080/tv on the TV and scan the QR code with each phone.
+#
+# The images come from GitHub's container registry. To build them on your own machine instead (no registry needed):
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+name: mars-ledger
+
+services:
+  app:
+    image: ${MARS_LEDGER_IMAGE:-ghcr.io/murtaza-nasir/mars-ledger:latest}
+    restart: unless-stopped
+    # tini as PID 1 passes SIGTERM on to node, so a restart takes a moment instead of a 10 s timeout
+    init: true
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      ENGINE_URL: http://engine:8080
+      DATA_DIR: /data
+    ports:
+      - "${MARS_LEDGER_PORT:-8080}:8080"
+    volumes:
+      - app-data:/data
+    networks:
+      - default
+      - engine
+    depends_on:
+      - engine
+
+  # Full-game mode: the open-source Terraforming Mars engine (GPL-3.0), unmodified, pinned to the commit in
+  # ENGINE_COMMIT. No published port and no internet access: only the app reaches it, on the internal network.
+  engine:
+    image: ${MARS_LEDGER_ENGINE_IMAGE:-ghcr.io/murtaza-nasir/mars-ledger-engine:41a1b005de73}
+    restart: unless-stopped
+    init: true
+    environment:
+      PORT: "8080"
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - engine-db:/usr/src/app/db
+    networks:
+      - engine
+
+networks:
+  engine:
+    internal: true
+
+volumes:
+  app-data:
+  engine-db:

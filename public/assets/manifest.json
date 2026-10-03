@@ -1,0 +1,198 @@
+[
+ {
+  "file": "event-animal.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "Deer-like animals grazing on grass under an enormous glass dome on Mars, red desert beyond the glass. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 109,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-asteroid.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "A fiery asteroid streaking down through the thin Martian atmosphere above a rocky plain, glowing trail. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 101,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-attack.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "Sabotage at a Martian mining rig, an explosion and fireball tearing through machinery, debris in the dusty air. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 114,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-city.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "A domed city on Mars at night, warm window lights under huge glass domes, red desert around it. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 103,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-earth.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "Seen from the surface of Mars in the evening sky: a large clearly visible planet Earth, blue oceans and white swirling clouds and green-brown continents, with its grey Moon beside it, hanging above a dark red Martian ridge, a lone small habitat on the plain below. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 212,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-gameend.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "Terraformed Mars seen from orbit: still mostly rust-red and ochre deserts, a long canyon system now filled with a blue sea, a blue northern ocean, patches of green around the shores, thin white clouds, thin blue atmosphere glow at the limb, two small moons. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 215,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-greenery.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "An engineered forest growing inside a Martian crater, lush green trees against red cliffs. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 104,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-heat.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "A glowing beam of focused sunlight from a huge thin mirror in the sky striking a Martian ice field, dense white steam clouds billowing up from the melting ice, orange glow on the ice. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 205,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-jovian.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "A shipyard in orbit around a Jovian moon, giant banded gas planet filling the sky, spacecraft under construction. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 111,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-microbe.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "Extreme macro close-up of colorful microbial mats and bacterial colonies on Martian rock, wet glistening textures. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 110,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-ocean.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "A roaring torrent of bright blue water pouring over red cliffs into a crater, the crater floor already a wide shimmering blue lake with white foam and mist. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 202,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-power.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "A vast solar power array and a glowing fusion reactor complex on a Martian plain. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 108,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-production.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "Industrial dawn over a Martian refinery and mining complex, smokestacks, conveyor lines, first sunlight. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 113,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-science.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "Interior of a research laboratory inside a glass dome on Mars, glowing instruments and screens-free consoles, red landscape outside. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 107,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "event-space.webp",
+  "width": 1920,
+  "height": 1080,
+  "prompt": "A large ring-shaped orbital space station in low orbit above the curved red horizon of Mars, docking ships with glowing engines, stars, sunlit metal. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 206,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "mars-color.jpg",
+  "width": 4096,
+  "height": 2048,
+  "source": "https://planetarymaps.usgs.gov/mosaic/Mars_Viking_ClrMosaic_global_925m.tif",
+  "product": "USGS Astrogeology, Mars Viking Global Color Mosaic 925m (Lanczos-downsampled)",
+  "licence": "Public domain (USGS/NASA), no use constraints"
+ },
+ {
+  "file": "mars-elevation.png",
+  "width": 2048,
+  "height": 1024,
+  "source": "https://planetarymaps.usgs.gov/mosaic/Mars_MGS_MOLA_DEM_mosaic_global_463m.tif",
+  "product": "USGS Astrogeology, Mars MGS MOLA DEM 463m; int16 metres linearly mapped -6507..8582 m to 0..255 (0.5/99.8 percentiles)",
+  "licence": "CC0 / public domain"
+ },
+ {
+  "file": "phone-lobby.webp",
+  "width": 1170,
+  "height": 2532,
+  "prompt": "View from low orbit over the curved horizon of Mars, thin glowing atmosphere line, planet occupying the lower third, deep dark starry space filling the upper two thirds, vertical composition. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 77,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "tv-stage-0.webp",
+  "width": 2560,
+  "height": 1440,
+  "prompt": "A wide valley on Mars seen from a low rise, a long distant ridge across the middle, open sky above, sky just after sunset, a glowing rust-orange band along the horizon fading upward into deep indigo, first faint stars high up, low raking light, barren red dust plains, dry rock, no water, no plants, thin pale sky. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 2026,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "tv-stage-1.webp",
+  "width": 2560,
+  "height": 1440,
+  "prompt": "A wide valley on Mars seen from a low rise, a long distant ridge across the middle, open sky above, sky just after sunset, a glowing rust-orange band along the horizon fading upward into deep indigo, first faint stars high up, low raking light, thin hazy atmosphere, first meltwater streams and frost in the valley floor, faint patches of dark green lichen on rocks. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 2026,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "tv-stage-2.webp",
+  "width": 2560,
+  "height": 1440,
+  "prompt": "A wide valley on Mars seen from a low rise, a long distant ridge across the middle, open sky above, sky at dusk, a rust-orange glow along the horizon fading upward into deep indigo, a few thin clouds, low raking light, shallow blue lakes on the valley floor, green lowlands and meadows, a few small glass domed habitats glowing near the lake. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 2026,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ },
+ {
+  "file": "tv-stage-3.webp",
+  "width": 2560,
+  "height": 1440,
+  "prompt": "A wide valley on Mars seen from a low rise, a long distant ridge across the middle, open sky above, sky at sunset, a warm rose-gold glow along the horizon rising into deep blue, scattered clouds lit from below, low raking light, reflections on the water, a wide blue sea filling the valley, dense forests on the slopes, glowing domed cities along the shore. Cinematic painterly matte painting, realistic science fiction concept art, Mars at dusk, oxide rust and deep indigo palette, dark umber shadows, ember orange accents, cold ice-white highlights, volumetric dust haze, atmospheric perspective, restrained composition, soft rim light, high detail. No text, no lettering, no logos, no watermark, no border.",
+  "seed": 2026,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps",
+  "licence": "generated for this project (CC BY 4.0, see THIRD_PARTY.md)"
+ }
+]

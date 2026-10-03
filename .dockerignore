@@ -1,0 +1,22 @@
+# Only what the image build reads (see Dockerfile). Generated card data are rebuilt inside the image.
+*
+!package.json
+!package-lock.json
+!index.html
+!vite.config.ts
+!tsconfig.json
+!ENGINE_COMMIT
+!LICENSE
+!THIRD_PARTY.md
+!tools/fetch-data.mjs
+!tools/check-data.mjs
+!tools/check-data.d.mts
+!tools/extract-cards.ts
+!tools/extract-boards.ts
+!tools/build-cards.ts
+!cards/overrides
+!public
+!src
+!server-assets
+src/shared/data/*.json
+src/shared/data/.engine-commit

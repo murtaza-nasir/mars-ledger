@@ -1,0 +1,19 @@
+# Build both images on this machine instead of pulling them:
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+# The app builds from this repository (it fetches the card data from the engine's GitHub repository while it builds).
+# The engine builds from github.com/terraforming-mars/terraforming-mars at ENGINE_COMMIT with upstream's Dockerfile.
+# Both need network access to github.com; the engine takes several minutes the first time.
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: mars-ledger:local
+    pull_policy: build
+
+  engine:
+    build:
+      # keep in step with ../ENGINE_COMMIT
+      context: https://github.com/terraforming-mars/terraforming-mars.git#${ENGINE_COMMIT:-41a1b005de737058fbb94249ed2ec5252a2e328f}
+    image: mars-ledger-engine:local
+    pull_policy: build

@@ -1,0 +1,17 @@
+# HTTPS in front of Mars Ledger with Caddy (https://caddyserver.com). Optional: everything works over plain HTTP
+# on a LAN. HTTPS adds the phones' share sheet for posters, and the camera on phones that refuse it over HTTP.
+#
+# Replace mars.example.com with a name that points at this machine. With a public name and ports 80 and 443 open,
+# Caddy gets a Let's Encrypt certificate by itself. For a LAN-only name, see the "tls internal" block below.
+# Caddy proxies WebSockets (/ws) without extra settings.
+
+mars.example.com {
+	reverse_proxy 127.0.0.1:8080
+}
+
+# A LAN-only name with Caddy's own certificate authority. Each phone must trust Caddy's root certificate once
+# (caddy trust, then install the root.crt from Caddy's data folder on the phone).
+#mars.home.arpa {
+#	tls internal
+#	reverse_proxy 127.0.0.1:8080
+#}

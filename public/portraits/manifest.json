@@ -1,0 +1,110 @@
+{
+ "R00": {
+  "name": "Beginner Corporation",
+  "prompt": "A modest prefabricated habitat module with a single glowing window, a small rover parked beside it and a few hydroponic tents, centred on an open plain. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1557955329,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R03": {
+  "name": "Saturn Systems",
+  "prompt": "A massive, ringed gas giant looms in the background, its pale bands swirling with atmospheric storms. In the foreground, a sleek titanium-hulled research station orbits silently, reflecting the planet's soft, hazy light. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1171641019,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R08": {
+  "name": "CrediCor",
+  "prompt": "A massive, gleaming gold vault stands in the center of a red desert, its heavy doors slightly ajar, revealing a blinding, radiant light from within the depths. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1376193331,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R09": {
+  "name": "PhoboLog",
+  "prompt": "A towering titanium refinery with gleaming metallic pipes and industrial machinery, set against the reddish Martian landscape under a star-filled sky. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 620772261,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R10": {
+  "name": "Point Luna",
+  "prompt": "A lunar mining base on the grey Moon at Earth-rise, titanium ore haulers beside a tall launch tower, the blue Earth hanging large above the horizon. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1170715200,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R13": {
+  "name": "ThorGate",
+  "prompt": "A towering, angular reactor core radiates pulsing amber light from the center of a dark, industrial landscape. Massive conduits snake into the ground, emphasizing the facility's immense energy output and heavy industrial presence. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1557062650,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R16": {
+  "name": "Cheung Shing MARS",
+  "prompt": "A tall crane lowers a gleaming habitat module onto a half-built tower city on the Martian plains at dusk, welding sparks glowing, dust drifting across the scene. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 748967251,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R17": {
+  "name": "Ecoline",
+  "prompt": "A massive glass dome housing a dense, vertical jungle of greenery, with a lone suited figure standing on a central walkway overlooking the lush canopy below. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1537419235,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R18": {
+  "name": "Helion",
+  "prompt": "A massive, glowing orange reactor core pulses with intense energy at the center of a dark, industrial space station, surrounded by intricate piping and metallic structures. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1260141170,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R19": {
+  "name": "Interplanetary Cinematics",
+  "prompt": "A vast, circular glass dome on the Martian surface, its curved walls reflecting the red sky. Inside, rows of empty cinema seats face a massive blank screen, surrounded by polished steel corridors. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1008405220,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R24": {
+  "name": "Mining Guild",
+  "prompt": "Massive industrial fortress complex with towering steel silos and active drilling rigs, centered against a stark Martian horizon. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1770464666,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R27": {
+  "name": "Robinson Industries",
+  "prompt": "A balanced industrial complex on a Martian plateau: a small refinery, a greenhouse dome, solar arrays and a power plant arranged in a neat ring. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1888384032,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R30": {
+  "name": "Teractor",
+  "prompt": "A gleaming Earth-funded spaceport tower at the centre, a shuttle lifting off beside it on a pillar of light, with a small blue Earth hanging in the sky above. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 2012336322,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R31": {
+  "name": "Tharsis Republic",
+  "prompt": "A colossal, terraced administrative complex rises from the red dunes, its geometric tiers glowing with soft amber light under a dusty sky. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 16179284,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R32": {
+  "name": "United Nations Mars Initiative",
+  "prompt": "A sleek, white orbital elevator tethered to a rocky Martian ridge, rising into a thin blue sky. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 436187630,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R34": {
+  "name": "Valley Trust",
+  "prompt": "A research campus nestled in a deep Martian canyon, glass laboratories stepping down the cliff walls with soft light, a river of fog along the valley floor. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 1889277147,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R35": {
+  "name": "Vitor",
+  "prompt": "A gleaming white headquarters spire on a Martian mesa at dusk, terraces of greenhouses around its base and beams of light rising into the sky. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 127607885,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R43": {
+  "name": "Inventrix",
+  "prompt": "A sleek, spherical laboratory station floats in the center, featuring a complex array of glass domes and metallic arms. It hovers above a flat, reddish Martian plain under a dim, hazy sky. Centered subject in a square emblem composition with space around it, cinematic painterly matte painting, realistic science fiction, Mars at dusk, oxide rust and deep indigo palette, volumetric haze, warm rim light, no text, no letters, no logos, no border.",
+  "seed": 565778367,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ }
+}

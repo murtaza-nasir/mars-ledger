@@ -1,0 +1,245 @@
+[
+ {
+  "file": "barren-ice",
+  "oceans": "low",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "cold",
+  "view": "surface",
+  "barren": true
+ },
+ {
+  "file": "barren-orbit",
+  "oceans": "low",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "cold",
+  "view": "orbit",
+  "barren": true
+ },
+ {
+  "file": "barren-surface",
+  "oceans": "low",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "cold",
+  "view": "surface",
+  "barren": true
+ },
+ {
+  "file": "full-lush-dense-orbit",
+  "oceans": "full",
+  "greenery": "lush",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "full-lush-dense-surface",
+  "oceans": "full",
+  "greenery": "lush",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "full-lush-few-orbit",
+  "oceans": "full",
+  "greenery": "lush",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "full-lush-few-surface",
+  "oceans": "full",
+  "greenery": "lush",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "full-sparse-dense-orbit",
+  "oceans": "full",
+  "greenery": "sparse",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "full-sparse-dense-surface",
+  "oceans": "full",
+  "greenery": "sparse",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "full-sparse-few-orbit",
+  "oceans": "full",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "full-sparse-few-surface",
+  "oceans": "full",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "low-lush-dense-orbit",
+  "oceans": "low",
+  "greenery": "lush",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "low-lush-dense-surface",
+  "oceans": "low",
+  "greenery": "lush",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "low-lush-few-orbit",
+  "oceans": "low",
+  "greenery": "lush",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "low-lush-few-surface",
+  "oceans": "low",
+  "greenery": "lush",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "low-sparse-dense-orbit",
+  "oceans": "low",
+  "greenery": "sparse",
+  "cities": "dense",
+  "warmth": "cold",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "low-sparse-dense-surface",
+  "oceans": "low",
+  "greenery": "sparse",
+  "cities": "dense",
+  "warmth": "cold",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "low-sparse-few-orbit",
+  "oceans": "low",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "cold",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "low-sparse-few-surface",
+  "oceans": "low",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "cold",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "mid-lush-dense-orbit",
+  "oceans": "mid",
+  "greenery": "lush",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "mid-lush-dense-surface",
+  "oceans": "mid",
+  "greenery": "lush",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "mid-lush-few-orbit",
+  "oceans": "mid",
+  "greenery": "lush",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "mid-lush-few-surface",
+  "oceans": "mid",
+  "greenery": "lush",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "mid-sparse-dense-orbit",
+  "oceans": "mid",
+  "greenery": "sparse",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "mid-sparse-dense-surface",
+  "oceans": "mid",
+  "greenery": "sparse",
+  "cities": "dense",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ },
+ {
+  "file": "mid-sparse-few-orbit",
+  "oceans": "mid",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "orbit",
+  "barren": false
+ },
+ {
+  "file": "mid-sparse-few-surface",
+  "oceans": "mid",
+  "greenery": "sparse",
+  "cities": "few",
+  "warmth": "warm",
+  "view": "surface",
+  "barren": false
+ }
+]

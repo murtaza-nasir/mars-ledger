@@ -1,0 +1,17 @@
+.env
+vendor/
+node_modules/
+/data/
+dist/
+dist-server/
+dist-ui/
+__pycache__/
+# Engine-derived data, made by `npm run fetch-data` (never committed: card names, card text and maps come from the
+# upstream engine at the commit in ENGINE_COMMIT).
+/cards-src/
+/src/shared/data/*.json
+/src/shared/data/.engine-commit
+/cards/REPORT.md
+# Release exports (tools/release/export.sh) and docs builds
+/release-out/
+/site/site/

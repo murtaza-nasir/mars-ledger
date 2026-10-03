@@ -1,0 +1,1610 @@
+{
+ "001": {
+  "name": "Colonizer Training Camp",
+  "prompt": "A massive domed training facility sits on the icy, reddish surface of a Jovian moon. Thick fog swirls around the base of the structure, where small figures in heavy suits practice maneuvers near a large, cratered landscape. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1437731403,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "002": {
+  "name": "Asteroid Mining Consortium",
+  "prompt": "A massive industrial rig clamps onto a jagged, metallic asteroid drifting in the void near Jupiter. Sparks fly as lasers carve into the rock, revealing veins of shiny silver ore, with the gas giant looming large in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1287347185,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "003": {
+  "name": "Deep Well Heating",
+  "prompt": "A massive industrial borehole drills deep into the rust-colored Martian crust, superheated steam and steam plumes billowing violently from the open shaft. The ground glows with intense orange heat, cracking under the thermal stress as thick white vapor rises into the thin, dusty sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1002204007,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "004": {
+  "name": "Cloud Seeding",
+  "prompt": "Massive aerial drones hover above a vast, steaming Martian ocean, releasing dense white plumes into the dusty sky to thicken the cloud cover. The camera looks up from the water's surface toward the churning, artificial weather systems forming overhead. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 634977988,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "005": {
+  "name": "Search For Life",
+  "prompt": "A rover with a large optical sensor scans a dark, rocky crater floor. Tiny, glowing microbial mats shimmer faintly on the wet stone surface, illuminated by the rover’s harsh headlamps. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1390399058,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "006": {
+  "name": "Inventors' Guild",
+  "prompt": "A sprawling underground laboratory carved into red Martian rock, illuminated by harsh white lights. Scientists in hazmat suits examine holographic blueprints of new machinery, surrounded by cluttered workbenches and experimental prototypes. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1272356840,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "007": {
+  "name": "Martian Rails",
+  "prompt": "Steel train tracks weave through a dusty red valley, connecting distant city domes. A sleek maglev train glides along the elevated rails, kicking up fine red dust against the orange Martian horizon. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1020374910,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "008": {
+  "name": "Capital",
+  "prompt": "A proud Martian capital city of glass towers and domes on the shore of a new blue sea, seen from a ridge at dusk, lights coming on along the waterfront. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 745460190,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "009": {
+  "name": "Asteroid",
+  "prompt": "A massive, jagged asteroid hurtles through the Martian sky, trailing a fiery streak of debris. Below, the reddish landscape shakes as dust billows from the ground, while small figures watch the celestial impact from a rocky ridge. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1533641337,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "010": {
+  "name": "Comet",
+  "prompt": "A massive, icy comet streaks through the Martian sky, trailing a thick, glowing tail of vapor. Its impact flashes brightly above the ochre desert, sending plumes of dust and water vapor erupting from the surface below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1001261980,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "011": {
+  "name": "Big Asteroid",
+  "prompt": "A massive, jagged asteroid hurtles through the thin Martian sky, trailing a fiery plume of disintegrating rock. Below, the rust-colored desert surface shakes as debris falls, while distant figures watch the impact site glow orange. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1286159114,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "012": {
+  "name": "Water Import From Europa",
+  "prompt": "A massive cryogenic transport ship hovers low over a freshly laid, shimmering blue ocean tile on the rust-red Martian surface. Thick plumes of white vapor billow from its underbelly as it releases frozen water, with the icy moon of Europa visible in the distant black sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1436576432,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "013": {
+  "name": "Space Elevator",
+  "prompt": "A towering carbon-nanotube cable stretches from a massive equatorial anchor platform on the Martian surface into the thin red sky. The structure supports a sleek counterweight station orbiting high above the planet, silhouetted against the black void. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 581392934,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "014": {
+  "name": "Development Center",
+  "prompt": "A sleek, white research facility with glass domes sits amidst reddish Martian dunes. Solar panels flank the building, reflecting the dusty sky. Small figures walk toward the entrance. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1019465605,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "015": {
+  "name": "Equatorial Magnetizer",
+  "prompt": "A massive, glowing electromagnetic coil rises from the dusty Martian plains near the equator. Its intense blue field distorts the air, deflecting red dust clouds and casting long, sharp shadows across the barren, rocky terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1271201555,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "016": {
+  "name": "Domed Crater",
+  "prompt": "A massive, transparent dome encloses a lush green crater landscape, with a small city nestled inside. The dome rests on the rusty, rocky Martian surface, its curved glass reflecting the orange sky and distant mountains. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1389211305,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "017": {
+  "name": "Noctis City",
+  "prompt": "A sprawling, illuminated metropolis rises from the dark Martian plains, its dense cluster of skyscrapers glowing with artificial light against the night sky. The city occupies a distinct, isolated section of the landscape, surrounded by the stark, reddish desert terrain under a star-filled void. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 634035775,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "018": {
+  "name": "Methane From Titan",
+  "prompt": "A sleek spacecraft docks at a massive orbital refinery, harvesting methane from Titan's hazy orange atmosphere. Below, the moon's icy surface glows faintly, while the station's glowing engines vent heat into the void of space. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 896893870,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "019": {
+  "name": "Imported Hydrogen",
+  "prompt": "A sleek cargo shuttle descends through the dusty Martian sky, releasing a plume of white vapor as it deposits cargo. Below, a vast, newly formed dark ocean reflects the rust-colored horizon under a pale sun. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1114813240,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "020": {
+  "name": "Research Outpost",
+  "prompt": "A small, modular research station with solar arrays and a dome, isolated on a flat basalt plain. Surrounding it are vast, empty red dunes and distant jagged mountains under a pale pink sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 277043295,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "021": {
+  "name": "Phobos Space Haven",
+  "prompt": "A sprawling orbital station clings to the cratered surface of Phobos, featuring glowing titanium refineries and a dense cluster of habitats. The camera looks down from the small moon’s gray, pockmarked terrain toward the reddish curve of Mars in the distance. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1736730825,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "022": {
+  "name": "Black Polar Dust",
+  "prompt": "A massive, dark grey dust cloud billows over the white polar ice caps. A sleek automated drilling rig pierces the crust, churning up soot-laden slush that flows into a newly forming, murky ocean basin. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2123184499,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "023": {
+  "name": "Arctic Algae",
+  "prompt": "A frozen arctic landscape under a pale Mars sky, where clusters of vibrant green algae bloom in shallow, icy ponds. Tiny distant figures in heavy suits observe the thriving vegetation near the edge of a newly formed, partially frozen ocean. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 160041445,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "024": {
+  "name": "Predators",
+  "prompt": "A pack of sleek, four-legged predators stalks across a dusty, reddish Martian plain. Their muscular forms move in unison, eyes fixed on a distant prey, under a hazy pink sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 401513542,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "025": {
+  "name": "Space Station",
+  "prompt": "A sleek, multi-module orbital habitat circles Mars, its white hull gleaming under the sun. Solar panels extend like wings against the black void, with the red planet's surface visible in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1625926864,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "026": {
+  "name": "Eos Chasma National Park",
+  "prompt": "A vast, warm canyon floor dotted with lush green vegetation and grazing herds. Small, futuristic observation domes are nestled among the rock formations, overlooking the fertile basin under a hazy Martian sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2044788074,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "027": {
+  "name": "Interstellar Colony Ship",
+  "prompt": "A massive, sleek spacecraft with glowing engine trails departs Earth's atmosphere, its hull reflecting the blue planet below. The ship ascends through swirling clouds into the blackness of space, leaving a faint contrail behind as it heads toward the stars. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 250072572,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "028": {
+  "name": "Security Fleet",
+  "prompt": "A squadron of sleek, angular fighter spacecraft hovers in formation against the blackness of orbit. Their metallic hulls reflect the distant sun, with red navigation lights glowing on their wings. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 509137005,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "029": {
+  "name": "Cupola City",
+  "prompt": "A sprawling dome city nestled in a Martian valley, featuring tiered residential blocks and glowing interior lights. Dark red dust surrounds the transparent structure under a hazy orange sky, with distant mountains fading into the atmospheric haze. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1767891195,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "030": {
+  "name": "Lunar Beam",
+  "prompt": "A massive, curved solar reflector hovers in Earth’s orbit, angled to project a blinding, concentrated beam of white light. The intense beam strikes a barren, rocky lunar surface, creating a glowing crater of superheated stone and rising plumes of steam. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 160983326,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "031": {
+  "name": "Optimal Aerobraking",
+  "prompt": "A sleek spacecraft with glowing orange thrusters skims through the thin Martian atmosphere, leaving a fiery contrail behind. The view is from a low angle, capturing the intense friction and heat against the dusty red horizon. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2124372360,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "032": {
+  "name": "Underground City",
+  "prompt": "A sprawling subterranean metropolis carved into rust-colored Martian bedrock, illuminated by pulsing amber lights. Massive ventilation shafts and steel support beams frame the cavernous hall, with tiny figures moving through the bustling underground streets. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1737885746,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "033": {
+  "name": "Regolith Eaters",
+  "prompt": "Microscopic green bacteria cluster in a dark, rocky trench on the Martian surface. They glow faintly as they consume the iron-rich regolith, releasing tiny bubbles of oxygen into the dusty air. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 277952676,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "034": {
+  "name": "GHG Producing Bacteria",
+  "prompt": "Tiny translucent bubbles of gas rise from a shallow, rust-colored puddle in a dusty crater. The liquid surface shimmers with faint green algae, while the surrounding Martian soil remains dry and cracked under a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 250981639,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "035": {
+  "name": "Ants",
+  "prompt": "A close-up of a colony of large, iridescent insects crawling over reddish Martian soil. They cluster around a small patch of pale green moss, their segmented bodies glistening under the harsh sunlight. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2045943185,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "036": {
+  "name": "Release of Inert Gases",
+  "prompt": "Vast plumes of pale, inert gas billow from deep underground vents, drifting across the rust-colored Martian plains. The hazy atmosphere thickens as the gases rise, diffusing sunlight over the rocky terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1627114539,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "037": {
+  "name": "Nitrogen-Rich Asteroid",
+  "prompt": "A massive, irregular asteroid with deep blue atmospheric swirls drifts past the rust-colored Martian horizon. Its surface is pitted and rocky, casting long shadows across the barren, ochre plains below under a hazy, dusty sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 402455741,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "038": {
+  "name": "Rover Construction",
+  "prompt": "A heavy industrial rover with large treaded wheels stands on reddish dust, its mechanical arm extended toward a newly constructed city dome. The scene captures the moment of delivery, with the rover positioned in the foreground against the backdrop of the Martian horizon. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 121889068,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "039": {
+  "name": "Deimos Down",
+  "prompt": "A massive, rocky asteroid crashes into the dusty Martian plain, sending up a towering plume of smoke and debris. The impact crater glows with fresh heat, surrounded by scattered chunks of stone and a hazy, reddish sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1883558330,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "040": {
+  "name": "Asteroid Mining",
+  "prompt": "A massive industrial rig clamps onto a rocky asteroid in Jupiter’s shadow. Sparks fly as laser cutters slice through the crust, revealing veins of metallic ore while a tugship waits nearby. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1188691929,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "041": {
+  "name": "Food Factory",
+  "prompt": "A massive, angular industrial complex with glowing vents sits on the rust-colored plains. Conveyor belts move through transparent sections, while steam rises from exhaust stacks into the thin, dusty atmosphere. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 836685647,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "042": {
+  "name": "ArchaeBacteria",
+  "prompt": "A microscopic view of ice crystals forming on a dark Martian rock surface, revealing glowing, filamentous bacterial colonies thriving in the freezing substrate. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 685219573,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "043": {
+  "name": "Carbonate Processing",
+  "prompt": "A massive industrial complex sits on the rust-colored plains, featuring towering smokestacks and intricate piping networks. Thick white vapor billows from the structures, contrasting with the dusty red landscape under a pale yellow sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1607511651,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "044": {
+  "name": "Natural Preserve",
+  "prompt": "A pristine, isolated crater rimmed with rust-red rock and sparse green vegetation, surrounded by vast, untouched Martian desert. A small, sleek observation dome sits at the edge, monitoring the untouched wilderness under a dusty orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1102330816,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "045": {
+  "name": "Nuclear Power",
+  "prompt": "A massive nuclear reactor complex dominates the dusty Martian plains, its white containment domes glowing faintly against the rust-colored horizon. Thick cooling pipes snake across the barren landscape, releasing plumes of steam into the thin, hazy atmosphere under a dim, distant sun. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 917703510,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "046": {
+  "name": "Lightning Harvest",
+  "prompt": "A massive, jagged lightning bolt strikes a dense, metallic collection array in the dusty Martian plains. Sparks cascade down into glowing storage tanks, illuminating the barren red landscape under a hazy, ochre sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 800742124,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "047": {
+  "name": "Algae",
+  "prompt": "Giant translucent green domes filled with swirling phytoplankton float above the surface of a vast, shallow ocean. The water stretches to a hazy horizon under a pale red sky, with gentle ripples disturbing the glassy surface of the aquatic farms. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1488808570,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "048": {
+  "name": "Adapted Lichen",
+  "prompt": "A sprawling, rust-colored lichen colony blankets the reddish Martian regolith, spreading across a rocky outcrop. Tiny green sprouts emerge from the crust, thriving in the thin, dusty atmosphere under a pale orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1208121323,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "049": {
+  "name": "Tardigrades",
+  "prompt": "Tiny, translucent tardigrades crawl over a patch of reddish, porous Martian regolith under a thin, hazy sky. A microscopic view highlights their eight-legged bodies and rounded heads as they navigate the dusty, barren terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1057310589,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "050": {
+  "name": "Virus",
+  "prompt": "A translucent, swirling green mist engulfs a cluster of red shrubs and small grazing creatures in a Martian valley. The organic forms within the haze appear wilting and dissolving into the atmospheric vapor. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1606602392,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "051": {
+  "name": "Miranda Resort",
+  "prompt": "A sleek, white orbital resort station orbits the pale blue moon of Jupiter. Large glass observation domes overlook the gas giant's swirling clouds, with small shuttlecraft docked at its exterior airlocks. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 684064270,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "052": {
+  "name": "Fish",
+  "prompt": "A small, streamlined fish swims through a clear, shallow Martian tidal pool. Sunlight filters through the water onto smooth rocks, while sparse green algae grows on the submerged stones in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 835497908,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "053": {
+  "name": "Lake Marineris",
+  "prompt": "Vast, turquoise waters fill the deep canyon basin under a hazy red sky. Gentle waves lap against rocky shores, with a single small spacecraft hovering above the surface to monitor the new ocean. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1187749666,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "054": {
+  "name": "Small Animals",
+  "prompt": "A herd of small, furry quadrupeds grazes on sparse green vegetation in a shallow crater. The reddish Martian soil surrounds them under a thin, hazy sky, with distant rocky outcrops visible on the horizon. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1487866497,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "055": {
+  "name": "Kelp Farming",
+  "prompt": "Rows of swaying brown-green kelp fronds float in shallow, turquoise Martian shallows. Gentle waves ripple across the sandy seabed under a hazy, ochre sky, with distant dunes visible in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 799554071,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "056": {
+  "name": "Mine",
+  "prompt": "A massive automated mining rig drills into the rust-colored Martian surface, sparks flying as it extracts raw ore. Heavy machinery churns dust in the foreground, with a distant ridge of red rock under a hazy sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 916548525,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "057": {
+  "name": "Vesta Shipyard",
+  "prompt": "A massive orbital shipyard orbits Jupiter, silhouetted against the gas giant’s swirling bands. Massive dry docks and assembly lines surround a sleek spacecraft under construction, with distant moons visible in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1101421371,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "058": {
+  "name": "Beam From A Thorium Asteroid",
+  "prompt": "A massive thorium asteroid drifts near Jupiter, emitting a brilliant white beam of energy toward a distant station. The gas giant's swirling clouds fill the background, while the asteroid's rugged, metallic surface glows with intense radiation. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1360610986,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "059": {
+  "name": "Mangrove",
+  "prompt": "Dense, tangled mangrove roots rise from the surface of a vast, shallow Martian ocean. The gnarled branches support thick green foliage, contrasting with the rust-red shoreline in the distance. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 639530556,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "060": {
+  "name": "Trees",
+  "prompt": "Rows of lush green saplings stand in neat formations across a reddish-brown Martian plain. A gentle breeze rustles the leaves as a thin, hazy orange sky looms above the newly planted forest. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1961860443,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "061": {
+  "name": "Great Escarpment Consortium",
+  "prompt": "A massive, rust-colored canyon wall dominates the Martian horizon, its sheer cliff face scarred by deep vertical fissures. At the base, a sprawling industrial complex with smokestacks and conveyor belts processes raw ore, set against the stark red dust and rocky terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 65580493,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "062": {
+  "name": "Mineral Deposit",
+  "prompt": "A massive, jagged outcrop of dark, metallic ore protrudes from the rusty Martian regolith. Heavy mining drones hover nearby, extracting glowing chunks of steel from the exposed mineral vein. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 451017847,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "063": {
+  "name": "Mining Expedition",
+  "prompt": "Heavy drilling rigs pierce the rust-colored regolith, sending plumes of dust into the thin atmosphere. Exposed rock veins glint under the harsh sunlight, while distant figures oversee the excavation of raw materials. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1843842273,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "064": {
+  "name": "Mining Area",
+  "prompt": "Heavy industrial machinery drills into a rugged, metallic-rich Martian ridge, surrounded by a grid of steel beams and titanium extraction equipment. A small, automated facility sits adjacent to the main drilling site, processing raw ore under a dusty, orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1937922370,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "065": {
+  "name": "Building Industries",
+  "prompt": "A massive automated foundry complex dominates the Martian plain, emitting plumes of white steam from its cooling towers. Steel girders stack high beside the machinery as sparks fly from welding arms, set against a backdrop of rust-red dunes and distant mountains. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 75852244,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "066": {
+  "name": "Land Claim",
+  "prompt": "A dusty red plain under a pale sky, with a single small flag planted in the dry soil, marking a newly claimed patch of land. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 495728750,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "067": {
+  "name": "Mining Rights",
+  "prompt": "A massive automated drilling rig pierces the red Martian crust, its heavy machinery actively extracting raw ore. The industrial structure sits within a rugged, rocky basin, surrounded by piles of extracted minerals under a dusty, orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1787496696,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "068": {
+  "name": "Sponsors",
+  "prompt": "A sponsored supply lander descending on a pillar of flame toward a small Martian outpost at dusk, cargo pods glinting. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2050241624,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "069": {
+  "name": "Electro Catapult",
+  "prompt": "A massive electromagnetic launcher structure dominates a dusty Martian plain, its long arm extended toward the horizon. Dark metallic coils and thick cables connect to a nearby power station, with small maintenance figures visible near the base. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 221455871,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "070": {
+  "name": "Earth Catapult",
+  "prompt": "A massive electromagnetic railgun installation dominates a lush Earth landscape, its long track stretching toward the horizon. A sleek spacecraft sits at the launch point, ready for acceleration, with green forests and a blue sky visible in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1844751386,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "071": {
+  "name": "Advanced Alloys",
+  "prompt": "Gleaming stacks of iridescent titanium and steel ingots rest on a reinforced platform, bathed in the warm glow of a nearby solar array. The polished metal surfaces reflect the rust-colored Martian horizon and scattered dust particles drifting in the thin atmosphere. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 452172940,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "072": {
+  "name": "Birds",
+  "prompt": "A flock of small, feathered birds with iridescent plumage hovers above a lush green meadow on Mars. In the background, a large, rust-colored mountain rises under a pale pink sky, with a few scattered trees dotting the landscape. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 66768182,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "073": {
+  "name": "Mars University",
+  "prompt": "A sprawling, white-domed university complex sits on a reddish plateau, featuring large glass observatories and terraced green gardens. Students in small groups walk between the buildings under a pale orange sky, with distant mountains visible in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1962802592,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "074": {
+  "name": "Viral Enhancers",
+  "prompt": "A translucent, glowing green microbe cluster floats inside a sealed glass observation tank. Tiny, vibrant plant sprouts emerge from the nutrient-rich liquid, illuminated by soft blue laboratory lighting against a dark, sterile background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1788438531,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "075": {
+  "name": "Towing A Comet",
+  "prompt": "A massive comet with a glowing blue nucleus is dragged through the Martian sky by a fleet of sleek spacecraft. The icy tail streams behind it, scattering debris as it heads toward a barren valley below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 496916629,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "076": {
+  "name": "Space Mirrors",
+  "prompt": "A vast array of polished solar mirrors floats in high orbit, angled to reflect brilliant sunlight toward a dark, rust-colored Martian landscape below. The mirrors shimmer with intense white light against the blackness of space, casting sharp, bright beams onto the planet's surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 77007151,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "077": {
+  "name": "Solar Wind Power",
+  "prompt": "A sleek solar sail array unfurls against the black void, its shimmering membranes catching the red sun's glare. Below, the curved horizon of Mars glows with atmospheric haze, while a single spacecraft drifts silently in the upper right. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1938831801,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "078": {
+  "name": "Ice Asteroid",
+  "prompt": "A massive, jagged ice asteroid dominates the Martian sky, trailing a glittering vapor cloud as it plunges toward the dusty surface. Below, vast sheets of water spread across the red terrain, reflecting the bright blue of the incoming celestial body. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1664033832,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "079": {
+  "name": "Quantum Extractor",
+  "prompt": "A sleek, crystalline quantum mining rig hovers above a jagged Martian canyon, emitting a brilliant blue energy beam into the red dust. The machine floats in a magnetic field, surrounded by swirling particles of light and raw energy. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 338171070,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "080": {
+  "name": "Giant Ice Asteroid",
+  "prompt": "A massive, glowing ice asteroid dominates the Martian sky, shedding cascading plumes of water vapor that freeze into fresh ocean tiles below. Distant figures in hazmat suits watch as the cold front erases lush green vegetation from the surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1785508053,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "081": {
+  "name": "Ganymede Colony",
+  "prompt": "A sprawling domed city built into the icy surface of a Jovian moon. Pale blue ice cliffs rise in the background under a hazy sky, with white structures nestled in the frozen terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 493584451,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "082": {
+  "name": "Callisto Penal Mines",
+  "prompt": "A massive, rusted mining rig drills into the icy, pockmarked surface of Callisto. A long conveyor belt carries glowing mineral chunks toward a hovering transport ship, with distant Jovian storms swirling in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 73585145,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "083": {
+  "name": "Giant Space Mirror",
+  "prompt": "A colossal, shimmering parabolic mirror dominates the Martian sky, reflecting brilliant sunlight in a concentrated beam. Below, the dusty terrain glows with intense heat as the focused energy powers distant industrial facilities. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1936056687,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "084": {
+  "name": "Trans-Neptune Probe",
+  "prompt": "A sleek, metallic spacecraft drifts through the void, its dish antenna angled toward a distant, hazy blue planet. Thin streams of energy pulse from its core as it navigates the deep space beyond the outer giants. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1828811980,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "085": {
+  "name": "Commercial District",
+  "prompt": "A sprawling urban complex of sleek, reflective skyscrapers rises from the rust-colored Martian plain. Glass facades catch the pale sunlight, casting long shadows across the dusty ground, with a dense cluster of smaller buildings extending into the horizon. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 436618330,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "086": {
+  "name": "Robotic Workforce",
+  "prompt": "A sleek, multi-armed construction robot stands in a dusty Martian crater, actively assembling a small solar panel array. Its metallic body gleams under the pale sun, casting long shadows across the reddish terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 51320288,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "087": {
+  "name": "Grass",
+  "prompt": "A dense, vibrant carpet of green grass covers a flat, reddish Martian plain. The vegetation is lush and uniform, spreading across the soil under a thin, hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1946690934,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "089": {
+  "name": "Peroxide Power",
+  "prompt": "A gleaming white industrial complex sits on the rust-colored Martian plain, featuring large spherical tanks and interconnected pipes. Thick steam billows from vents into the thin, hazy sky, highlighting the facility's active chemical processing operations. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 330303601,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "090": {
+  "name": "Research",
+  "prompt": "A sleek white research vessel hovers above a red desert, its underbelly open to reveal glowing internal machinery. Two smaller drones descend toward the dusty surface, scanning the terrain with bright blue light beams. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1937211796,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "091": {
+  "name": "Gene Repair",
+  "prompt": "A sterile laboratory module with large tanks holding glowing green plant specimens. Robotic arms manipulate delicate genetic splices under bright white lights, surrounded by racks of scientific instruments and data displays. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 74494210,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "092": {
+  "name": "Io Mining Industries",
+  "prompt": "A massive industrial mining rig anchors into the cratered surface of Io, its heavy machinery extracting bright sulfur deposits. In the distant background, the colossal orange sphere of Jupiter looms over the desolate, rocky landscape. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 494526648,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "093": {
+  "name": "Bushes",
+  "prompt": "Thorny, leafy green bushes sprout from cracked, rust-colored Martian soil. The camera views the dense foliage from a low angle, highlighting the contrast between the vibrant vegetation and the barren, rocky terrain behind them. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1786695726,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "094": {
+  "name": "Mass Converter",
+  "prompt": "A towering metallic converter rises from the rust-colored desert, its base glowing with intense orange heat. Thick cables snake from its core into the rocky ground, while a faint blue energy aura pulses around its upper section. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1947878797,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "095": {
+  "name": "Physics Complex",
+  "prompt": "A sleek, angular research facility with glowing blue energy conduits pulses atop a basalt ridge. Tall antenna arrays and server racks line the interior, while a distant rover patrols the dusty Martian plain below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 52262171,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "096": {
+  "name": "Greenhouses",
+  "prompt": "Rows of translucent domes stretch across a rusty valley, filled with lush green ferns and vines. Sunlight filters through the curved glass, highlighting the dense vegetation thriving within the enclosed structures. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 437527713,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "097": {
+  "name": "Nuclear Zone",
+  "prompt": "A desolate, cracked landscape under a hazy sky, where a massive, humming nuclear reactor dominates the center. Steam rises from the ground, and the air shimmers with heat, emphasizing the intense, artificial warmth radiating from the industrial core. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1829966903,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "098": {
+  "name": "Tropical Resort",
+  "prompt": "A lush, glass-domed resort complex nestled in a vibrant Martian valley, featuring tropical plants and a central pool reflecting the orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2108426662,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "099": {
+  "name": "Toll Station",
+  "prompt": "A massive, angular toll gate structure dominates a high-altitude Martian canyon, its metallic frame stretching across the chasms. Small spacecraft pass through the central aperture while distant figures wait in line on the rocky ridge below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 178993456,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "100": {
+  "name": "Fueled Generators",
+  "prompt": "Towering industrial generators stand in a Martian canyon, belching thick white steam into the red sky. Heavy pipes connect the structures to a distant processing facility, with a small figure in a spacesuit walking along a narrow maintenance catwalk. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 595022058,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "101": {
+  "name": "Ironworks",
+  "prompt": "A massive, rust-colored industrial complex dominates the Martian plains, its towering smokestacks releasing thick plumes of white steam into the thin, dusty atmosphere. Heavy machinery and conveyor belts stretch across the foreground, processing raw ore under the harsh, reddish sunlight. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1416650876,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "102": {
+  "name": "Power Grid",
+  "prompt": "Massive solar panels stretch across the rust-colored desert floor, connected by thick cables to a humming transformer station. A distant rover monitors the array under a pale, hazy Martian sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1299788230,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "103": {
+  "name": "Steelworks",
+  "prompt": "A massive, rust-colored industrial complex with towering smokestacks belching grey plumes into a dusty red sky. Sparks fly from open forges as heavy machinery processes raw ore under a hazy, ochre atmosphere. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 981336400,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "104": {
+  "name": "Ore Processor",
+  "prompt": "A heavy industrial structure with glowing orange furnaces sits on the rust-colored Martian plain, surrounded by piles of raw metal ore. Thick pipes connect the building to the ground, while a faint plume of white vapor rises into the dusty atmosphere. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 605721843,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "105": {
+  "name": "Earth Office",
+  "prompt": "An Earth liaison office station in Mars orbit, a sleek ring of windows glowing warm, with a small blue Earth visible far beyond in the dark sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1394459476,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "106": {
+  "name": "Acquired Company",
+  "prompt": "A corporate shuttle docking at a large gleaming Martian headquarters complex built into a canyon wall at dusk, landing lights along the pad. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1242895566,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "107": {
+  "name": "Media Archives",
+  "prompt": "A massive, gleaming server complex on Earth, surrounded by lush greenery and towering skyscrapers. Data streams visually flow from the building into orbit, connecting to distant spacecraft and Martian habitats. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1024705865,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "108": {
+  "name": "Open City",
+  "prompt": "A sprawling, open-air metropolis rises from the Martian regolith, featuring dense clusters of green vegetation and exposed architecture. The city sprawls across a dusty plain under a hazy sky, with no enclosing domes or walls. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 766302424,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "109": {
+  "name": "Media Group",
+  "prompt": "A broadcast tower of antennas and dish arrays on a Martian mesa at dusk, beams of light fanning out into the indigo sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1521223485,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "110": {
+  "name": "Business Network",
+  "prompt": "A web of glowing communication relays strung across Martian settlements at night, light pulses running along cables between domes. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 980189338,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "111": {
+  "name": "Business Contacts",
+  "prompt": "A sleek orbital station hovering above Earth's blue surface. A cargo shuttle docks at the side, transferring containers to the station's bay. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1298878781,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "112": {
+  "name": "Bribed Committee",
+  "prompt": "A small shuttle arriving at a secluded luxury dome on a cliff edge at dusk, its single window glowing, discreet and exclusive. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1415716726,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "113": {
+  "name": "Solar Power",
+  "prompt": "A vast array of gleaming solar panels stretches across the rust-colored Martian plains, angled to catch the sun. The reflective surfaces shimmer under the bright light, casting long, sharp shadows on the dusty terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 593834001,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "114": {
+  "name": "Breathing Filters",
+  "prompt": "Giant industrial filtration towers stand in a dusty Martian valley, their complex pipe networks glowing faintly against the rust-colored dunes. The camera looks up from the ground, capturing the massive mechanical structures processing the thin atmosphere under a pale yellow sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1023518130,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "115": {
+  "name": "Artificial Photosynthesis",
+  "prompt": "A vast, intricate network of glowing blue bio-reactors spreads across the rusty Martian plains, their translucent membranes pulsing with light. In the background, a distant greenhouse dome emits soft green vapor into the thin, hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1241945380,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "116": {
+  "name": "Artificial Lake",
+  "prompt": "A vast, shallow lake of turquoise water spreads across the rust-colored Martian plains. Gentle ripples disturb the surface, reflecting the pale sky above, while the surrounding terrain remains dry and barren. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1393542302,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "117": {
+  "name": "Geothermal Power",
+  "prompt": "A massive cylindrical drilling rig pierces the red Martian crust, venting plumes of white steam into the dusty sky. Heat shimmering from the ground illuminates the surrounding rocky terrain, emphasizing the intense thermal energy released from below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 604566536,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "118": {
+  "name": "Farming",
+  "prompt": "Rows of vibrant green crops grow in raised terraces on the rusty Martian surface. A large automated irrigation system with silver pipes and misting nozzles sprays water over the fields under a hazy red sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 884468121,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "119": {
+  "name": "Dust Seals",
+  "prompt": "A row of heavy industrial doors seals a massive underground facility, with thick layers of red Martian dust caked on the metal surfaces. The surrounding landscape is arid and barren, emphasizing the dry conditions required for the structure. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1135663375,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "120": {
+  "name": "Urbanized Area",
+  "prompt": "A sprawling Martian metropolis with interconnected glass domes and elevated transit lines. A dense cluster of residential and commercial towers rises from the rust-colored regolith, connected by sleek bridges and illuminated by the setting sun. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 289485416,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "121": {
+  "name": "Sabotage",
+  "prompt": "A massive robotic arm descends from a hovering drone, its claw crushing a stack of gleaming steel ingots into scrap metal on a dusty Martian plateau. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1715864318,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "122": {
+  "name": "Moss",
+  "prompt": "A low, vibrant green carpet of moss spreads across a damp, rocky Martian plain. Behind the vegetation, three distinct blue ocean tiles glimmer under a hazy sky, reflecting the light onto the wet stones. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2135905092,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "123": {
+  "name": "Industrial Center",
+  "prompt": "A massive, rust-red industrial complex with towering smokestacks and conveyor belts sits on the Martian plain. Thick plumes of grey steam rise into the dusty orange sky, highlighting the heavy machinery and steel frameworks. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 138961874,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "124": {
+  "name": "Hired Raiders",
+  "prompt": "A sleek, low-flying interceptor skims over a rust-red canyon, its cargo bay open to reveal stolen steel beams and a crate of currency. Dust trails behind the ship as it speeds away from a distant settlement under a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 372045425,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "125": {
+  "name": "Hackers",
+  "prompt": "A sleek, dark server farm nestled in a Martian crater, glowing with pulsating blue light. Cables snake across the reddish dust toward a distant city, while a small drone hovers nearby, scanning the data flow. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1630258919,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "126": {
+  "name": "GHG Factories",
+  "prompt": "A sprawling industrial complex of towering smokestacks belches thick white vapor into the dusty red sky. The factory sits on a flat plain, surrounded by rust-colored rocks and faint dust devils swirling around its base. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2015532893,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "127": {
+  "name": "Subterranean Reservoir",
+  "prompt": "A massive cylindrical drill pierces the red Martian regolith, releasing a geyser of liquid water that pools into a new, shimmering ocean basin. The surrounding terrain is cracked and wet, with steam rising from the fresh excavation site under a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 254126027,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "128": {
+  "name": "Ecological Zone",
+  "prompt": "A lush, protected marshland on Mars, surrounded by a low fence. Tall reeds and vibrant green shrubs grow densely, while small birds and rabbits forage among the foliage under a pale orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 530233946,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "129": {
+  "name": "Zeppelins",
+  "prompt": "A fleet of silver airships drifts above a sprawling Martian city, their balloons catching the pink sun. Below, domed structures and red dunes stretch toward the horizon, with thin clouds swirling in the atmosphere. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1755155148,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "130": {
+  "name": "Worms",
+  "prompt": "Tiny translucent worms writhing in reddish Martian soil. They cluster near the base of small green plants, with a thin layer of atmosphere visible above. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 140116777,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "131": {
+  "name": "Decomposers",
+  "prompt": "A translucent, bioluminescent pod glows faintly in a shallow Martian tide pool. Inside, clusters of tiny, pulsing microbial colonies drift among decaying organic matter, set against the rust-colored bedrock of the planet's surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2136814527,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "132": {
+  "name": "Fusion Power",
+  "prompt": "A sleek, silver fusion reactor hums in the red Martian desert, its glowing core emitting a soft blue light. Surrounding it are solar panels and a small science outpost, with the planet's curved horizon visible in the background under a dusty sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1716806149,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "133": {
+  "name": "Symbiotic Fungus",
+  "prompt": "A close-up of a vibrant, glowing fungal network spreading across dark Martian regolith. Bioluminescent mycelium threads connect to a nearby industrial machine, pulsing with soft light against the cold, rocky terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 290673299,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "134": {
+  "name": "Extreme-Cold Fungus",
+  "prompt": "A translucent, frost-covered fungal cluster glows faintly on a dark, icy Martian outcrop. The scene is bathed in pale blue twilight, with delicate ice crystals forming on the organism's cap, highlighting its resilience in the frigid air. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 255313712,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "135": {
+  "name": "Advanced Ecosystems",
+  "prompt": "A lush, self-sustaining Martian biome featuring towering red trees, swarms of glowing microbial clouds, and grazing herbivores. The scene captures a thriving, closed-loop ecosystem under a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2016475046,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "136": {
+  "name": "Great Dam",
+  "prompt": "A massive concrete structure spans a narrow canyon, holding back a wide, calm body of blue water. The dam wall features large hydroelectric turbines at its base, with mist rising from the water as it flows through. The surrounding landscape is dry, reddish-brown Martian terrain with sparse vegetation. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1631168028,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "137": {
+  "name": "Cartel",
+  "prompt": "A sleek, dark-colored orbital freighter docks at a massive Earth-space elevator. The ship’s cargo bay is open, revealing a dense grid of glowing, high-tech containers ready for transport to the red planet. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 373200522,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "138": {
+  "name": "Strip Mine",
+  "prompt": "A massive open-pit excavation scar chews into the rust-red Martian regolith. Heavy industrial machinery sits idle at the pit's edge, surrounded by piles of dark ore and exposed rock strata under a hazy, dusty sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 109153051,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "139": {
+  "name": "Wave Power",
+  "prompt": "Massive underwater turbines churn in the deep blue Martian ocean, their rotating blades visible beneath the rippling surface. The camera views the scene from a low angle at the water's edge, with the vast, calm sea stretching toward the horizon under a pale sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1904655245,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "140": {
+  "name": "Lava Flows",
+  "prompt": "Molten orange lava cascades down the steep, rugged slopes of a massive shield volcano. The glowing streams contrast sharply against the dark basalt rock, with thick plumes of volcanic smoke rising into the thin, dusty Martian sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1192990190,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "141": {
+  "name": "Power Plant",
+  "prompt": "A massive geothermal power station pierces the rust-red Martian regolith, its steel towers venting white steam into the thin atmosphere. Thick black cables snake from the facility's base into the ground, connecting to a distant grid of solar panels under a pale blue sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 807183736,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "142": {
+  "name": "Mohole Area",
+  "prompt": "A massive industrial drilling rig pierces the thin, dry crust of the reserved ocean basin, venting thick plumes of steam into the dusty Martian sky. Heavy machinery dominates the barren, rocky terrain, with no water visible beneath the surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 689304770,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "143": {
+  "name": "Large Convoy",
+  "prompt": "A massive freighter with a glowing blue cargo pod detaches from orbit, descending through the Martian atmosphere toward a newly formed coastal plain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1578288212,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "144": {
+  "name": "Titanium Mine",
+  "prompt": "A massive industrial drill burrows into rust-red Martian bedrock, extracting shimmering silver ore. Heavy machinery and conveyor belts transport raw materials through a dusty, desolate mining landscape under a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1081496055,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "145": {
+  "name": "Tectonic Stress Power",
+  "prompt": "Massive drilling rigs pierce the rust-red Martian crust, extracting geothermal energy from deep magma veins. Thick cables snake from the industrial machinery to a nearby power station, surrounded by billowing steam and glowing orange heat vents. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 930177377,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "146": {
+  "name": "Nitrophilic Moss",
+  "prompt": "Vibrant green moss carpets the rocky shoreline of a vast Martian ocean, thriving near the water's edge. The camera views the lush vegetation from a low angle, highlighting the contrast between the wet, dark soil and the bright, healthy plant life. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 779628763,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "147": {
+  "name": "Herbivores",
+  "prompt": "A herd of large, gentle herbivores grazes on lush green grass in a wide, sunlit valley. In the distance, a few small figures tend to the flock, with a clear blue sky overhead. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1501495373,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "148": {
+  "name": "Insects",
+  "prompt": "A close-up view of a dusty Martian soil patch where a cluster of translucent, iridescent beetles scurries over vibrant green moss. Tiny roots of engineered plants emerge from the dark red dirt, with a faint mist of oxygen hovering just above the ground. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1237327324,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "149": {
+  "name": "CEO's Favorite Project",
+  "prompt": "A massive, gleaming solar array dominates the Martian horizon, its golden panels catching the sun's light. A small maintenance drone hovers near the central hub, servicing the intricate machinery against the backdrop of rust-colored dunes. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1053240650,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "150": {
+  "name": "Anti-Gravity Technology",
+  "prompt": "A sleek, silver research laboratory hovers silently above a rugged Martian canyon. Its underside emits a faint blue energy glow, lifting the structure against gravity while dust drifts below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1577100463,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "151": {
+  "name": "Investment Loan",
+  "prompt": "A heavily armoured cargo freighter unloading sealed crates of precious metal ingots at a Martian spaceport at dusk. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 688370472,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "152": {
+  "name": "Insulation",
+  "prompt": "Thick, layered white insulation panels wrap a cylindrical Martian habitat module. Heat radiates visibly from the seams as steam vents, contrasting with the cold, dusty red terrain surrounding the structure. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 806274435,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "153": {
+  "name": "Adaptation Technology",
+  "prompt": "A sleek, silver laboratory module sits on the dusty Martian surface, its transparent dome revealing intricate, glowing neural-mapping machinery inside. Soft white light spills from the windows onto the reddish regolith, highlighting the complex wiring and sensor arrays within the research facility. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1191834901,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "154": {
+  "name": "Caretaker Contract",
+  "prompt": "A sleek, white maintenance drone hovers over a patch of vibrant green moss, gently spraying mist. In the background, a vast, warm red desert stretches toward a hazy horizon under a pale yellow sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1500340406,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "155": {
+  "name": "Designed Microorganisms",
+  "prompt": "A close-up of a frost-covered, crystalline patch on the Martian surface, revealing intricate, glowing green microbial colonies thriving within the ice. The scene is set in a cold, shadowed crevice under a pale, hazy sky, emphasizing the delicate biological growth amidst the harsh, frozen terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 778719264,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "156": {
+  "name": "Standard Technology",
+  "prompt": "A sleek, white laboratory module sits on the red Martian regolith, its glass walls revealing glowing scientific instruments inside. A small rover with a camera array is parked nearby, capturing data under a thin, dusty sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 929235354,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "157": {
+  "name": "Nitrite Reducing Bacteria",
+  "prompt": "A microscopic view of a reddish-brown Martian soil matrix, filled with glowing cyan bacterial colonies. Tiny, pulsing organic clusters multiply within the porous dirt, highlighting the biological transformation of the planet's surface at a cellular level. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1080307980,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "158": {
+  "name": "Industrial Microbes",
+  "prompt": "A vast, rust-colored Martian plain dotted with rows of humming, cylindrical bio-fermentation tanks. Greenish vapor rises from the vents, blending with the dusty sky as the automated units process raw ore into steel and energy. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1356541085,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "159": {
+  "name": "Lichen",
+  "prompt": "Small patches of pale, crusty lichen cling to dark basalt rocks in a sheltered canyon. The dry Martian air is still, with faint shadows indicating a warm, sun-drenched environment. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 668736523,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "160": {
+  "name": "Power Supply Consortium",
+  "prompt": "A massive network of solar arrays and wind turbines spans a dusty Martian plain. Cables snake from these generators toward a central hub, where steam rises from vents as energy flows through the grid. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1965946732,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "161": {
+  "name": "Convoy From Europa",
+  "prompt": "A massive icebreaker ship drags a barge of blue slush across a cracked, gray lunar plain. The vessel leaves a wet, glistening trail behind it as it moves toward a distant, jagged mountain range under a star-filled sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 36358138,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "162": {
+  "name": "Imported GHG",
+  "prompt": "A massive cargo shuttle descends through the thin Martian atmosphere, its hull glowing orange from atmospheric friction. Below, a dense cloud of steam and smoke billows from the landing site, obscuring the rust-colored plains as the craft touches down. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 455317056,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "163": {
+  "name": "Imported Nitrogen",
+  "prompt": "A massive transport shuttle descends through a hazy blue sky, releasing a thick cloud of white gas that drifts over a lush green forest. Tiny figures in white suits stand at the tree line, watching the atmospheric delivery. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1814341334,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "164": {
+  "name": "Micro-Mills",
+  "prompt": "A cluster of small, humming industrial mills processes raw ore in a Martian canyon, venting thick plumes of dark smoke and heat into the dusty red atmosphere under a hazy sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1916810101,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "165": {
+  "name": "Magnetic Field Generators",
+  "prompt": "Colossal ring-shaped superconductors hover above the Martian surface, emitting faint blue energy arcs. Below, vibrant green forests thrive in the shielded zone, protected from solar winds, with a distant city glowing under the crimson sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 88540131,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "166": {
+  "name": "Shuttles",
+  "prompt": "A sleek, white transport shuttle hovers above a reddish-brown desert plain, its engines glowing faintly orange. In the distance, a cluster of small habitat domes sits nestled against a rocky ridge under a dusty, amber sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 474894937,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "167": {
+  "name": "Import of Advanced GHG",
+  "prompt": "A sleek cargo shuttle descends through Mars’ thin, dusty atmosphere, its hull glowing faintly from re-entry friction. Below, a vast, rust-colored desert stretches toward the horizon, with a few scattered solar panels catching the distant sun. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1799971535,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "168": {
+  "name": "Windmills",
+  "prompt": "Tall white windmills spin rapidly in the rust-colored desert, their blades catching the thin Martian breeze. The structures stand in a neat row against a pale butterscotch sky, casting long shadows on the rocky terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2079752030,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "169": {
+  "name": "Tundra Farming",
+  "prompt": "A sprawling automated greenhouse complex nestled in a temperate Martian valley, where rows of lush green crops grow under transparent domes. Steam rises from vents near the base, indicating the warm internal climate, while the surrounding landscape remains a mix of reddish soil and sparse vegetation. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 217141192,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "170": {
+  "name": "Aerobraked Ammonia Asteroid",
+  "prompt": "A dark, jagged asteroid tumbles through the thin Martian atmosphere, trailing a long ribbon of white ammonia vapor and glowing friction heat. The camera captures the object from a low orbital angle, highlighting its rugged surface and the atmospheric distortion caused by its high-speed entry. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1815529005,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "171": {
+  "name": "Magnetic Field Dome",
+  "prompt": "A massive, translucent magnetic dome hovers over a lush green forest on the rust-colored Martian surface. The curved barrier glows with a faint blue energy field, protecting the vibrant vegetation inside from the harsh, dusty winds of the red planet outside. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 456259259,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "172": {
+  "name": "Pets",
+  "prompt": "A cozy terrarium dome on Earth, filled with lush greenery and several small animals like rabbits and birds. The glass structure glows warmly against the evening backdrop, showcasing a thriving micro-ecosystem. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 37267201,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "173": {
+  "name": "Protected Habitats",
+  "prompt": "Rows of gleaming, transparent geodesic domes sit nestled in a red dune valley. Inside, lush green gardens and clear pools of water thrive under the orange Martian sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1967101847,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "174": {
+  "name": "Protected Valley",
+  "prompt": "A lush, vibrant greenery patch thrives within a shielded Martian valley, nestled against rugged red rock walls. A sleek, futuristic building with transparent panels overlooks the valley floor, where gentle mist swirls around the verdant foliage. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1801126452,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "175": {
+  "name": "Satellites",
+  "prompt": "A dense constellation of solar-powered satellites orbits high above the rust-red Martian surface. They reflect blinding sunlight while casting long, sharp shadows on the cratered terrain far below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 475804322,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "176": {
+  "name": "Noctis Farming",
+  "prompt": "A low, glass-domed greenhouse glows under a dim Martian twilight sky. Inside, rows of lush green leafy vegetables thrive under bright artificial grow-lights, contrasting with the dark, dusty red soil outside. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 89482008,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "177": {
+  "name": "Water Splitting Plant",
+  "prompt": "A massive industrial complex sits on the edge of a vast, shimmering ocean on Mars. Steam rises from tall stacks as a large pipe discharges water vapor into the thin red atmosphere. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1917997966,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "178": {
+  "name": "Heat Trappers",
+  "prompt": "Massive parabolic solar collectors line the Martian horizon, focusing intense sunlight onto central thermal exchange towers. Glowing red conduits connect the structures, channeling captured heat into a humming power grid under a dusty orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1659719199,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "179": {
+  "name": "Soil Factory",
+  "prompt": "A massive industrial complex on the rust-colored Martian plain, featuring towering silos and conveyor belts mixing dark soil with green vegetation. Steam rises from vents as the facility processes raw regolith into fertile earth under a hazy red sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 367689353,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "180": {
+  "name": "Fuel Factory",
+  "prompt": "A sprawling industrial complex on the Martian surface, featuring large fuel storage tanks and processing pipes. Small figures in hazmat suits monitor control panels near the main building, with a red dusty sky overhead. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1806621410,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "181": {
+  "name": "Ice Cap Melting",
+  "prompt": "The polar ice cap cracks and melts under a warming sky, revealing dark, wet Martian soil beneath. A new blue ocean tile spreads across the landscape, with steam rising from the exposed ground. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 480897652,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "182": {
+  "name": "Corporate Stronghold",
+  "prompt": "A massive, fortified corporate headquarters dominates the Martian landscape, featuring towering metallic walls and a central command spire. The structure is surrounded by a network of defensive turrets and energy conduits, set against a backdrop of rust-colored dunes and a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 94419918,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "183": {
+  "name": "Biomass Combustors",
+  "prompt": "Industrial turbines with glowing orange cores stand in a Martian canyon, exhaling plumes of white steam. Distant green vegetation lines the rocky horizon under a dusty red sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1923582808,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "184": {
+  "name": "Livestock",
+  "prompt": "Herd of hardy, thick-furred livestock grazing in a lush, green pasture on Mars. A gentle breeze ripples through the vibrant grass under a pale, dusty sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1824726779,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "185": {
+  "name": "Olympus Conference",
+  "prompt": "A sleek, white research facility with large glass windows sits on a lush green hillside on Earth, surrounded by mature oak trees. In the foreground, a small red rover with a solar panel is parked on a dirt path leading to the building's entrance. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 465841773,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "186": {
+  "name": "Rad-Suits",
+  "prompt": "Rows of sleek, white protective suits hang from racks in a dimly lit factory, illuminated by soft blue light. In the background, blurred silhouettes of two bustling Martian cities glow under a hazy, dusty sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 47022039,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "187": {
+  "name": "Aquifer Pumping",
+  "prompt": "A massive industrial pump station rises from the rust-red Martian regolith, its steel pipes extending deep into the ground. Thick white steam vents from the machinery, drifting over the dusty terrain as workers in the distance monitor the operation. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1976192833,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "188": {
+  "name": "Flooding",
+  "prompt": "Vast turquoise water rushes across the rusty Martian plain, submerging the edges of adjacent greenery and grey construction sites. The liquid flows dynamically from a central breach, reflecting the pale sky above. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1702187728,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "189": {
+  "name": "Energy Saving",
+  "prompt": "A massive solar array reflects sunlight from a distant city, powering a compact fusion reactor. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 309486150,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "190": {
+  "name": "Local Heat Trapping",
+  "prompt": "A massive, translucent dome of shimmering heat-trapping material encloses a lush, vibrant greenhouse. Inside, dense tropical vegetation and exotic animals thrive in a warm, humid microclimate, starkly contrasting with the cold, dusty Martian landscape visible through the curved glass. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1924524963,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "191": {
+  "name": "Permafrost Extraction",
+  "prompt": "A massive industrial drill pierces the reddish Martian surface, churning thick, slushy slurry into a waiting pipeline. In the background, a pale blue ocean tile spreads across the dusty plain, reflecting the dim sunlight. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 95607605,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "192": {
+  "name": "Invention Contest",
+  "prompt": "A row of strange prototype machines and drones lined up on a Martian plain at dusk for a trial, test beacons glowing. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 482060670,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "193": {
+  "name": "Plantation",
+  "prompt": "A lush, verdant forest of tall, engineered trees spreads across the rust-colored Martian plains. A small, automated greenhouse structure with translucent panels sits among the roots, surrounded by vibrant green foliage under a dusty pink sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1807530521,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "194": {
+  "name": "Power Infrastructure",
+  "prompt": "Massive solar panel arrays stretch across the rust-colored desert floor, connected to a central energy hub by thick copper cables. The low sun casts long, sharp shadows across the metallic structures and dusty terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1977102266,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "195": {
+  "name": "Indentured Workers",
+  "prompt": "A group of workers in heavy pressure suits hauls crates of construction materials across a dusty, rocky plain. In the background, a massive automated factory complex hums with activity under a hazy, butterscotch-colored sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 48176940,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "196": {
+  "name": "Lagrange Observatory",
+  "prompt": "A sleek, white observatory with a large central lens orbits high above Mars. The rusty red planet fills the background, while the deep black of space surrounds the structure. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 467029654,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "197": {
+  "name": "Terraforming Ganymede",
+  "prompt": "A massive terraforming engine hovers above Ganymede's icy surface, projecting a warm orange glow that melts the frozen landscape into steaming pools. Distant, small figures stand on the ice near the machine's base, observing the transformation under Jupiter's looming shadow. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1825668608,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "198": {
+  "name": "Immigration Shuttles",
+  "prompt": "A small, silver spacecraft detaches from a massive orbital habitat, drifting through the void of space. Behind it, the blue curve of Earth glows against the blackness, while distant Mars appears as a red speck. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2087609233,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "199": {
+  "name": "Restricted Area",
+  "prompt": "A high-security research facility sits within a fenced-off sector of the Martian surface, surrounded by red dust and rocky terrain. A small spacecraft hovers nearby, casting a shadow over the secure zone marked by tall poles. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 191451911,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "200": {
+  "name": "Immigrant City",
+  "prompt": "A sprawling, multi-tiered urban complex with domed structures and vertical gardens, built into a reddish canyon. A dense network of pipes and solar arrays covers the surrounding terrain, with small figures moving between buildings under a dusty sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 556920499,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "201": {
+  "name": "Energy Tapping",
+  "prompt": "Massive industrial siphons descend from a low-flying drone into a geothermal vent on the Martian surface. Superheated steam erupts in white plumes as thick cables connect the machinery to a glowing power core. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1446436389,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "202": {
+  "name": "Underground Detonations",
+  "prompt": "Explosive charges detonate deep within a Martian lava tube, sending shockwaves through the cavern walls. Debris rains down onto industrial machinery below, illuminating the dusty, rock-strewn environment in a flash of orange light. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1329565599,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "203": {
+  "name": "Soletta",
+  "prompt": "A sleek, solar-powered spacecraft hovers in the black void of space, its intricate array of golden photovoltaic panels fully extended to catch the distant star's light. The craft's sleek metallic hull gleams against the dark backdrop, with no visible crew or text. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 943243017,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "204": {
+  "name": "Technology Demonstration",
+  "prompt": "A sleek, silver prototype drone hovers above a red dust field, its intricate internal mechanisms visible through a transparent hull. In the distance, a small team of figures observes the machine against a backdrop of jagged Martian rocks and a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 643574442,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "205": {
+  "name": "Rad-Chem Factory",
+  "prompt": "A sprawling industrial complex with massive ventilation fans and chemical processing tanks dominates the dusty Martian plain. Thick plumes of white vapor billow from the factory stacks into the rust-colored sky, contrasting with the dark, rocky terrain surrounding the automated facility. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1364924988,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "206": {
+  "name": "Special Design",
+  "prompt": "A sleek, angular prototype vehicle rests on a dusty red plain, its chassis featuring unusual, optimized aerodynamic curves. Engineers in the background point to the vehicle’s sleek lines under a pale Martian sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1213352838,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "207": {
+  "name": "Medical Lab",
+  "prompt": "A sleek, white laboratory dome sits on the rust-colored Martian plain. Its transparent walls reveal rows of glowing blue bioreactors and medical equipment inside. A small rover is parked near the entrance. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1062566672,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "208": {
+  "name": "AI Central",
+  "prompt": "A sleek, white domed structure with a central spire sits on a flat Martian plateau. A large satellite dish on its roof points toward the sky, surrounded by low-lying shrubs and a distant rover. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 803890817,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "88": {
+  "name": "Heather",
+  "prompt": "A dense, lush garden of green vegetation thrives inside a transparent dome, contrasting with the rust-colored Martian desert outside. Sunlight filters through the glass, illuminating the vibrant foliage as the structure maintains a warm, humid microclimate. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2118391450,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P01": {
+  "name": "Allied Bank",
+  "prompt": "A fortified financial vault tower of dark glass and copper rises inside a pressurised dome on a Martian mesa, warm light glowing from its upper floors; landing pads and supply crawlers ring its base under a dusky sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 493207915,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P02": {
+  "name": "Aquifer Turbines",
+  "prompt": "A massive subterranean turbine housing breaks through the red Martian regolith, venting steam as a newly formed, shallow ocean tile spreads across the surrounding crater floor under a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 74223825,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P03": {
+  "name": "Biofuels",
+  "prompt": "A small, rugged laboratory module sits on the rust-colored Martian plain, its exterior vents releasing thick, greenish mist. Inside, visible through a large glass panel, bioreactors bubble with vibrant, glowing algae cultures, ready for the colony's initial launch. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1936433223,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P04": {
+  "name": "Biolab",
+  "prompt": "A pristine white research dome sits on reddish Martian soil, its glass walls revealing lush green plants inside. Scientists in white suits work at benches under bright artificial light, while a small rover is parked outside in the dusty landscape. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1829713380,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P05": {
+  "name": "Biosphere Support",
+  "prompt": "A massive, translucent dome shelters a sprawling greenhouse of lush green ferns and vines. Outside the glass, the rusty red Martian dunes stretch to the horizon under a pale blue sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 436733298,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P06": {
+  "name": "Business Empire",
+  "prompt": "A sprawling industrial complex with smokestacks and warehouses on an Earth coastline. A massive cargo ship unloads containers at a busy port, with distant city lights glowing in the background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 50418888,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P07": {
+  "name": "Dome Farming",
+  "prompt": "A massive, transparent geodesic dome rests on the rust-colored Martian plain, filled with lush green crops and irrigation lines. Inside, tiny figures tend to rows of vegetables under artificial sunlight, contrasting with the barren, dusty landscape surrounding the structure. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1946575966,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P08": {
+  "name": "Donation",
+  "prompt": "A sleek, gold-plated cargo shuttle descends through the thin Martian atmosphere, its hatch open to reveal a dense stack of gleaming metallic ingots. The vessel hovers low over a barren, rust-colored plain, casting a long shadow on the dusty surface below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1689876943,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P09": {
+  "name": "Early Settlement",
+  "prompt": "A small, modular habitat complex sits on a flat, reddish plain under a pale sky. Solar panels and greenhouses surround the structure, with a few distant figures working near the foundation. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 331237721,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P10": {
+  "name": "Ecology Experts",
+  "prompt": "A small greenhouse outpost on a dusky Martian plain, beds of vivid moss, lichen and hardy ferns spilling from its open doors onto the rust soil; two tiny distant figures walk between the planting rows. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1937366955,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P11": {
+  "name": "Eccentric Sponsor",
+  "prompt": "A heavy cargo lander rests on a dusky Martian plain with its ramp lowered, two large equipment crates rolling out under floodlights; one tiny distant figure guides them. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 75435801,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P12": {
+  "name": "Experimental Forest",
+  "prompt": "A lush, vibrant forest of tall green trees rises from the red Martian soil, marking the founding moment of a new biome. In the distance, a small group of figures stands near the edge of the greenery, observing the thriving plants against the rusty landscape. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 494379408,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P13": {
+  "name": "Galilean Mining",
+  "prompt": "A titanium mining rig anchored to a cratered, icy Jovian moon, ore conveyors and cargo shuttles lifting off, with banded Jupiter looming huge in the dark sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1785769973,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P14": {
+  "name": "Great Aquifer",
+  "prompt": "Vast subterranean caverns open to the Martian surface, with massive pumps driving deep blue water upward into newly formed ocean tiles. Turbulent currents swirl as the liquid floods the red basalt landscape, creating a stark contrast between the dark water and the rusty terrain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1947468965,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P15": {
+  "name": "Huge Asteroid",
+  "prompt": "A massive, rocky asteroid dominates the Martian sky, its jagged surface glowing with intense heat. Below, the reddish desert landscape reflects the fiery light, with distant, small figures watching the celestial event unfold. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 51590195,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P16": {
+  "name": "Io Research Outpost",
+  "prompt": "A compact research outpost of domes and antennas on the sulphur-yellow volcanic plains of Io, a plume erupting on the horizon and Jupiter filling the sky behind it. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 437945464,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P17": {
+  "name": "Loan",
+  "prompt": "A massive, rust-colored loan shark drone hovers above a red dune, extending a glowing cable toward a tiny, struggling settlement. The cable pulses with energy, draining the colony's power while a dark cloud of debt looms overhead. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1830638879,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P18": {
+  "name": "Martian Industries",
+  "prompt": "A sprawling industrial complex rises from the rust-colored Martian plains, smokestacks belching grey plumes into the dusty sky. Massive factories and storage silos cluster together, with small figures in protective gear working near heavy machinery. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2107787406,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P19": {
+  "name": "Metal-Rich Asteroid",
+  "prompt": "A massive, jagged asteroid riddled with metallic veins crashes into the dusty Martian plain, kicking up a towering plume of rust-colored dust. Molten fragments scatter across the barren landscape as the heavy object settles, exposing glittering ores within its fractured surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 178616344,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P20": {
+  "name": "Metals Company",
+  "prompt": "A massive orbital mining station hovers above a cratered Martian basin, its mechanical arms extending down to extract glowing veins of raw metal from the rust-red surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1481937791,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P21": {
+  "name": "Mining Operations",
+  "prompt": "A massive excavator digs into a rust-red Martian ridge, kicking up clouds of orange dust. A convoy of haulers carries glowing ore chunks toward a distant industrial base under a hazy sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 794010601,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P22": {
+  "name": "Mohole",
+  "prompt": "A massive industrial drilling rig dominates a rugged Martian plateau, boring deep into the crust to tap geothermal energy. Thick plumes of steam and smoke billow from the machinery as the ground trembles, with small distant figures monitoring the intense heat rising from the borehole. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 911929939,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P23": {
+  "name": "Mohole Excavation",
+  "prompt": "A massive industrial barge hovers over a deep, circular trench in the reddish Martian crust. Superheated jets blast molten rock upward, illuminating the dark chasm with intense orange light while heavy machinery anchors the platform to the rough surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1096663749,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P24": {
+  "name": "Nitrogen Shipment",
+  "prompt": "A massive cargo lander touches down on the rust-colored plains, its rear hatch open to reveal crates of pressurized gas. A small figure in a spacesuit stands near the base, overseeing the unloading of the vital atmospheric resources. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1597593446,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P25": {
+  "name": "Orbital Construction Yard",
+  "prompt": "A sprawling orbital shipyard circles Mars, featuring massive cranes assembling a new station. A cargo shuttle docks at the central hub, its cargo bay open to reveal gleaming metallic ingots. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 675178480,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P26": {
+  "name": "Polar Industries",
+  "prompt": "A massive industrial complex dominates a polar plain, steam vents billowing from its heated machinery. Nearby, a dark blue ocean tile spreads across the white ice, reflecting the industrial smoke against the Martian horizon. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 825701962,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P27": {
+  "name": "Power Generation",
+  "prompt": "A massive solar array unfurls across the rust-colored desert, panels tilted toward the distant sun. A central generator hums with visible steam, establishing a new energy hub on the Martian surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1177552604,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P28": {
+  "name": "Research Network",
+  "prompt": "A sprawling underground laboratory complex with glowing server racks and fiber optic cables. Small figures work at consoles. The scene captures the founding moment of a global data hub, emphasizing connectivity and scientific infrastructure. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1452219213,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P29": {
+  "name": "Self-Sufficient Settlement",
+  "prompt": "A bustling dome city glows under a dusty orange sky, featuring interconnected habitats and hydroponic farms. Small figures work near solar arrays, highlighting the settlement's self-sustaining infrastructure on the red Martian plain. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 562572251,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P30": {
+  "name": "Smelting Plant",
+  "prompt": "A massive industrial smelter glows with orange heat in the Martian regolith, venting thick plumes of grey smoke into the dusty sky. Sparks fly from a large furnace as a distant figure observes the intense metalworking process. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1095737918,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P31": {
+  "name": "Society Support",
+  "prompt": "A bustling Martian settlement center with solar panels and small hydroponic gardens. Distant figures gather near a central plaza, surrounded by modest buildings and early infrastructure under a dusty orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 910725800,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P32": {
+  "name": "Supplier",
+  "prompt": "A massive industrial complex on the Martian surface, featuring towering power generation towers and stacks of gleaming steel ingots. The scene captures the founding moment with heavy machinery assembling infrastructure against a dusty, reddish sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 792838930,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P33": {
+  "name": "Supply Drop",
+  "prompt": "A cargo capsule crashes into a dusty red plain, scattering crates of shiny metal and green planters. Dust clouds billow around the impact site, with a distant rover observing the delivery. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1481044868,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P34": {
+  "name": "UNMI Contractor",
+  "prompt": "A massive cargo shuttle lifts off from an Earth spaceport, trailing bright exhaust. In the distance, a sprawling industrial complex and launch pads stretch toward the horizon under a cloudy sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1176659495,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P35": {
+  "name": "Acquired Space Agency",
+  "prompt": "A sleek orbital refueling station hovers in the blackness above Mars, its cargo bays open to reveal glowing titanium ingots. A small crew of figures in white suits stands on the upper deck, silhouetted against the red planet below, overseeing the transfer of resources to a waiting shuttle. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 824530609,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P36": {
+  "name": "House Printing",
+  "prompt": "A massive, automated robotic arm constructs a skeletal steel frame from raw metal ingots on the Martian surface. The machine operates with precision, welding beams together while a backdrop of reddish dunes and distant craters frames the industrial activity. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 673974027,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P37": {
+  "name": "Lava Tube Settlement",
+  "prompt": "A sprawling domed city nestled inside a massive, glowing volcanic lava tube. Bioluminescent lights illuminate the smooth basalt walls, while steam vents rise from the rocky floor in the dim, subterranean Martian cavern. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1596667805,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P38": {
+  "name": "Martian Survey",
+  "prompt": "A sleek, low-flying rover with a prominent sensor mast traverses a vast, rust-colored desert plain. In the distance, a faint atmospheric haze suggests the presence of a thin, developing sky, while the foreground reveals cracked, dry soil under bright sunlight. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1335110156,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P39": {
+  "name": "Psychrophiles",
+  "prompt": "Tiny, translucent microbial colonies cluster within a frozen, subterranean ice pocket. The chamber is illuminated by faint, cold blue light, highlighting the intricate, crystalline structures of the microbes against the dark, rocky Martian soil. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 949164698,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P40": {
+  "name": "Research Coordination",
+  "prompt": "A sleek, silver orbital station hovers above the Martian equator, its intricate lattice of solar panels and sensor arrays reflecting the dusty orange sky. Below, the rust-colored desert stretches endlessly, dotted with distant research outposts connected by faint light trails. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 235812089,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P41": {
+  "name": "SF Memorial",
+  "prompt": "A tall, smooth white memorial obelisk stands alone on a wind-swept Martian plain at dusk, its polished surface reflecting the amber horizon, with a few distant habitat domes on the skyline. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2030634095,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "P42": {
+  "name": "Space Hotels",
+  "prompt": "A sleek, white orbital resort station drifts above Earth’s blue curvature. Its transparent observation deck reveals a starry void, while solar panels extend like wings against the black sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1610634709,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R00": {
+  "name": "Beginner Corporation",
+  "prompt": "A modest prefabricated headquarters sits on the Martian surface, surrounded by a sprawling grid of neatly stacked crate-like modules. The scene is viewed from a low angle, emphasizing the orderly arrangement of the free card inventory against the dusty red horizon. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1776690579,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R03": {
+  "name": "Saturn Systems",
+  "prompt": "A massive, gleaming space station orbits Saturn’s icy rings, its solar arrays extended. A sleek titanium processing facility glows on the station’s hull, with small shuttles docked at its side. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1894741033,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R08": {
+  "name": "CrediCor",
+  "prompt": "A towering, sleek silver skyscraper pierces the Martian haze, its base surrounded by construction cranes and heavy machinery. The building’s glass facade reflects the rusty orange sky, standing as a beacon of corporate dominance on the barren red plains. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1732095393,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R09": {
+  "name": "PhoboLog",
+  "prompt": "A massive orbital refinery station hangs in the black void above Mars. Glowing titanium ingots are being processed in open-air vats, their metallic sheen reflecting the red planet's surface far below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 272276791,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R10": {
+  "name": "Point Luna",
+  "prompt": "A sleek lunar space elevator anchors a massive titanium processing facility to Earth’s orbit. Glowing blue energy beams transfer raw materials from a distant lunar mining base to a bustling orbital dock, with the Earth’s horizon curving below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1895634130,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R13": {
+  "name": "ThorGate",
+  "prompt": "A massive, angular power plant complex dominates a flat Martian plain, its dark metal structures humming with energy. Thick cables snake from the central hub to distant relay stations under a dusty orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1777616232,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R16": {
+  "name": "Cheung Shing MARS",
+  "prompt": "A sleek, white orbital construction hub hovers above the rust-colored Martian surface. Massive robotic arms extend from the central structure, assembling modular habitat units against a backdrop of swirling ochre dust storms. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 429830631,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R17": {
+  "name": "Ecoline",
+  "prompt": "A sprawling, emerald-green forest canopy spreads across the reddish Martian soil, featuring dense, healthy vegetation and a few small, white maintenance drones hovering low among the branches. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1855553905,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R18": {
+  "name": "Helion",
+  "prompt": "A sleek, silver spacecraft hovers above the Martian regolith, its engines venting intense, glowing orange heat plumes into the dusty atmosphere. The vessel’s metallic hull reflects the harsh sunlight, emphasizing its advanced thermal technology against the rust-colored landscape below. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 2116459744,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R19": {
+  "name": "Interplanetary Cinematics",
+  "prompt": "A grand film studio complex of curved domes in a Martian canyon at dusk, giant floodlights sweeping the sky and a camera drone swarm overhead. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 153209701,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R24": {
+  "name": "Mining Guild",
+  "prompt": "A massive automated drilling rig pierces the rust-colored Martian crust, its heavy treads leaving deep tracks in the regolith. Thick plumes of dust billow from the base as it extracts raw metal, set against a backdrop of jagged, iron-rich mountains under a hazy orange sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1555923720,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R27": {
+  "name": "Robinson Industries",
+  "prompt": "Massive automated assembly lines churn out sleek, identical industrial machinery inside a vast, dimly lit Martian hangar. Sparks fly from welding arms as finished units are stacked high on conveyor belts, ready for deployment across the red planet's surface. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1169478322,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R30": {
+  "name": "Teractor",
+  "prompt": "A sprawling, multi-tiered orbital manufacturing complex suspended in low Earth orbit, featuring massive solar arrays and docking bays. Below, the blue-green curve of Earth glows against the black void of space. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1120630352,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R31": {
+  "name": "Tharsis Republic",
+  "prompt": "A sprawling, multi-tiered city of white domes and glass towers rises from the rust-colored plains of Mars. Tall spires pierce the thin, pinkish-orange sky, connected by elevated transit lines, with a distant figure standing on a balcony overlooking the expansive urban sprawl. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 902579910,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R32": {
+  "name": "United Nations Mars Initiative",
+  "prompt": "A sprawling white orbital station with solar arrays floats above the reddish curve of Mars. Small docking shuttles approach the central hub, while Earth glows blue in the distant background. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 751114108,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R34": {
+  "name": "Valley Trust",
+  "prompt": "A sleek white orbital station hovering above a deep blue ocean on Earth. Solar panels unfurl from its hull, catching the sunlight, while a small shuttle docks at the airlock. The curve of the planet rises in the background, contrasting with the blackness of space. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 1168552521,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R35": {
+  "name": "Vitor",
+  "prompt": "A gleaming white headquarters spire rises from a dusky Martian mesa, ringed by landing pads and greenhouse terraces, banners of light rising into the evening sky. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 849453518,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ },
+ "R43": {
+  "name": "Inventrix",
+  "prompt": "A sleek white research laboratory with a large glass dome sits on the rust-colored Martian plain. Inside, a complex network of holographic displays and experimental machinery glows, while outside, a thin atmosphere swirls around the structure. Cinematic painterly matte painting, realistic science fiction illustration, Mars at dusk, oxide rust and deep indigo palette, volumetric dust haze, soft warm rim light, restrained detail, wide 3:2 composition, no text, no letters, no logos, no border.",
+  "seed": 344174893,
+  "model": "Krea 2 Turbo (text-to-image), 8 steps"
+ }
+}

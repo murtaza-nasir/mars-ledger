@@ -1,0 +1,74 @@
+{
+ "R00": {
+  "name": "Beginner Corporation",
+  "scene": "A modest prefabricated habitat module with a single glowing window, a small rover parked beside it and a few hydroponic tents, centred on an open plain."
+ },
+ "R08": {
+  "name": "CrediCor",
+  "scene": "A massive, gleaming gold vault stands in the center of a red desert, its heavy doors slightly ajar, revealing a blinding, radiant light from within the depths."
+ },
+ "R17": {
+  "name": "Ecoline",
+  "scene": "A massive glass dome housing a dense, vertical jungle of greenery, with a lone suited figure standing on a central walkway overlooking the lush canopy below."
+ },
+ "R18": {
+  "name": "Helion",
+  "scene": "A massive, glowing orange reactor core pulses with intense energy at the center of a dark, industrial space station, surrounded by intricate piping and metallic structures."
+ },
+ "R19": {
+  "name": "Interplanetary Cinematics",
+  "scene": "A vast, circular glass dome on the Martian surface, its curved walls reflecting the red sky. Inside, rows of empty cinema seats face a massive blank screen, surrounded by polished steel corridors."
+ },
+ "R43": {
+  "name": "Inventrix",
+  "scene": "A sleek, spherical laboratory station floats in the center, featuring a complex array of glass domes and metallic arms. It hovers above a flat, reddish Martian plain under a dim, hazy sky."
+ },
+ "R24": {
+  "name": "Mining Guild",
+  "scene": "Massive industrial fortress complex with towering steel silos and active drilling rigs, centered against a stark Martian horizon."
+ },
+ "R09": {
+  "name": "PhoboLog",
+  "scene": "A towering titanium refinery with gleaming metallic pipes and industrial machinery, set against the reddish Martian landscape under a star-filled sky."
+ },
+ "R31": {
+  "name": "Tharsis Republic",
+  "scene": "A colossal, terraced administrative complex rises from the red dunes, its geometric tiers glowing with soft amber light under a dusty sky."
+ },
+ "R13": {
+  "name": "ThorGate",
+  "scene": "A towering, angular reactor core radiates pulsing amber light from the center of a dark, industrial landscape. Massive conduits snake into the ground, emphasizing the facility's immense energy output and heavy industrial presence."
+ },
+ "R32": {
+  "name": "United Nations Mars Initiative",
+  "scene": "A sleek, white orbital elevator tethered to a rocky Martian ridge, rising into a thin blue sky."
+ },
+ "R03": {
+  "name": "Saturn Systems",
+  "scene": "A massive, ringed gas giant looms in the background, its pale bands swirling with atmospheric storms. In the foreground, a sleek titanium-hulled research station orbits silently, reflecting the planet's soft, hazy light."
+ },
+ "R30": {
+  "name": "Teractor",
+  "scene": "A gleaming Earth-funded spaceport tower at the centre, a shuttle lifting off beside it on a pillar of light, with a small blue Earth hanging in the sky above."
+ },
+ "R10": {
+  "name": "Point Luna",
+  "scene": "A lunar mining base on the grey Moon at Earth-rise, titanium ore haulers beside a tall launch tower, the blue Earth hanging large above the horizon."
+ },
+ "R16": {
+  "name": "Cheung Shing MARS",
+  "scene": "A tall crane lowers a gleaming habitat module onto a half-built tower city on the Martian plains at dusk, welding sparks glowing, dust drifting across the scene."
+ },
+ "R27": {
+  "name": "Robinson Industries",
+  "scene": "A balanced industrial complex on a Martian plateau: a small refinery, a greenhouse dome, solar arrays and a power plant arranged in a neat ring."
+ },
+ "R34": {
+  "name": "Valley Trust",
+  "scene": "A research campus nestled in a deep Martian canyon, glass laboratories stepping down the cliff walls with soft light, a river of fog along the valley floor."
+ },
+ "R35": {
+  "name": "Vitor",
+  "scene": "A gleaming white headquarters spire on a Martian mesa at dusk, terraces of greenhouses around its base and beams of light rising into the sky."
+ }
+}
