@@ -22,6 +22,9 @@ export class Store {
       CREATE TABLE IF NOT EXISTS seat_prefs (game TEXT NOT NULL, player TEXT NOT NULL, hints INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (game, player));
     `);
+    for (const col of ['show_vp', 'confirm_buy']) {
+      try { this.db.exec(`ALTER TABLE seat_prefs ADD COLUMN ${col} INTEGER NOT NULL DEFAULT 0`); } catch { /* already there */ }
+    }
   }
 
   /**
@@ -29,9 +32,17 @@ export class Store {
    * outside the command log on purpose: toggling one is not a move, so it never shows up as "your last
    * move" for undo, never resets the turn clock and never replays.
    */
-  seatPrefs(game: string): Record<string, {hints: boolean}> {
-    const rows = this.db.prepare('SELECT player, hints FROM seat_prefs WHERE game = ?').all(game) as Array<{player: string; hints: number}>;
-    return Object.fromEntries(rows.map((r) => [r.player, {hints: !!r.hints}]));
+  seatPrefs(game: string): Record<string, {hints: boolean; showVp?: boolean; confirmBuy?: boolean}> {
+    const rows = this.db.prepare('SELECT player, hints, show_vp, confirm_buy FROM seat_prefs WHERE game = ?').all(game) as
+      Array<{player: string; hints: number; show_vp: number; confirm_buy: number}>;
+    return Object.fromEntries(rows.map((r) => [r.player, {hints: !!r.hints, ...(r.show_vp ? {showVp: true} : {}), ...(r.confirm_buy ? {confirmBuy: true} : {})}]));
+  }
+
+  /** Show VP changes / confirm card purchases for a seat without a profile; only the keys given change. */
+  setSeatFlags(game: string, player: string, flags: {showVp?: boolean; confirmBuy?: boolean}) {
+    this.db.prepare('INSERT OR IGNORE INTO seat_prefs (game, player) VALUES (?, ?)').run(game, player);
+    if (flags.showVp !== undefined) this.db.prepare('UPDATE seat_prefs SET show_vp = ? WHERE game = ? AND player = ?').run(flags.showVp ? 1 : 0, game, player);
+    if (flags.confirmBuy !== undefined) this.db.prepare('UPDATE seat_prefs SET confirm_buy = ? WHERE game = ? AND player = ?').run(flags.confirmBuy ? 1 : 0, game, player);
   }
 
   setSeatHints(game: string, player: string, hints: boolean) {

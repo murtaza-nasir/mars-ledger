@@ -11,6 +11,7 @@ import type {Resource} from '../../../shared/types';
 import {CardArt} from './CardArt';
 import {TrRace} from './TrRace';
 import {tvt} from '../settings';
+import {useDisplayName} from '../../names';
 
 function useLater<T>(value: T, zero: T, ms: number): T {
   const [v, setV] = useState(zero);
@@ -20,7 +21,8 @@ function useLater<T>(value: T, zero: T, ms: number): T {
 
 export function Recap({history, generation}: {history: GameHistory; generation: number}) {
   const g = history.generations.find((x) => x.generation === generation);
-  const nameOf = (c?: Color) => history.players.find((p) => p.color === c)?.name ?? '';
+  const nameFor = useDisplayName();
+  const nameOf = (c?: Color) => (c ? nameFor(c, history.players.find((p) => p.color === c)?.name ?? '') : '');
   const race = trRace(history).map((s) => ({...s, name: nameOf(s.color), points: s.points.filter((p) => p.generation <= generation)}));
   const hi = g ? highlights(g) : null;
   const cards: React.ReactNode[] = [];

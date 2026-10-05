@@ -351,3 +351,36 @@ describe('what the screens say', () => {
     expect(undoText({playerId: 'a', name: 'Ada'}, 'b')).toBe('Ada undid their last move');
   });
 });
+
+describe('a new game', () => {
+  it('does not inherit a seat\'s answer memory from the previous game (answers in the new game are accepted)', async () => {
+    let gid = 'e1';
+    let e = new SaveEngine(ORDER_DEFAULT);
+    const client = {player: async (id: string) => e.model(id), spectator: async () => e.spectator(), logs: async () => [],
+      input: (id: string, r: InputResponse) => e.input(id, r), load: (g: string, n: number) => e.load(g, n)} as unknown as EngineClient;
+    const state = (): GameState => {
+      const s = newGame('g');
+      return {...s, mode: 'full', phase: 'full' as GameState['phase'],
+        players: ORDER_DEFAULT.map((eid) => ({id: PLAYER_OF[eid], name: SEATS[eid].name, color: SEATS[eid].color, ...(eid === 'pbot' ? {bot: 'normal'} : {})})) as GameState['players'],
+        full: {gameId: gid, spectatorId: 's1', players: Object.fromEntries(ORDER_DEFAULT.map((eid) => [PLAYER_OF[eid], {engineId: eid, color: SEATS[eid].color}]))}} as GameState;
+    };
+    const pa = sock('phoneA');
+    const sent: Array<{to: string; msg: ServerMsg}> = [];
+    const b = new FullBridge(client, state, () => [pa] as never, (ws, msg) => sent.push({to: (ws as unknown as Sock).name, msg}), 60000, null, 60000);
+    b.stop();
+    b.hello(pa as never, {role: 'phone', playerId: 'a'});
+    const seen = () => {
+      let cur: {view: FullView; v: ViewVersion} | null = null;
+      for (const x of sent) if (x.to === 'phoneA' && x.msg.type === 'full' && (!cur || !isOlderView(x.msg.view, cur.view, x.msg.v, cur.v))) cur = {view: x.msg.view, v: x.msg.v!};
+      return seenOf(cur!.v, cur!.view.model as PlayerViewModel)!;
+    };
+    const city = (): InputResponse => ({type: 'or', index: (e.menu('pa') as {options: Array<{title: string}>}).options.findIndex((o) => o.title === 'Place a city'), response: {type: 'option'}});
+    await b.pushAll();
+    await b.input('a', city(), false, seen());
+    expect(e.g.age).toBeGreaterThan(1);
+    // the table starts a new game: a fresh engine game whose gameAge starts low again
+    gid = 'e2'; e = new SaveEngine(ORDER_DEFAULT);
+    await b.pushAll();
+    await expect(b.input('a', city(), false, seen())).resolves.toBeUndefined();
+  });
+});

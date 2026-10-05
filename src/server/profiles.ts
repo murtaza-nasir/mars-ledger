@@ -23,6 +23,9 @@ const MIGRATIONS: string[] = [
      PRIMARY KEY (profile, achievement));`,
   // 2: a person's own settings that follow them between game nights
   `ALTER TABLE profiles ADD COLUMN hints INTEGER NOT NULL DEFAULT 0;`,
+  // 3: show VP changes, confirm card purchases (both off unless the person turns them on)
+  `ALTER TABLE profiles ADD COLUMN show_vp INTEGER NOT NULL DEFAULT 0;
+   ALTER TABLE profiles ADD COLUMN confirm_buy INTEGER NOT NULL DEFAULT 0;`,
 ];
 
 export class ProfileError extends Error {}
@@ -60,23 +63,25 @@ export class ProfileDesk {
 
   // ---- profiles ----------------------------------------------------------------------------
   get(id: string): Profile | null {
-    const r = this.db.prepare('SELECT id, name, color, avatar, created, merged_into, hints FROM profiles WHERE id = ?').get(id) as
-      {id: string; name: string; color: string; avatar: string | null; created: number; merged_into: string | null; hints: number} | undefined;
+    const r = this.db.prepare('SELECT id, name, color, avatar, created, merged_into, hints, show_vp, confirm_buy FROM profiles WHERE id = ?').get(id) as
+      {id: string; name: string; color: string; avatar: string | null; created: number; merged_into: string | null; hints: number; show_vp: number; confirm_buy: number} | undefined;
     if (!r) return null;
     if (r.merged_into) return this.get(r.merged_into);
-    return {id: r.id, name: r.name, color: r.color as PlayerColor, avatar: r.avatar, created: r.created, hints: !!r.hints};
+    return {id: r.id, name: r.name, color: r.color as PlayerColor, avatar: r.avatar, created: r.created, hints: !!r.hints,
+      ...(r.show_vp ? {showVp: true} : {}), ...(r.confirm_buy ? {confirmBuy: true} : {})};
   }
 
   list(): ProfileSummary[] {
-    const rows = this.db.prepare(`SELECT p.id, p.name, p.color, p.avatar, p.created, p.hints,
+    const rows = this.db.prepare(`SELECT p.id, p.name, p.color, p.avatar, p.created, p.hints, p.show_vp, p.confirm_buy,
         (SELECT COUNT(*) FROM results r WHERE r.profile = p.id) AS games,
         (SELECT MAX(ended_at) FROM results r WHERE r.profile = p.id) AS last
-      FROM profiles p WHERE p.merged_into IS NULL`).all() as Array<{id: string; name: string; color: string; avatar: string | null; created: number; hints: number; games: number; last: number | null}>;
+      FROM profiles p WHERE p.merged_into IS NULL`).all() as Array<{id: string; name: string; color: string; avatar: string | null; created: number; hints: number; show_vp: number; confirm_buy: number; games: number; last: number | null}>;
     const wins = new Map<string, number>();
     for (const r of this.db.prepare('SELECT profile, json FROM results').all() as Array<{profile: string; json: string}>) {
       if (isWin(JSON.parse(r.json) as GameResult)) wins.set(r.profile, (wins.get(r.profile) ?? 0) + 1);
     }
     return rows.map((r) => ({id: r.id, name: r.name, color: r.color as PlayerColor, avatar: r.avatar, created: r.created, hints: !!r.hints,
+      ...(r.show_vp ? {showVp: true} : {}), ...(r.confirm_buy ? {confirmBuy: true} : {}),
       games: r.games, wins: wins.get(r.id) ?? 0, lastPlayed: r.last}))
       .sort((a, b) => (b.lastPlayed ?? b.created) - (a.lastPlayed ?? a.created));
   }
@@ -95,7 +100,7 @@ export class ProfileDesk {
     return this.get(input.id)!;
   }
 
-  update(id: string, patch: {name?: unknown; color?: unknown; avatar?: unknown; hints?: unknown}): Profile {
+  update(id: string, patch: {name?: unknown; color?: unknown; avatar?: unknown; hints?: unknown; showVp?: unknown; confirmBuy?: unknown}): Profile {
     const p = this.get(id);
     if (!p || p.id !== id) throw new ProfileError('That profile does not exist');
     const name = patch.name === undefined ? p.name : cleanName(patch.name);
@@ -109,7 +114,13 @@ export class ProfileDesk {
     if (!isAvatar(avatar)) throw new ProfileError('That avatar is not available');
     if (patch.hints !== undefined && typeof patch.hints !== 'boolean') throw new ProfileError('Hints are either on or off');
     const hints = patch.hints === undefined ? !!p.hints : patch.hints;
-    this.db.prepare('UPDATE profiles SET name = ?, color = ?, avatar = ?, hints = ? WHERE id = ?').run(name, color, avatar as string | null, hints ? 1 : 0, id);
+    for (const [k, label] of [['showVp', 'Show VP changes'], ['confirmBuy', 'Confirm card purchases']] as const) {
+      if (patch[k] !== undefined && typeof patch[k] !== 'boolean') throw new ProfileError(`${label} is either on or off`);
+    }
+    const showVp = patch.showVp === undefined ? !!p.showVp : patch.showVp;
+    const confirmBuy = patch.confirmBuy === undefined ? !!p.confirmBuy : patch.confirmBuy;
+    this.db.prepare('UPDATE profiles SET name = ?, color = ?, avatar = ?, hints = ?, show_vp = ?, confirm_buy = ? WHERE id = ?')
+      .run(name, color, avatar as string | null, hints ? 1 : 0, showVp ? 1 : 0, confirmBuy ? 1 : 0, id);
     return this.get(id)!;
   }
 
@@ -237,7 +248,9 @@ export class ProfileDesk {
         winRate: s.winRate, bestScore: s.bestScore};
     }).sort((a, b) => b.wins - a.wins || (b.winRate ?? -1) - (a.winRate ?? -1) || (b.bestScore ?? 0) - (a.bestScore ?? 0) || b.games - a.games);
     const recent = (this.db.prepare('SELECT json FROM recorded_games ORDER BY ended_at DESC LIMIT 6').all() as Array<{json: string}>)
-      .map((r) => JSON.parse(r.json) as RecentGame);
+      .map((r) => JSON.parse(r.json) as RecentGame)
+      // a profile renamed since the game shows its current name (the stored row keeps the name of that night as a fallback)
+      .map((g) => ({...g, players: g.players.map((p) => (p.profileId ? {...p, name: this.get(p.profileId)?.name ?? p.name} : p))}));
     const latest = (this.db.prepare('SELECT profile, achievement, game, at FROM unlocks ORDER BY at DESC, achievement LIMIT 8').all() as
       Array<{profile: string; achievement: string; game: string; at: number}>).flatMap((r): HallOfFame['latest'] => {
       const p = this.get(r.profile);

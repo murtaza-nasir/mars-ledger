@@ -12,6 +12,7 @@ import {Piles, type Pile} from '../../ui/deck/Piles';
 import type {DeckItem} from '../../ui/deck/Deck';
 import {cardDef, groupTableau, prod, RES, stock} from './model';
 import {chipName, otherActionNote, tableSignature, tableTitle} from './tableFocus';
+import {useDisplayName} from '../../names';
 
 /** The profile portrait of the seat playing this engine colour, if it has one. */
 function useSeatAvatar(color: Color): string | null {
@@ -30,6 +31,8 @@ function Picker({me, others, focus, onPick}: {me: PublicPlayerModel; others: Pub
   const cur = (focus && others.find((p) => p.color === focus)) || me;
   const mine = cur === me;
   const avatar = useSeatAvatar(cur.color);
+  const nameFor = useDisplayName();
+  const curName = nameFor(cur.color, cur.name);
   const bot = useIsBotColor(cur.color);
   // the menu never outlives the table it was opened on (a tab change or my turn sends the table back to me)
   useEffect(() => { setOpen(false); }, [focus]);
@@ -37,13 +40,13 @@ function Picker({me, others, focus, onPick}: {me: PublicPlayerModel; others: Pub
   return (
     <div data-testid="table-selector" style={{position: 'relative', flex: 'none'}}>
       <button type="button" data-testid="table-picker" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}
-        aria-label={mine ? 'Your table. Show another player\'s table' : `${tableTitle(cur.name)}. Show another table`}
+        aria-label={mine ? 'Your table. Show another player\'s table' : `${tableTitle(curName)}. Show another table`}
         style={{display: 'inline-flex', alignItems: 'center', gap: 6, height: 32, padding: '0 9px 0 4px', borderRadius: 999,
           fontSize: 13.5, fontWeight: 650, fontVariationSettings: "'wdth' 86", color: 'var(--ice)',
           background: mine ? 'rgba(255,255,255,.06)' : `color-mix(in oklab, ${hex} 26%, var(--dusk-2))`,
           boxShadow: mine ? 'inset 0 0 0 1px var(--rim)' : `inset 0 0 0 1.5px ${hex}`}}>
-        <Avatar name={cur.name} color={cur.color} avatar={avatar} size={24} ring={false} />
-        {mine ? 'You' : chipName(cur.name)}
+        <Avatar name={curName} color={cur.color} avatar={avatar} size={24} ring={false} />
+        {mine ? 'You' : chipName(curName)}
         {bot && <BotMark style={{marginLeft: 0}} />}
         <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true" style={{opacity: 0.7, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .15s'}}>
           <path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.7" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -57,7 +60,7 @@ function Picker({me, others, focus, onPick}: {me: PublicPlayerModel; others: Pub
             style={{position: 'absolute', top: 38, left: 0, zIndex: 30, minWidth: 220, padding: 6, borderRadius: 14, background: 'var(--dusk-2)', transformOrigin: '20% 0',
               boxShadow: '0 0 0 1px var(--rim-strong), 0 18px 40px rgba(0,0,0,.55)'}}>
             <Seat p={me} label="You" on={mine} onPick={() => onPick(null)} />
-            {others.map((p) => <Seat key={p.color} p={p} label={p.name} on={cur.color === p.color} onPick={() => onPick(p.color)} />)}
+            {others.map((p) => <Seat key={p.color} p={p} label={nameFor(p.color, p.name)} on={cur.color === p.color} onPick={() => onPick(p.color)} />)}
           </motion.div>
         )}
       </AnimatePresence>
@@ -68,12 +71,13 @@ function Picker({me, others, focus, onPick}: {me: PublicPlayerModel; others: Pub
 function Seat({p, label, on, onPick}: {p: PublicPlayerModel; label: string; on: boolean; onPick: () => void}) {
   const avatar = useSeatAvatar(p.color);
   const bot = useIsBotColor(p.color);
+  const name = useDisplayName()(p.color, p.name);
   return (
     <button type="button" role="menuitemradio" aria-checked={on} data-table-seat={p.color} onClick={onPick}
-      aria-label={label === 'You' ? 'Your table' : tableTitle(p.name)}
+      aria-label={label === 'You' ? 'Your table' : tableTitle(name)}
       style={{display: 'flex', alignItems: 'center', gap: 10, width: '100%', minHeight: 44, padding: '0 10px 0 6px', borderRadius: 10, fontSize: 15,
         fontWeight: on ? 700 : 550, background: on ? `color-mix(in oklab, ${PLAYER_HEX[p.color]} 22%, transparent)` : 'transparent', textAlign: 'left'}}>
-      <Avatar name={p.name} color={p.color} avatar={avatar} size={28} ring={false} />
+      <Avatar name={name} color={p.color} avatar={avatar} size={28} ring={false} />
       <span style={{flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{label}{bot && <BotMark />}</span>
       <span className="num faint" style={{fontSize: 13}}>TR {p.terraformRating}</span>
     </button>
@@ -111,6 +115,7 @@ export function TableBar({me, others, focus, onPick, tags}: {me: PublicPlayerMod
 const hasAction = (c: CardModel) => cardDef(c.name).text.some((t) => /^Action:/i.test(t));
 
 function OtherTableView({p, passed}: {p: PublicPlayerModel; passed: boolean}) {
+  const name = useDisplayName()(p.color, p.name);
   const g = groupTableau(p.tableau);
   const used = new Set(p.actionsThisGeneration ?? []);
   const [lifted, setLifted] = useState<{pile: string; card: CardModel} | null>(null);
@@ -144,7 +149,7 @@ function OtherTableView({p, passed}: {p: PublicPlayerModel; passed: boolean}) {
         <span aria-hidden="true" style={{width: 12, height: 12, borderRadius: 3, background: hex, flex: 'none'}} />
         <div style={{flex: 1, minWidth: 0}}>
           <h3 data-testid="other-table-title" style={{margin: 0, fontWeight: 750, fontSize: 18, fontVariationSettings: "'wdth' 86", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
-            {tableTitle(p.name)}<BotMarkFor color={p.color} />
+            {tableTitle(name)}<BotMarkFor color={p.color} />
           </h3>
           <div className="faint" style={{fontSize: 13}}>
             {p.cardsInHandNbr} {p.cardsInHandNbr === 1 ? 'card' : 'cards'} in hand

@@ -12,6 +12,8 @@ export const REST_TILT = {min: 0.56, max: 0.76, step: 0.01} as const;
 // A live placement dives in: the tile centred, about two-fifths of the screen tall, seen at a low angle with its
 // neighbours around it. Several placements at once pull back until all of them fit.
 export const FOCUS = {pull: 1, zoom: 6.5, polar: 1.0, swing: 0.16, clamp: 0.95} as const;
+/** A board-life visit: a gentle pass toward a vignette, milder than a placement's dive. */
+export const VISIT_FOCUS = {pull: 0.6, zoom: 2.1, polar: 0.82, swing: 0.1, clamp: 0.85} as const;
 export const STORY_FOCUS = {pull: 0.4, zoom: 1.3, polar: 0.72, swing: 0.08, clamp: 0.5} as const;
 
 /** A world point [x, y, z]. */
@@ -176,7 +178,7 @@ export function restScaleOf(rest: View, cells: ReadonlyArray<{x: number; z: numb
   return {pxPerWorld: Number.isFinite(pxPerWorld) ? pxPerWorld : 1, hexPx};
 }
 
-export type FocusOptions = {enabled: boolean; mode?: 'live' | 'story'; R: number};
+export type FocusOptions = {enabled: boolean; mode?: 'live' | 'story' | 'visit'; R: number};
 
 /** The distance moves are measured from: where a camera framing the whole plate (radius R) at the standard tilt
  *  would stand. Dives and passes keep their size on screen however close the resting view fills the frame. */
@@ -188,7 +190,7 @@ export function refDist(R: number): number {
  *  `clamp` × R from the centre, so the plate stays the subject. */
 export function focusView(points: Array<{x: number; z: number; y?: number}>, rest: View, o: FocusOptions): View {
   if (!o.enabled || !points.length) return rest;
-  const f = o.mode === 'story' ? STORY_FOCUS : FOCUS;
+  const f = o.mode === 'visit' ? VISIT_FOCUS : o.mode === 'story' ? STORY_FOCUS : FOCUS;
   const cx = points.reduce((a, p) => a + p.x, 0) / points.length;
   const cz = points.reduce((a, p) => a + p.z, 0) / points.length;
   let tx = cx * f.pull, tz = cz * f.pull;
@@ -247,40 +249,15 @@ export function momentView(rest: View, t: number, strength: 'step' | 'max', ref 
 }
 
 /** How far into a move the camera is (0 at rest, 1 fully in): drives the fog. */
-export function moveAmount(cur: View, rest: View, mode: 'live' | 'story' = 'live', ref = rest.dist): number {
-  const f = mode === 'story' ? STORY_FOCUS : FOCUS;
+export function moveAmount(cur: View, rest: View, mode: 'live' | 'story' | 'visit' = 'live', ref = rest.dist): number {
+  const f = mode === 'visit' ? VISIT_FOCUS : mode === 'story' ? STORY_FOCUS : FOCUS;
   const full = rest.dist - Math.min(rest.dist, ref / f.zoom);
   return full <= 0 ? 0 : Math.max(0, Math.min(1, (rest.dist - cur.dist) / full));
 }
 
-// ---- the automatic fallback to the flat board -----------------------------------------------------------
-export const FALLBACK = {budgetP95: 21, windowMs: 3000, windows: 2, warmupMs: 4000, gapMs: 90} as const;
-
+// ---- frame times (the quality ladder judges windows of them: quality.ts) -------------------------------------
 export function p95(samples: number[]): number {
   if (!samples.length) return 0;
   const s = [...samples].sort((a, b) => a - b);
   return s[Math.min(s.length - 1, Math.floor(s.length * 0.95))];
-}
-
-/** What one judged window measured: the 95th-percentile and median frame times (ms) and the share of frames that
- *  were gaps of FALLBACK.gapMs or more (a browser or desktop holding frames back looks like this). */
-export type WindowStats = {p95: number; median: number; gaps: number; frames: number};
-
-export function windowStats(samples: number[]): WindowStats {
-  const s = [...samples].sort((a, b) => a - b);
-  return {p95: p95(s), median: s.length ? s[Math.floor(s.length / 2)] : 0, gaps: s.length ? s.filter((x) => x >= FALLBACK.gapMs).length / s.length : 0,
-    frames: s.length};
-}
-
-/**
- * Feed one window's frame times (ms). The board falls back when `windows` consecutive windows (after the warm-up)
- * miss the budget; one good window resets the count. Hidden-tab windows are skipped by the caller, and so are windows
- * in which the page did not have focus: a desktop may slow down the frames of a window nobody is using (a covered
- * window, or one on another screen), which says nothing about the board.
- */
-export function fallbackStep(state: {bad: number}, windowSamples: number[], sinceStartMs: number, focused = true): {bad: number; fallback: boolean; stats?: WindowStats} {
-  if (sinceStartMs < FALLBACK.warmupMs || windowSamples.length < 20 || !focused) return {bad: state.bad, fallback: false};
-  const stats = windowStats(windowSamples);
-  const bad = stats.p95 > FALLBACK.budgetP95 ? state.bad + 1 : 0;
-  return {bad, fallback: bad >= FALLBACK.windows, stats};
 }

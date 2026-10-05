@@ -1,13 +1,39 @@
 // The effect preview ("−23 M€ · +1 heat production · places an ocean · +1 TR") and the projected numbers after a move.
 // Shown only on this phone; nothing here is sent to the table.
-import type {Projection, Range, Snapshot} from '../../../../shared/projection';
+import {useMemo} from 'react';
+import type {GameState} from '../../../../shared/game';
+import type {PreviewLine, Projection, Range, Snapshot, World} from '../../../../shared/projection';
 import type {Resource} from '../../../../shared/types';
+import {withVp} from '../../../../shared/vp';
 import {RES_COLOR, RES_LABEL, ResIcon} from '../../../ui/Icons';
+import {usePrefsContext} from '../../../ui/PhonePrefs';
 
 const TONE: Record<string, string> = {cost: '#FFC9A8', loss: '#FFB39E', gain: '#9FE3AE', info: 'var(--ice)', unknown: 'var(--ice-dim)'};
 
-/** One line of what a move does, then what is not known yet. */
-export function EffectPreview({p, label = 'What this does', compact, testId = 'effect-preview'}: {p: Projection | null; label?: string; compact?: boolean; testId?: string}) {
+/** The projection with VP added when this player turned "Show VP changes" on (and the caller gave the world it came from). */
+export function useVpProjection(p: Projection | null, world: World | null | undefined, opts: {space?: string; base?: GameState} = {}): Projection | null {
+  const {showVp} = usePrefsContext();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => (showVp && p && world ? withVp(world, p, opts) : p), [showVp, p, world, opts.space, opts.base]);
+}
+
+/** The preview of a hovered space's VP: a line a player can read at a glance. */
+export function VpLines({lines, testId = 'space-vp'}: {lines: PreviewLine[]; testId?: string}) {
+  return (
+    <div data-testid={testId} style={{margin: '8px 2px 0', fontSize: 14.5, fontWeight: 600, lineHeight: 1.4}}>
+      <span className="faint" style={{fontWeight: 400}}>VP </span>
+      {lines.map((l, i) => <span key={i}>{i > 0 && <span className="faint" style={{fontWeight: 400}}> · </span>}<span style={{color: TONE[l.tone]}}>{l.text}</span></span>)}
+    </div>
+  );
+}
+
+/**
+ * One line of what a move does, then what is not known yet. With `world`, and "Show VP changes" on, the VP the move
+ * changes is added (`space`: the space picked for its first tile; `base`: the state the move is made from).
+ */
+export function EffectPreview({p: given, world, space, base, label = 'What this does', compact, testId = 'effect-preview'}:
+  {p: Projection | null; world?: World | null; space?: string; base?: GameState; label?: string; compact?: boolean; testId?: string}) {
+  const p = useVpProjection(given, world, {space, base});
   if (!p) return null;
   if (!p.ok) {
     return (

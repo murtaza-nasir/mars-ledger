@@ -10,6 +10,7 @@ import {TvCard} from '../TvCard';
 import {PLAYER_HEX} from '../../ui/Icons';
 import {director} from '../sound/director';
 import {stripRect} from './flicks';
+import {FLICK_SETTLE_MAX_MS, nextFlick} from './flickQueue';
 import {useStage} from '../stage';
 
 /** How long a flick may wait for the rules before it quietly goes back. */
@@ -40,9 +41,21 @@ function FlickLayer() {
   const confirmedFn = useConfirmed();
   const movingColor = useNet((s) => s.fullView?.moving ?? null);
   const [done, setDone] = useState<Set<string>>(new Set());
-  // Only flicks that arrived while this TV was watching, one at a time in arrival order.
+  // Only flicks that arrived while this TV was watching, one at a time in arrival order; one that waited too long
+  // behind the others is old news and is not shown (its card moment stood aside for it, flicks.ts).
   const mounted = useRef(Date.now());
-  const current = flicks.find((f) => f.at >= mounted.current - 500 && !done.has(f.id) && findCard(f.card));
+  const [now, setNow] = useState(() => Date.now());
+  const current = nextFlick(flicks, done, mounted.current, now, findCard);
+  // a stale flick ahead of the others is passed over the next time the queue is looked at
+  useEffect(() => {
+    if (current) return;
+    const waiting = flicks.some((f) => f.at >= mounted.current - 500 && !done.has(f.id));
+    if (!waiting) return;
+    const t = setTimeout(() => setNow(Date.now()), 1000);
+    return () => clearTimeout(t);
+  }, [current, flicks, done]);
+  // test hook: the flick on screen
+  (window as unknown as {__flickNow?: unknown}).__flickNow = current ? {id: current.id, card: current.card, color: current.color} : null;
   const busy = !!current;
   useEffect(() => { useStage.getState().set('flick', busy); }, [busy]);
   return (
@@ -50,7 +63,7 @@ function FlickLayer() {
       <AnimatePresence>
         {current && (
           <FlickedCard key={current.id} flick={current} confirmed={confirmedFn(current)} cancelled={cancelled.includes(current.id)} moving={movingColor === current.color}
-            onDone={() => setDone((d) => new Set(d).add(current.id))} />
+            onDone={() => { setDone((d) => new Set(d).add(current.id)); setNow(Date.now()); }} />
         )}
       </AnimatePresence>
     </div>
@@ -97,34 +110,46 @@ function FlickedCard({flick, confirmed, cancelled, moving, onDone}: {flick: Flic
     return () => clearTimeout(t);
   }, [phase, confirmed, cancelled, moving]);
 
+  // The card leaves (onDone) once, when its last step has played. Only unmounting stops that: the steps below change the
+  // phase, and a phase change must not cancel the step still running (it used to: the settle step set the phase, its own
+  // cleanup then marked it dead, and onDone never came, so the layer kept this flick as its current one, invisible, until
+  // twelve newer flicks pushed it out of the store, and then showed the next old flick as a new card was being played).
+  const live = useRef(true);
+  const finished = useRef(false);
+  useEffect(() => () => { live.current = false; }, []);
+  const finish = () => { if (live.current && !finished.current) { finished.current = true; onDone(); } };
   useEffect(() => {
-    let alive = true;
     if (phase === 'show') {
-      const t = setTimeout(async () => {
-        if (!alive) return;
-        setPhase('settle');
+      const t = setTimeout(() => setPhase('settle'), 2400);
+      return () => clearTimeout(t);
+    }
+    if (phase === 'settle') {
+      (async () => {
         const r = stripRect(flick.color);
         const W = window.innerWidth, H = window.innerHeight;
         const x = r ? r.left + r.width / 2 - W / 2 : 0;
         const y = r ? r.top + r.height / 2 - H * 0.46 : H * 0.6;
         await controls.start({x, y, scale: 0.14, rotate: geo.dir * 4, opacity: 0.0, filter: 'blur(2px)',
           transition: {duration: 0.7, ease: [0.55, 0, 0.8, 0.3], opacity: {duration: 0.7, ease: [0.9, 0, 1, 1]}}});
-        if (!alive) return;
+        if (!live.current) return;
         if (r) setLanding(r);
         director.cue('flickLand');
-        setTimeout(() => alive && onDone(), 900);
-      }, 2400);
-      return () => { alive = false; clearTimeout(t); };
+        setTimeout(finish, 900);
+      })();
+      // whatever happens to the animation, the card is gone well after it should have landed
+      const t = setTimeout(finish, FLICK_SETTLE_MAX_MS);
+      return () => clearTimeout(t);
     }
     if (phase === 'cancel') {
       director.cue('flickCancel');
       (async () => {
         await controls.start({y: window.innerHeight * 0.72, rotate: geo.dir * 7, scale: 0.92, opacity: 0, filter: 'blur(10px)',
           transition: {duration: 0.85, ease: [0.5, 0, 0.75, 0], delay: 0.35}});
-        if (alive) onDone();
+        finish();
       })();
+      const t = setTimeout(finish, FLICK_SETTLE_MAX_MS);
+      return () => clearTimeout(t);
     }
-    return () => { alive = false; };
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const label = phase === 'cancel' ? 'Not played' : phase === 'enter' || phase === 'wait' ? 'is playing' : 'plays';
@@ -138,7 +163,7 @@ function FlickedCard({flick, confirmed, cancelled, moving, onDone}: {flick: Flic
         transition={{duration: 1.1, delay: 0.55, ease: 'easeOut'}}
         style={{position: 'absolute', left: '50%', top: '46%', width: '40vw', height: '40vw', marginLeft: '-20vw', marginTop: '-20vw', borderRadius: '50%',
           background: `radial-gradient(circle, color-mix(in oklab, ${color} 55%, transparent), transparent 62%)`}} />
-      <motion.div exit={{opacity: 0, transition: {duration: 0.3}}}
+      <motion.div exit={{opacity: 0, transition: {duration: 0.3}}} data-flick-card={flick.card} data-moment-color={flick.color} data-flick-at={flick.at} data-flick-phase={phase}
         style={{position: 'absolute', left: '50%', top: '46%', width: '20vw', marginLeft: '-10vw', transform: 'translateY(-50%)'}}>
         <motion.div animate={controls} style={{transformOrigin: '50% 50%', willChange: 'transform, filter, opacity'}}>
           {/* hover gently while waiting for the rules */}

@@ -8,14 +8,18 @@ import {setSettings, TEXT_SIZE_LABEL, TEXT_SIZES, TILE_STYLE_LABEL, TILE_STYLES,
 import type {TvSettings} from '../settings';
 import {clearBoardFallback, fallbackReason, useBoardFallback} from '../full/board3d/fallback';
 import type {FallbackReason} from '../full/board3d/fallback';
+import {LEVELS, resetLadder, useQuality} from '../full/board3d/quality';
+import type {LevelReason} from '../full/board3d/quality';
+import {reportTv3d, tvId} from '../full/board3d/report';
 import {useRadioNotice} from '../radio/store';
 import {useNet} from '../../net';
 import {useMissionStatus} from '../narrator/status';
 import {REST_TILT_DEG, REST_ZOOM} from '../full/board3d/camera3d';
 import {startFlying, stopFlying, useFly, useRestInfo} from '../full/board3d/flyStore';
 
-/** `group`: a heading shown above the row (the experimental features sit under one at the end). */
-type Head = {group?: string; groupNote?: string};
+/** `group`: a heading shown above the row (the experimental features sit under one at the end); `sub`: the row belongs
+ *  to the switch above it (indented, and disabled while that switch is off). */
+type Head = {group?: string; groupNote?: string; sub?: boolean};
 type Row = Head & (
   | {kind: 'switch'; id: string; label: string; on: boolean; set: (v: boolean) => void; disabled?: boolean; note?: string | null}
   // volumes run 0..1 in tenths and show as percentages; other sliders give their own range, step and format
@@ -88,6 +92,7 @@ function Panel({onClose}: {onClose: () => void}) {
   const s = useTvSettings();
   const muted = useSyncExternalStore((l) => director.subscribe(l), () => director.muted);
   const fellBack = useBoardFallback();
+  const quality = useQuality();
   const radioNotice = useRadioNotice();
   const radioOn = useNet((x) => !!x.config?.radioPlaylist);
   const mission = useMissionStatus();
@@ -111,7 +116,18 @@ function Panel({onClose}: {onClose: () => void}) {
       set: (v) => { if (v) clearBoardFallback(); set({board3d: v}); }, note: fallbackNote(fallbackReason(), fellBack)},
     {kind: 'choice', id: 'tileStyle', label: 'Tile style', value: tileStyleOf(s), options: TILE_STYLES.map((t) => ({value: t, label: TILE_STYLE_LABEL[t]})),
       set: (v) => set({tileStyle: v as TvSettings['tileStyle']}), disabled: !s.board3d || fellBack},
+    // how much this screen's 3D board draws: it steps down by itself when frames stay slow (board3d/quality.ts)
+    {kind: 'button', id: 'quality', label: `3D: ${LEVELS[fellBack ? LEVELS.length - 1 : quality.level].label}${quality.level > 0 || fellBack ? ' (slow frames)' : ''}`,
+      text: 'Reset to full', disabled: !s.board3d || (quality.level === 0 && !fellBack), note: qualityNote(quality.level, quality.reason, fellBack),
+      run: () => { resetLadder(); clearBoardFallback(); reportTv3d({level: 0, dir: 'reset', p95: null, median: null, slow: null, render: null,
+        size: `${window.innerWidth}x${window.innerHeight}@${Math.round(window.devicePixelRatio * 100) / 100}`}); }},
+    {kind: 'switch', id: 'trTrack', label: 'TR track', on: s.trTrack, set: (v) => set({trTrack: v}), note: 'A numbered track around the board with a marker for each player'},
     {kind: 'switch', id: 'cameraMoves', label: 'Camera moves', on: s.cameraMoves, set: (v) => set({cameraMoves: v})},
+    // Board life is the master switch; Terraformers (its characters) sits under it: the sky drops and the ambient life run without them
+    {kind: 'switch', id: 'boardLife', label: 'Board life', on: s.boardLife, set: (v) => set({boardLife: v}), disabled: no3d,
+      note: 'Tiny people, rovers and surprises on the empty land'},
+    {kind: 'switch', id: 'terraformers', label: 'Terraformers', on: s.terraformers, set: (v) => set({terraformers: v}), disabled: no3d || !s.boardLife, sub: true,
+      note: s.boardLife ? 'The little characters and their scenes' : 'Needs Board life'},
     // the radio only when the server has a playlist (RADIO_PLAYLIST)
     ...(radioOn ? [
       {kind: 'switch', id: 'radio', label: 'Radio', on: s.radio, set: (v: boolean) => set({radio: v}), note: s.radio ? radioNotice : null},
@@ -199,7 +215,7 @@ function Panel({onClose}: {onClose: () => void}) {
           renders its page at a low resolution makes it look large; this line tells which. It sits under the title so it
           shows even when the panel is taller than the screen and scrolls. */}
       <p className="faint" data-screen="" style={{margin: '-0.6vh 0.2vw 1vh', fontSize: tvt(0.85)}}>
-        Screen: {window.innerWidth}×{window.innerHeight} page pixels, {Math.round(window.devicePixelRatio * 100) / 100}× density ({Math.round(window.innerWidth * window.devicePixelRatio)}×{Math.round(window.innerHeight * window.devicePixelRatio)} device)
+        Screen: {window.innerWidth}×{window.innerHeight} page pixels, {Math.round(window.devicePixelRatio * 100) / 100}× density ({Math.round(window.innerWidth * window.devicePixelRatio)}×{Math.round(window.innerHeight * window.devicePixelRatio)} device) · TV {tvId()}
       </p>
       <div style={{display: 'grid', gap: '0.3vh'}}>
         {rows.map((r, i) => (<Fragment key={r.id}>
@@ -219,7 +235,7 @@ function Panel({onClose}: {onClose: () => void}) {
             onFocus={() => setFocus(i)}
             style={{display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) calc(14vw * var(--tvt, 1))', alignItems: 'center', gap: '1.2vw', padding: '0.7vh 0.9vw', borderRadius: '0.7vw',
               background: focus === i ? 'rgba(255,255,255,.07)' : 'transparent', opacity: 'disabled' in r && r.disabled ? 0.42 : 1, outline: 'none'}}>
-            <span style={{fontSize: tvt(1.1), fontWeight: 600, whiteSpace: 'nowrap'}}>{r.label}
+            <span style={{fontSize: tvt(1.1), fontWeight: 600, whiteSpace: 'nowrap', paddingLeft: r.sub ? '1.4vw' : undefined}}>{r.sub && <span aria-hidden="true" className="faint">└ </span>}{r.label}
               {r.note && <span data-note="" className="faint" style={{display: 'block', fontSize: tvt(0.85), fontWeight: 500, whiteSpace: 'normal'}}>{r.note}</span>}</span>
             <Control r={r} />
           </div>
@@ -239,6 +255,16 @@ function fallbackNote(why: FallbackReason | null, now: boolean): string | null {
   const lead = now ? `Switched off ${when}` : `Last switched off ${when}`;
   if (why.kind === 'error') return `${lead} after a graphics error: ${why.message.slice(0, 120)}`;
   return `${lead}: frames took ${Math.round(why.p95)} ms (slowest 5%), ${Math.round(why.median)} ms typical, ${Math.round(why.gaps * 100)}% held back (screen ${why.size})`;
+}
+
+/** What the quality ladder did on this screen, in plain words: when it last stepped, what the frames measured. */
+function qualityNote(level: number, why: LevelReason | null, flat: boolean): string | null {
+  if (flat) return 'Every lighter 3D level was still too slow here. Turn the 3D board back on, or reset to full.';
+  if (level === 0) return why?.dir === 'up' ? 'Back to full after a slow spell' : null;
+  const back = 'Comes back by itself when frames have room.';
+  if (!why) return back;
+  const when = new Date(why.at).toLocaleString([], {weekday: 'short', hour: 'numeric', minute: '2-digit'});
+  return `Since ${when}: frames took ${Math.round(why.p95)} ms (slowest 5%) at ${why.size.replace('x', '×').replace('@', ' at ')}×. ${back}`;
 }
 
 function Control({r}: {r: Row}) {

@@ -171,7 +171,7 @@ describe('ProfileDesk', () => {
     old.close();
     const store = new Store(dir);
     const desk = new ProfileDesk(store.db);
-    expect((store.db.prepare('PRAGMA user_version').get() as {user_version: number}).user_version).toBe(2);
+    expect((store.db.prepare('PRAGMA user_version').get() as {user_version: number}).user_version).toBe(3);
     expect(store.currentGameId()).toBe('oldgame1');
     expect(store.replay('oldgame1').state.players.map((p) => p.name)).toEqual(['Ann']);
     expect(desk.list()).toEqual([]);

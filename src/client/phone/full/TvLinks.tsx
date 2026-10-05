@@ -13,6 +13,7 @@ import {useLogHistory} from './logHistory';
 import {cardLabel, groupLog, headline, plain} from './logMoves';
 import type {LogEntry} from './logMoves';
 import {echoTargets, lastReplayable, replayable, replayOf} from './logLinks';
+import {useSeatNames} from '../../names';
 
 type Move = Extract<LogEntry, {kind: 'move'}>;
 type SendState = {kind: 'idle'} | {kind: 'busy'} | {kind: 'sent'} | {kind: 'error'; text: string};
@@ -20,9 +21,11 @@ type SendState = {kind: 'idle'} | {kind: 'busy'} | {kind: 'sent'} | {kind: 'erro
 const NO_LOGS: LogLine[] = [];
 /** The seat this phone plays (null on the TV and before the first view). */
 const useSeat = () => useNet((s) => (s.fullView?.role === 'player' ? s.fullView.playerId : null));
-const useNames = () => {
-  const sig = useNet((s) => s.fullView?.model.players.map((p) => `${p.color}:${p.name}`).join('|') ?? '');
-  return useMemo(() => Object.fromEntries(sig.split('|').filter(Boolean).map((x) => x.split(':') as [string, string])) as Record<string, string>, [sig]);
+/** Colour → the seat's current name (src/client/names.ts). */
+const useNames = (): Record<string, string> => {
+  const seats = useSeatNames().byColor;
+  const sig = useNet((s) => s.fullView?.model.players.map((p) => `${p.color}\u0000${p.name}`).join('\u0001') ?? '');
+  return useMemo(() => ({...Object.fromEntries(sig.split('\u0001').filter(Boolean).map((x) => x.split('\u0000') as [string, string])), ...seats}), [sig, seats]);
 };
 
 /** One press at a time; the answer stays on the button for a moment. */

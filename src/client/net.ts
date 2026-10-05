@@ -20,6 +20,8 @@ import type {Seen, UndoNotice, ViewVersion} from '../shared/sync';
 import type {NoticeFeed} from '../shared/notices';
 import type {FlyStatus, FlyTvState} from '../shared/fly';
 import type {Echo, EchoTarget, Replay, ReplayMove} from '../shared/tvlinks';
+import {namesKey, relabelById, relabelFeed, relabelHistory, relabelRows, relabelView, seatNames} from '../shared/names';
+import type {Tv3dReport} from '../shared/tv3d';
 
 type Pending = {resolve: () => void; reject: (e: Error) => void};
 /** A refusal from the server; `code` says why ('stale' answer, 'undoWindow' for an undo that came too late). */
@@ -96,10 +98,11 @@ type Net = {
   /** people across game nights; `mine` is the profile the server remembers for this device */
   profiles: ProfileSummary[];
   /** seats' own settings (smart hints) for seats without a profile, keyed by player id */
-  seatPrefs: Record<string, {hints: boolean}>;
+  seatPrefs: Record<string, {hints: boolean; showVp?: boolean; confirmBuy?: boolean}>;
   /** phones connected per player id */
   phones: Record<string, number>;
   setSeatHints: (playerId: string, hints: boolean) => Promise<void>;
+  setSeatFlags: (playerId: string, flags: {showVp?: boolean; confirmBuy?: boolean}) => Promise<void>;
   /** the profile list has arrived at least once (the join screen waits for it) */
   profilesKnown: boolean;
   mine: string | null;
@@ -111,7 +114,7 @@ type Net = {
   /** profile screens loaded on this device, by profile id */
   details: Record<string, ProfileDetail>;
   createProfile: (profile: {id: string; name: string; color: string; avatar: string | null}) => Promise<void>;
-  updateProfile: (profileId: string, patch: {name?: string; color?: string; avatar?: string | null; hints?: boolean}) => Promise<void>;
+  updateProfile: (profileId: string, patch: {name?: string; color?: string; avatar?: string | null; hints?: boolean; showVp?: boolean; confirmBuy?: boolean}) => Promise<void>;
   mergeProfiles: (from: string, into: string) => Promise<void>;
   /** Fetch a profile's stats, achievements and recent games into `details`. */
   loadProfile: (profileId: string) => Promise<void>;
@@ -229,6 +232,7 @@ export const useNet = create<Net>(() => ({
   seatPrefs: {},
   phones: {},
   setSeatHints: (playerId, hints) => rpc({type: 'seatPref', id: id(), playerId, hints}),
+  setSeatFlags: (playerId, flags) => rpc({type: 'seatPref', id: id(), playerId, ...flags}),
   profilesKnown: false,
   mine: null,
   fame: null,
@@ -274,11 +278,32 @@ let flyHandler: ((m: FlyMsg) => void) | null = null;
 /** The TV's flight listens for the pilot's messages here (null to stop). */
 export function onFlyMessage(h: ((m: FlyMsg) => void) | null) { flyHandler = h; }
 
+/** TV: the 3D board's quality ladder changed level (board3d/report.ts), for the server log and /api/health. */
+export function sendTv3d(report: Tv3dReport) { if (ws?.readyState === 1) ws.send(JSON.stringify({type: 'tv3d', report} satisfies ClientMsg)); }
+
 /** Who this device is, sent on every (re)connect so the server can route private views. */
 let identity: {role: 'phone' | 'tv'; playerId: string | null} = {role: 'phone', playerId: null};
 export function identify(role: 'phone' | 'tv', playerId: string | null) {
   identity = {role, playerId};
   if (ws?.readyState === 1) ws.send(JSON.stringify(hello()));
+}
+
+/**
+ * Names on this device come from the seats in the game state (src/shared/names.ts): a player renamed on a phone is renamed
+ * in every view, story, notice and show this store holds the moment the new state arrives, before the server's fresh views.
+ */
+const namesOf = (s: {state: GameState | null}) => seatNames(s.state);
+function renamedTo(s: Net, state: GameState): Partial<Net> {
+  const before = namesOf(s);
+  const after = seatNames(state);
+  if (namesKey(before) === namesKey(after)) return {};
+  return {
+    ...(s.fullView ? {fullView: relabelView(s.fullView, after)} : {}),
+    ...(s.history ? {history: relabelHistory(s.history, after)} : {}),
+    ...(s.notices ? {notices: relabelFeed(s.notices, after)} : {}),
+    ...(s.production ? {production: relabelRows(s.production, after)} : {}),
+    ...(s.undoNotice ? {undoNotice: relabelById(s.undoNotice, after)} : {}),
+  };
 }
 
 const pageVisible = () => typeof document === 'undefined' || document.visibilityState !== 'hidden';
@@ -303,10 +328,10 @@ function connect() {
     switch (msg.type) {
     case 'state':
     case 'undone':
-      useNet.setState({state: msg.state, recent: msg.recent, lastEvents: [], lastTick: null});
+      useNet.setState((s) => ({...renamedTo(s, msg.state), state: msg.state, recent: msg.recent, lastEvents: [], lastTick: null}));
       break;
     case 'tick':
-      useNet.setState((s) => ({state: msg.state, recent: [...s.recent.slice(-39), msg.tick], lastEvents: msg.tick.events, lastTick: msg.tick}));
+      useNet.setState((s) => ({...renamedTo(s, msg.state), state: msg.state, recent: [...s.recent.slice(-39), msg.tick], lastEvents: msg.tick.events, lastTick: msg.tick}));
       break;
     case 'ack': pending.get(msg.id)?.resolve(); pending.delete(msg.id); break;
     case 'nack': {
@@ -315,8 +340,8 @@ function connect() {
       pending.get(msg.id)?.reject(err); pending.delete(msg.id); break;
     }
     // the view keeps the version it came with, so an answer can name exactly the view it was made against
-    case 'full': useNet.setState((s) => (isOlderView(msg.view, s.fullView, msg.v, s.fullVersion) ? {} : {fullView: msg.v ? {...msg.view, v: msg.v} : msg.view, fullVersion: msg.v ?? null})); break;
-    case 'fullUndo': useNet.setState((s) => (s.undoNotice?.id === msg.notice.id ? {} : {undoNotice: {...msg.notice, receivedAt: Date.now()}})); break;
+    case 'full': useNet.setState((s) => (isOlderView(msg.view, s.fullView, msg.v, s.fullVersion) ? {} : {fullView: relabelView(msg.v ? {...msg.view, v: msg.v} : msg.view, namesOf(s)), fullVersion: msg.v ?? null})); break;
+    case 'fullUndo': useNet.setState((s) => (s.undoNotice?.id === msg.notice.id ? {} : {undoNotice: relabelById({...msg.notice, receivedAt: Date.now()}, namesOf(s))})); break;
     case 'version': {
       offsets.push(msg.serverNow - Date.now());
       if (offsets.length > 8) offsets.shift();
@@ -330,7 +355,7 @@ function connect() {
     case 'echo': useNet.setState((s) => ({echoes: [...s.echoes.slice(-7), {...msg.echo, at: Date.now()}]})); break;
     // a hit lands on the TV now: buzz (phones that cannot vibrate from a web page, like iPhones, do nothing)
     case 'hapticHit': buzz(msg.hit.pattern); break;
-    case 'history': useNet.setState({history: msg.history}); break;
+    case 'history': useNet.setState((s) => ({history: relabelHistory(msg.history, namesOf(s))})); break;
     case 'profiles': useNet.setState({profiles: msg.profiles, mine: msg.mine, profilesKnown: true}); break;
     case 'prefs': useNet.setState({seatPrefs: msg.prefs}); break;
     case 'phones': useNet.setState({phones: msg.phones, ...(msg.tvs !== undefined ? {tvs: msg.tvs} : {})}); break;
@@ -338,7 +363,7 @@ function connect() {
     case 'unlocks': useNet.setState({unlocks: msg.unlocks}); break;
     case 'away': useNet.setState({away: msg.summary}); break;
     case 'deadEnd': useNet.setState({deadEnd: msg.deadEnd}); break;
-    case 'notices': useNet.setState((s) => ({notices: msg.feed, ...(msg.fresh.length ? {noticeFresh: {seq: s.noticeFresh.seq + 1, ids: msg.fresh}} : {})})); break;
+    case 'notices': useNet.setState((s) => ({notices: relabelFeed(msg.feed, namesOf(s)), ...(msg.fresh.length ? {noticeFresh: {seq: s.noticeFresh.seq + 1, ids: msg.fresh}} : {})})); break;
     case 'radioNow': useNet.setState({radioNow: msg.now}); break;
     case 'flyStatus': useNet.setState({flyStatus: msg.status}); break;
     // the pilot's controls arrive many times a second: handed straight to the TV's flight, never through the store
@@ -360,7 +385,7 @@ function connect() {
       // timed from the server clock when the message is late (a phone that slept gets it on waking), else from arrival
       const localStart = showLocalStart(msg.show, Date.now(), serverOffset());
       if (localStart + msg.show.durationMs < Date.now()) break;
-      useNet.setState({production: {...msg.show, localStart}});
+      useNet.setState((s) => ({production: relabelRows({...msg.show, localStart}, namesOf(s))}));
       break;
     }
     }

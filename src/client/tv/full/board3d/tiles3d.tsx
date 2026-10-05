@@ -221,8 +221,8 @@ const FADE_UP = lazy(() => canvasTex(4, 64, (g) => {
 const HEX_DISC = new THREE.CircleGeometry(1, 6, Math.PI / 2); HEX_DISC.rotateX(-Math.PI / 2);
 const HEX_RING = new THREE.RingGeometry(0.955, 1, 6, 1, Math.PI / 2); HEX_RING.rotateX(-Math.PI / 2);
 /** the owner rim: a dark under-stroke with a bright band of the player's colour on it */
-const RIM_UNDER = new THREE.RingGeometry(0.87, 1.0, 6, 1, Math.PI / 2); RIM_UNDER.rotateX(-Math.PI / 2);
-const RIM = new THREE.RingGeometry(0.9, 0.975, 6, 1, Math.PI / 2); RIM.rotateX(-Math.PI / 2);
+export const RIM_UNDER = new THREE.RingGeometry(0.87, 1.0, 6, 1, Math.PI / 2); RIM_UNDER.rotateX(-Math.PI / 2);
+export const RIM = new THREE.RingGeometry(0.9, 0.975, 6, 1, Math.PI / 2); RIM.rotateX(-Math.PI / 2);
 const DISC = new THREE.CircleGeometry(1, 40); DISC.rotateX(-Math.PI / 2);
 const RING = new THREE.RingGeometry(0.82, 1, 48); RING.rotateX(-Math.PI / 2);
 const DOME = new THREE.SphereGeometry(1, 28, 14, 0, Math.PI * 2, 0, Math.PI / 2);
@@ -370,7 +370,7 @@ const M = {
   flash: lazy(() => new THREE.MeshBasicMaterial({color: '#fff3d8', transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false})),
 };
 type OwnerMats = {ring: THREE.MeshBasicMaterial; dash: THREE.MeshBasicMaterial; cube: THREE.MeshStandardMaterial; flag: THREE.MeshStandardMaterial};
-const RIM_DARK = new THREE.MeshBasicMaterial({color: '#000000', transparent: true, opacity: 0.55, depthWrite: false});
+export const RIM_DARK = new THREE.MeshBasicMaterial({color: '#000000', transparent: true, opacity: 0.55, depthWrite: false});
 const ownerMats = new Map<string, OwnerMats>();
 function owner(color?: Color): OwnerMats | null {
   if (!color || color === 'neutral') return null;
@@ -493,11 +493,15 @@ function Shock({age, at, color, R, length = 0.9}: {age: () => number; at: number
 }
 
 // ---- owner identity -----------------------------------------------------------------------------------------
+/** Whether the board draws every owner rim itself, two instanced draws for the whole board (Board3D OwnerRims);
+ *  until then (and in the labs, which show one model) each tile draws its own. */
+export const ownerRims = {board: false};
+
 /** The owner's rim round the hex top: a bright band of their colour on a dark under-stroke, glowing at night. One
  *  consistent marker on every owned tile, whatever its model, readable from the default camera. */
 function Owner({color, R}: {color?: Color; R: number; age?: () => number; at?: number}) {
   const m = owner(color);
-  if (!m) return null;
+  if (!m || ownerRims.board) return null;
   return (
     <>
       <mesh geometry={RIM_UNDER} material={RIM_DARK} scale={[R, 1, R]} position={[0, 0.003, 0]} renderOrder={3} />

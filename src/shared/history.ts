@@ -103,9 +103,12 @@ function snapshotRace(g: GenRecord, m: SpectatorModel) {
  */
 export function observeFull(h: GameHistory, prev: SpectatorModel | null, next: SpectatorModel): {closed?: number; ended?: boolean; changed: boolean} {
   const g1 = next.game;
+  let renamed = false;
   for (const p of next.players) {
     if (!h.players.some((x) => x.color === p.color)) h.players.push({color: p.color, name: p.name});
     const hp = h.players.find((x) => x.color === p.color)!;
+    // the server relabels models with the seats' current names: a renamed player's stored name follows (src/shared/names.ts)
+    if (p.name && hp.name !== p.name) { hp.name = p.name; renamed = true; }
     const corp = p.tableau.find((c) => findCard(c.name)?.group === 'corporation')?.name;
     if (corp) hp.corporation = corp;
     // Everyone starts on 20 TR (14 solo); first sight may already be later in the game.
@@ -124,8 +127,8 @@ export function observeFull(h: GameHistory, prev: SpectatorModel | null, next: S
     return {changed: true};
   }
   // an undo (or a repeated one: undoCount can stay put while gameAge falls) is folded by the caller (HistoryKeeper.rewind)
-  if (isRewind(prev.game, g1)) return {changed: false};
-  const out: {closed?: number; ended?: boolean; changed: boolean} = {changed: false};
+  if (isRewind(prev.game, g1)) return {changed: renamed};
+  const out: {closed?: number; ended?: boolean; changed: boolean} = {changed: renamed};
 
   // A new generation closes the previous one with its pre-production numbers.
   if (g1.generation > prev.game.generation) {

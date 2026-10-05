@@ -656,7 +656,7 @@ export function spaceBonus(model: Pick<PlayerViewModel, 'game'>, spaceId: string
   return {bonus, words};
 }
 
-function neighbours(spaces: SpaceModel[], sp: SpaceModel): SpaceModel[] {
+export function neighbours(spaces: SpaceModel[], sp: SpaceModel): SpaceModel[] {
   const {cells} = layout(spaces);
   const me = cells.find((c) => c.id === sp.id);
   if (!me) return [];

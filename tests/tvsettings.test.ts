@@ -10,7 +10,7 @@ function memoryStore() {
 describe('TV settings store', () => {
   it('defaults: full volume, hum on, large text, weather on', () => {
     expect(parseSettings(null)).toEqual(DEFAULT_SETTINGS);
-    expect(DEFAULT_SETTINGS).toEqual({master: 1, hum: true, humVolume: 1, effects: 1, voice: 1, textSize: 'large', weather: true, board3d: true, cameraMoves: true, tileStyle: null, radio: false, radioVolume: 0.5,
+    expect(DEFAULT_SETTINGS).toEqual({master: 1, hum: true, humVolume: 1, effects: 1, voice: 1, textSize: 'large', weather: true, board3d: true, trTrack: true, cameraMoves: true, tileStyle: null, boardLife: true, terraformers: true, radio: false, radioVolume: 0.5,
       boardView: false, boardZoom: null, boardTilt: null, fly: false, flyBank: true});
   });
 

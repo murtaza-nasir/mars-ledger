@@ -7,6 +7,7 @@ import {PLAYER_HEX, ResIcon} from '../../ui/Icons';
 import {Planet} from '../Planet';
 import type {Cinematic, MilestoneKind} from './queue';
 import {tvt} from '../settings';
+import {useDisplayName} from '../../names';
 
 const TEXT: Record<MilestoneKind, {title: string; sub: string; accent: string}> = {
   oceans: {title: 'The last ocean', sub: 'All nine oceans are on Mars', accent: 'var(--ocean)'},
@@ -23,6 +24,7 @@ export function MilestoneCinematic({c}: {c: Extract<Cinematic, {kind: 'milestone
 }
 
 function Big({c}: {c: Extract<Cinematic, {kind: 'milestone'}>}) {
+  const nameFor = useDisplayName();
   const txt = TEXT[c.milestone];
   // One step on the track is a small change on the globe, so the cinematic winds the milestone's own
   // parameter back a little before letting it wash across the planet.
@@ -58,7 +60,7 @@ function Big({c}: {c: Extract<Cinematic, {kind: 'milestone'}>}) {
         </motion.div>
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{delay: 2.1}} style={{fontSize: '1.7vw', color: 'var(--ice-dim)', marginTop: '1.6vh'}}>
           {txt.sub}
-          {c.by && <> · <span style={{color: PLAYER_HEX[c.by.color], fontWeight: 700}}>{c.by.name}</span> made it happen</>}
+          {c.by && <> · <span style={{color: PLAYER_HEX[c.by.color], fontWeight: 700}}>{nameFor(c.by.color, c.by.name)}</span> made it happen</>}
         </motion.div>
       </div>
     </motion.div>
@@ -66,6 +68,7 @@ function Big({c}: {c: Extract<Cinematic, {kind: 'milestone'}>}) {
 }
 
 function Beat({c}: {c: Extract<Cinematic, {kind: 'milestone'}>}) {
+  const nameFor = useDisplayName();
   const txt = TEXT[c.milestone];
   const icon = c.milestone === 'heat-bonus' ? 'heat' : c.milestone === 'oxygen-bonus' ? 'plants' : null;
   const sub = c.milestone === 'heat-bonus' ? `Temperature ${c.value} °C` : txt.sub;
@@ -81,7 +84,7 @@ function Beat({c}: {c: Extract<Cinematic, {kind: 'milestone'}>}) {
       <div>
         <div style={{fontSize: '2.6vw', fontWeight: 850, lineHeight: 1, fontVariationSettings: "'wdth' 118", color: txt.accent}}>{txt.title}</div>
         <div className="muted" style={{fontSize: tvt(1.2), marginTop: '0.5vh'}}>
-          {sub}{c.by && <> · <span style={{color: PLAYER_HEX[c.by.color], fontWeight: 650}}>{c.by.name}</span></>}
+          {sub}{c.by && <> · <span style={{color: PLAYER_HEX[c.by.color], fontWeight: 650}}>{nameFor(c.by.color, c.by.name)}</span></>}
         </div>
       </div>
     </motion.div>

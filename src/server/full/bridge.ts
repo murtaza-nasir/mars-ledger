@@ -24,6 +24,8 @@ import {EngineClient} from './engine';
 import {HistoryKeeper} from './history';
 import {isBotSeat} from '../../shared/bots';
 import type {GameHistory} from '../../shared/history';
+import {relabelHistory, relabelModel, seatNames} from '../../shared/names';
+import type {SeatNames} from '../../shared/names';
 import {atTarget, consistentCut, CUT_RETRIES, HEARTBEAT_MS, isRewind, isTurnMenuQuestion, isUndoAnswer, judgeInput, menuChoice, modelFingerprint, MOVED_ON_TEXT, moveSubject,
   planBack, planBotUndo, ResyncLimiter, sameQuestion, seatNow, undoChangedText, UNDO_NOTICE_MS} from '../../shared/sync';
 import type {InputCode, MoveRecord, Seen, UndoNotice, ViewVersion} from '../../shared/sync';
@@ -94,6 +96,8 @@ export class FullBridge {
   /** The last accepted move by anyone (the undo window), and each seat's gameAge after its own last answer (double taps). */
   private lastMove: {playerId: string; name: string} | null = null;
   private ownAge = new Map<string, {epoch: number; age: number}>();
+  /** The game the per-game memory above (ownAge, moves, last move) belongs to; a different linked game clears it. */
+  private memoryGame: string | null = null;
   /** Answers reach the engine one at a time, so the check and the answer see the same game. */
   private inputChain: Promise<unknown> = Promise.resolve();
   /** Accepted answers so far; a fetch remembers the count when it starts, so an undo applies only to fetches made after it. */
@@ -124,6 +128,49 @@ export class FullBridge {
     this.timer.unref();
     this.beat = setInterval(() => this.heartbeat(), heartbeatMs);
     this.beat.unref();
+  }
+
+  // ---- names ----------------------------------------------------------------------------------------------------
+  /** The seats' current names (src/shared/names.ts): our player records, which a profile edit on a phone renames. */
+  names(): SeatNames {
+    return seatNames(this.state());
+  }
+  /**
+   * Every engine model passes through here. The engine keeps the names players had when the game was created and has no
+   * route to rename anyone, so models are relabelled as they arrive: views, the story, notices, mission control, bots
+   * and the production show all carry the names people chose on their phones.
+   */
+  playerModel(engineId: string): Promise<PlayerViewModel> {
+    return this.engine.player(engineId).then((m) => relabelModel(m, this.names()));
+  }
+  private spectatorModel(spectatorId: string): Promise<SpectatorModel> {
+    return this.engine.spectator(spectatorId).then((m) => relabelModel(m, this.names()));
+  }
+  private inputModel(engineId: string, response: InputResponse): Promise<PlayerViewModel> {
+    return this.engine.input(engineId, response).then((m) => relabelModel(m, this.names()));
+  }
+  /** The story as devices see it: names from the seats (the stored story may hold the names of game creation). */
+  story(gameId: string): GameHistory | null {
+    return this.history ? relabelHistory(this.history.get(gameId), this.names()) : null;
+  }
+
+  /**
+   * A seat was renamed: every device gets the views, the story and its last production show again with the new
+   * names, without waiting for the next move. (The engine's numbers did not move, so the poll would not push.)
+   */
+  async renamed(): Promise<void> {
+    const link = this.link();
+    if (!link) return;
+    if (this.lastSpectator) this.lastSpectator = relabelModel(this.lastSpectator, this.names());
+    if (this.observed) this.observed = {...this.observed, model: relabelModel(this.observed.model, this.names())};
+    if (this.lastMove) this.lastMove = {...this.lastMove, name: this.nameOf(this.lastMove.playerId, this.lastMove.name)};
+    if (this.lastUndo?.playerId) this.lastUndo = {...this.lastUndo, name: this.nameOf(this.lastUndo.playerId, this.lastUndo.name)};
+    if (this.show) {
+      const n = this.names();
+      this.show = {...this.show, players: this.show.players.map((p) => ({...p, name: (p.playerId ? n.byId[p.playerId] : undefined) ?? n.byColor[p.color] ?? p.name}))};
+    }
+    this.broadcastHistory(link);
+    await this.pushAll();
   }
 
   private link(): FullLink | null {
@@ -159,7 +206,8 @@ export class FullBridge {
     // A device joining mid-show gets it too; clients skip shows they have already played (by id).
     if (this.show && Date.now() < this.show.startAt + this.show.durationMs) this.send(ws, {type: 'production', show: {...this.show, serverNow: Date.now()}});
     const link = this.link();
-    if (link && this.history) this.send(ws, {type: 'history', history: this.history.get(link.gameId)});
+    const story = link ? this.story(link.gameId) : null;
+    if (story) this.send(ws, {type: 'history', history: story});
     if (link && this.deadEnd?.gameId === link.gameId) this.send(ws, {type: 'deadEnd', deadEnd: this.deadEnd});
     if (link && this.lastUndo?.gameId === link.gameId && Date.now() - this.lastUndo.at < UNDO_NOTICE_MS) this.send(ws, {type: 'fullUndo', notice: this.lastUndo});
     void this.pushTo(ws).catch((e) => console.warn('full: push on hello failed:', (e as Error).message));
@@ -262,14 +310,15 @@ export class FullBridge {
     if (!seat) throw new Error('You do not have a seat in this game');
     if (isBotSeat(this.state(), playerId) !== asBot) throw new Error(asBot ? 'That seat is not a bot' : 'A bot plays that seat');
     const notice = await this.locked(async () => {
-      const fresh = await this.engine.player(seat.engineId);
+      this.forGame(link.gameId);
+      const fresh = await this.playerModel(seat.engineId);
       const isUndo = isUndoAnswer(fresh.waitingFor, response);
       const own = this.ownAge.get(playerId);
       const verdict = judgeInput({playerId, fresh, seen, isUndo, boot: this.boot, epoch: this.epoch, lastUndo: this.lastUndo,
         ownAge: own && own.epoch === this.epoch ? own.age : null, lastMove: this.lastMove,
         activeName: fresh.players?.find((p) => p.isActive && p.color !== seat.color)?.name ?? null});
       if (!verdict.ok) throw new InputRefused(verdict.code, verdict.error);
-      const after = await this.engine.input(seat.engineId, response);
+      const after = await this.inputModel(seat.engineId, response);
       this.answers++;
       if (isUndo) return this.noteUndo(link, playerId, fresh, after);
       this.lastMove = {playerId, name: this.nameOf(playerId, fresh.thisPlayer?.name)};
@@ -320,7 +369,7 @@ export class FullBridge {
 
   private async takeBack(link: FullLink, playerId: string, what: 'back' | 'undo', seen?: Seen | null): Promise<{take: TakeBack; notice: UndoNotice | null}> {
     const seat = link.players[playerId];
-    const fresh = await this.engine.player(seat.engineId);
+    const fresh = await this.playerModel(seat.engineId);
     if (seen && seen.boot === this.boot && seen.epoch < this.epoch) {
       const undoer = this.lastUndo && this.lastUndo.epoch > seen.epoch ? this.lastUndo.name : null;
       throw new InputRefused('stale', undoChangedText(undoer));
@@ -333,7 +382,7 @@ export class FullBridge {
       if (!plan.ok) throw new InputRefused('undoWindow', plan.reason);
       if (seen && !sameQuestion(seen, fresh.waitingFor)) throw new InputRefused('stale', MOVED_ON_TEXT);
       await this.engine.load(link.gameId, 0);
-      const after = await this.engine.player(seat.engineId);
+      const after = await this.playerModel(seat.engineId);
       if (!atTarget(after, {...plan.target, color: seat.color})) {
         console.warn(`full: ${name} backed out, but the engine reloaded ${after.game.gameAge} (generation ${after.game.generation}), not the move's start at ${plan.target.age}`);
       }
@@ -352,7 +401,7 @@ export class FullBridge {
     while (!reached && steps < plan.steps + 2) {
       await this.engine.load(link.gameId, 1);
       steps++;
-      after = await this.engine.player(seat.engineId);
+      after = await this.playerModel(seat.engineId);
       reached = atTarget(after, plan.target);
       if (!reached && after.game.gameAge < plan.target.age) break;
     }
@@ -372,6 +421,17 @@ export class FullBridge {
     this.moves = [];
     this.rewindFrom = this.answers;
     this.taken = t;
+  }
+
+  /** Per-game memory never crosses games: a new game's gameAge starts low again, so an old seat's ownAge would refuse
+   *  every answer as "already went through", and old moves would offer Back or undo for a game that is gone. */
+  private forGame(gameId: string) {
+    if (this.memoryGame === gameId) return;
+    this.memoryGame = gameId;
+    this.ownAge.clear();
+    this.moves = [];
+    this.lastMove = null;
+    this.taken = null;
   }
 
   private locked<T>(job: () => Promise<T>): Promise<T> {
@@ -415,7 +475,7 @@ export class FullBridge {
     if (!link) return null;
     const seat = id?.role === 'phone' && id.playerId ? link.players[id.playerId] : undefined;
     if (seat && id?.playerId) {
-      const [model, logs] = await Promise.all([this.engine.player(seat.engineId), this.engine.logs(seat.engineId).catch(() => [])]);
+      const [model, logs] = await Promise.all([this.playerModel(seat.engineId), this.engine.logs(seat.engineId).catch(() => [])]);
       this.checkDeadEnd(id.playerId, model);
       return {role: 'player', playerId: id.playerId, model, logs};
     }
@@ -428,7 +488,7 @@ export class FullBridge {
     return this.enqueue(async () => {
       const link = this.link();
       if (!link) return;
-      const view = await this.viewFor(this.ids.get(ws), () => this.engine.spectator(link.spectatorId));
+      const view = await this.viewFor(this.ids.get(ws), () => this.spectatorModel(link.spectatorId));
       if (view) this.sendView(ws, view);
     });
   }
@@ -438,6 +498,7 @@ export class FullBridge {
    * production just paid out: broadcast the show, computed from that pre-production model.
    */
   private observe(link: FullLink, s: SpectatorModel, fetchedAfter = this.answers) {
+    this.forGame(link.gameId);
     let prev = this.observed?.gameId === link.gameId ? this.observed.model : null;
     if (!prev) this.firstSeen.clear();
     // Observations arrive in fetch order (every fetch runs in the push queue), so a lower gameAge is a rewind, never a slow
@@ -464,7 +525,7 @@ export class FullBridge {
     this.observed = {gameId: link.gameId, model: s};
     const storyGrew = this.history?.observe(link.gameId, prev, s) ?? false;
     if (storyGrew) this.broadcastHistory(link);
-    try { this.onObserve?.(link.gameId, prev, s, this.history?.get(link.gameId) ?? null); } catch (e) { console.warn('full: observer failed:', (e as Error).message); }
+    try { this.onObserve?.(link.gameId, prev, s, this.story(link.gameId)); } catch (e) { console.warn('full: observer failed:', (e as Error).message); }
     // after the observers (the away journal dates its entries now): entries later than this belong to the undone future
     if (!this.firstSeen.has(s.game.gameAge)) this.firstSeen.set(s.game.gameAge, Date.now());
     if (!prev) return;
@@ -501,8 +562,8 @@ export class FullBridge {
   }
 
   private broadcastHistory(link: FullLink) {
-    if (!this.history) return;
-    const history = this.history.get(link.gameId);
+    const history = this.story(link.gameId);
+    if (!history) return;
     for (const ws of this.sockets()) this.send(ws, {type: 'history', history});
   }
 
@@ -547,7 +608,7 @@ export class FullBridge {
       // The spectator model comes first: if production just paid out, the show must reach devices
       // before the post-production numbers do, so phones can hold their numerals until tokens land.
       const fetchedAfter = givenAfter ?? this.answers;
-      s = given ?? await this.engine.spectator(link.spectatorId);
+      s = given ?? await this.spectatorModel(link.spectatorId);
       given = undefined; givenAfter = undefined;
       this.observe(link, s, fetchedAfter);
       const first = s;
@@ -613,7 +674,7 @@ export class FullBridge {
       // and a rewind (undo) is never confused with a slow fetch.
       await this.enqueue(async () => {
         const after = this.answers;
-        const s = await this.engine.spectator(link.spectatorId);
+        const s = await this.spectatorModel(link.spectatorId);
         this.lastSpectator = s;
         this.observe(link, s, after);
         // gameAge alone misses changes the engine makes without a log line (a card's cost taken before it resolves)

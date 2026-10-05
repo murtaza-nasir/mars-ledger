@@ -37,6 +37,7 @@ import {cardSynergies, type Synergy} from '../../../shared/synergy';
 import {findCard} from '../../../shared/cards';
 import type {Hints} from '../../../shared/hints';
 import {HintLine, useHintsOn} from '../../ui/Hints';
+import {PhonePrefsContext, usePhonePrefs} from '../../ui/PhonePrefs';
 import {ProductionShowPhone, useHeldNumber, useShowDisplay, useTilePulse} from './Production';
 import {HitStack, NoticeBell, NoticeLayer} from './Notices';
 import {LogTab} from './LogTab';
@@ -49,6 +50,7 @@ import {useRenderCount} from '../../perf/recorder';
 import {dropPlan, planIsReady, usePlanSync} from './plan/store';
 import {IntendedChip} from './plan/Tray';
 import {PlanNotice} from './plan/PlanNotice';
+import {useDisplayName} from '../../names';
 
 type Tab = 'hand' | 'table' | 'mars' | 'log';
 
@@ -131,6 +133,7 @@ function Seated({model, logs, me, state, version, lastMove, back, undoMine}: {mo
   }, [model.thisPlayer.tableau, model.cardsInHand]);
   // Smart hints: only this player's own model, only when they turned hints on.
   const hintsOn = useHintsOn(state, me.id);
+  const prefs = usePhonePrefs(state, me.id);
   const hints: Hints = useMemo(() => (hintsOn ? fullHints(model) : NO_HINTS), [hintsOn, model]);
   // Debug handle for tests (like window.__net): what this phone is showing, tied to the model it came from.
   useEffect(() => {
@@ -268,6 +271,7 @@ function Seated({model, logs, me, state, version, lastMove, back, undoMine}: {mo
   return (
     // the live game the lifted card view counts its hints from (cardHints.ts)
     <FullHintWorld model={model}>
+    <PhonePrefsContext.Provider value={prefs}>
     <div style={{minHeight: '100svh', display: 'flex', flexDirection: 'column',
       // the hint line sits above the dock on your turn: keep the page scrollable clear of it
       paddingBottom: `calc(${(menu && hints.turn.length > 0 ? 136 : 92) + (undoMine?.ok && !open ? 72 : 0)}px + env(safe-area-inset-bottom))`}}>
@@ -334,6 +338,7 @@ function Seated({model, logs, me, state, version, lastMove, back, undoMine}: {mo
           return c ? {card: cardDef(c.name), cost: playable.get(c.name) ?? c.calculatedCost} : null;
         }} : undefined} />
     </div>
+    </PhonePrefsContext.Provider>
     </FullHintWorld>
   );
 }
@@ -481,6 +486,7 @@ function Dock({model, menu, forced, optional, active, state, meId, hints, onOpen
   active?: PublicPlayerModel; state: GameState; meId: string; hints: Hints['turn']; onOpen: () => void;
   /** only bots moved since this player's last move: take it back with theirs */
   undoMine?: {bots: number; onUndo: () => void} | null; busy?: boolean}) {
+  const nameFor = useDisplayName();
   const passed = model.game.passedPlayers.includes(model.color);
   // "Your move" appears at once but lets go only after the turn has really moved on: while a move is processed a
   // refresh can briefly show no question, and the button would otherwise blink to "Waiting" and back.
@@ -499,7 +505,7 @@ function Dock({model, menu, forced, optional, active, state, meId, hints, onOpen
   const target = active && active.color !== model.color ? state.players.find((p) => p.color === active.color) : undefined;
   const others = choosingCards(model)
     ? 'Others are choosing cards'
-    : active && active.color !== model.color ? `${active.name} is playing` : passed ? 'You passed. Waiting for the others' : 'Waiting for the table';
+    : active && active.color !== model.color ? `${nameFor(active.color, active.name)} is playing` : passed ? 'You passed. Waiting for the others' : 'Waiting for the table';
   return (
     <div style={{position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 30, padding: '12px 14px calc(14px + env(safe-area-inset-bottom))',
       background: 'linear-gradient(180deg, transparent, rgba(20,9,6,.94) 35%)'}}>
@@ -725,10 +731,11 @@ function UseActionButton({name, onUse}: {name: string; onUse: () => Promise<stri
 }
 
 function Rival({p, passed}: {p: PublicPlayerModel; passed: boolean}) {
+  const name = useDisplayName()(p.color, p.name);
   return (
     <div style={{padding: '10px 12px', borderRadius: 14, background: 'rgba(255,255,255,.04)', boxShadow: `inset 3px 0 0 ${PLAYER_HEX[p.color]}`, opacity: passed ? 0.6 : 1}}>
       <div style={{display: 'flex', alignItems: 'baseline', gap: 8}}>
-        <span style={{fontWeight: 700, flex: 1}}>{p.name}<BotMarkFor color={p.color} />{p.isActive && <span style={{color: 'var(--mc)', fontSize: 13}}> · playing</span>}{passed && <span className="faint" style={{fontSize: 13}}> · passed</span>}</span>
+        <span style={{fontWeight: 700, flex: 1}}>{name}<BotMarkFor color={p.color} />{p.isActive && <span style={{color: 'var(--mc)', fontSize: 13}}> · playing</span>}{passed && <span className="faint" style={{fontSize: 13}}> · passed</span>}</span>
         <span className="faint" style={{fontSize: 13}}>{p.cardsInHandNbr} in hand</span>
         <span className="num" style={{color: 'var(--tr)', fontSize: 18}}>{p.terraformRating}</span>
       </div>
@@ -746,6 +753,7 @@ function Rival({p, passed}: {p: PublicPlayerModel; passed: boolean}) {
 // ---- mars ------------------------------------------------------------------------------------
 function Mars({model}: {model: PlayerViewModel}) {
   const g = model.game;
+  const nameFor = useDisplayName();
   const hovers = useNet((s) => s.hovers);
   const items = [
     {label: 'Temperature', v: g.temperature, unit: '°C', pct: (g.temperature + 30) / 38, c: 'linear-gradient(90deg, #6FB8E8, #F0643A)'},
@@ -775,7 +783,7 @@ function Mars({model}: {model: PlayerViewModel}) {
           return (
             <div key={m.kind + m.name} style={{display: 'flex', gap: 8, padding: '6px 2px', borderBottom: '1px solid var(--rim)'}}>
               <span style={{flex: 1, color: m.color ? PLAYER_HEX[m.color] : 'var(--ice)'}}>{m.name}</span>
-              <span className="faint">{m.color ? `${m.kind === 'Award' ? 'funded' : 'claimed'} by ${m.playerName ?? nameOf(model, m.color)}` : `you: ${mine ?? 0}`}</span>
+              <span className="faint">{m.color ? `${m.kind === 'Award' ? 'funded' : 'claimed'} by ${nameFor(m.color, m.playerName ?? nameOf(model, m.color))}` : `you: ${mine ?? 0}`}</span>
             </div>
           );
         })}
@@ -864,6 +872,7 @@ function Recent({model, logs}: {model: PlayerViewModel; logs: LogLine[]}) {
 
 // ---- final score -----------------------------------------------------------------------------
 function Final({model, state, playerId}: {model: PlayerViewModel; state: GameState; playerId: string}) {
+  const nameFor = useDisplayName();
   const rows = [...model.players].map((p) => ({p, v: p.victoryPointsBreakdown})).sort((a, b) => (b.v?.total ?? 0) - (a.v?.total ?? 0));
   const cols: Array<[string, keyof NonNullable<PublicPlayerModel['victoryPointsBreakdown']>]> = [
     ['TR', 'terraformRating'], ['Milestones', 'milestones'], ['Awards', 'awards'], ['Greenery', 'greenery'], ['Cities', 'city'], ['Cards', 'victoryPoints'],
@@ -884,7 +893,7 @@ function Final({model, state, playerId}: {model: PlayerViewModel; state: GameSta
             style={{padding: '14px 16px', borderRadius: 18, background: 'rgba(0,0,0,.3)', boxShadow: `inset 4px 0 0 ${PLAYER_HEX[p.color]}`}}>
             <div style={{display: 'flex', alignItems: 'baseline', gap: 10}}>
               {!solo && <span className="num" style={{fontSize: 24, width: 26, color: rows.filter((x) => (x.v?.total ?? 0) > (v?.total ?? 0)).length === 0 ? 'var(--mc)' : undefined}}>{1 + rows.filter((x) => (x.v?.total ?? 0) > (v?.total ?? 0)).length}</span>}
-              <span style={{flex: 1, fontWeight: 750, fontSize: 20}}>{p.name}<BotMarkFor color={p.color} />{p.color === model.color && <span className="faint" style={{fontSize: 14}}> · you</span>}</span>
+              <span style={{flex: 1, fontWeight: 750, fontSize: 20}}>{nameFor(p.color, p.name)}<BotMarkFor color={p.color} />{p.color === model.color && <span className="faint" style={{fontSize: 14}}> · you</span>}</span>
               <span className="num" style={{fontSize: 36}}>{v?.total ?? 0}</span>
             </div>
             {v && (
@@ -897,7 +906,7 @@ function Final({model, state, playerId}: {model: PlayerViewModel; state: GameSta
           </motion.div>
         ))}
       </div>
-      <PosterCard gameId={state.full?.gameId} summary={summarize(rows.map(({p, v}) => ({name: p.name, color: p.color, vp: v?.total ?? 0, place: 1 + rows.filter((x) => (x.v?.total ?? 0) > (v?.total ?? 0)).length})))} />
+      <PosterCard gameId={state.full?.gameId} summary={summarize(rows.map(({p, v}) => ({name: nameFor(p.color, p.name), color: p.color, vp: v?.total ?? 0, place: 1 + rows.filter((x) => (x.v?.total ?? 0) > (v?.total ?? 0)).length})))} />
       <div style={{marginTop: 28}}><GameMenu state={state} playerId={playerId} gameOver onDone={() => {}} /></div>
     </motion.div>
   );

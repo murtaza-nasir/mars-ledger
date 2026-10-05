@@ -14,10 +14,11 @@ import type {Seen, UndoNotice, ViewVersion} from './sync';
 import type {NoticeFeed} from './notices';
 import type {FlyStatus, FlyTvState} from './fly';
 import type {Echo, EchoTarget, HapticHit, Replay, ReplayMove} from './tvlinks';
+import type {Tv3dReport} from './tv3d';
 
 export type ClientMsg =
   // a seat's own setting (smart hints) when the seat has no profile; not a move, never in the game log
-  | {type: 'seatPref'; id: string; playerId: string; hints: boolean}
+  | {type: 'seatPref'; id: string; playerId: string; hints?: boolean; showVp?: boolean; confirmBuy?: boolean}
   | {type: 'cmd'; id: string; command: Command}
   | {type: 'undo'; id: string; playerId: string}
   | {type: 'newGame'; id: string; force?: boolean}
@@ -48,7 +49,7 @@ export type ClientMsg =
   | {type: 'replayDone'; replayId: string}
   // profiles: create (the phone picks the id; `device` is the phone's id so it remembers the profile), edit, merge a duplicate
   | {type: 'profile'; id: string; op: 'create'; device: string; profile: {id: string; name: string; color: string; avatar: string | null}}
-  | {type: 'profile'; id: string; op: 'update'; profileId: string; patch: {name?: string; color?: string; avatar?: string | null; hints?: boolean}}
+  | {type: 'profile'; id: string; op: 'update'; profileId: string; patch: {name?: string; color?: string; avatar?: string | null; hints?: boolean; showVp?: boolean; confirmBuy?: boolean}}
   | {type: 'profile'; id: string; op: 'merge'; from: string; into: string}
   // ask for one profile's stats, achievements and recent games (answered with 'profileDetail', then acked)
   | {type: 'profileDetail'; id: string; profileId: string}
@@ -59,6 +60,8 @@ export type ClientMsg =
   | {type: 'radioLog'; text: string}
   // mission control: what became of a line on this TV (shown, spoken, or why not), for the server log and /api/health
   | {type: 'narrationSeen'; report: NarrationReport}
+  // the TV's 3D board changed quality level (shared/tv3d.ts): logged on the server and shown in /api/health
+  | {type: 'tv3d'; report: Tv3dReport}
   // table-sense notices (full mode): clear hits (all of this seat's when `ids` is missing), or mark the feed read up to `upTo`
   | {type: 'noticeClear'; playerId: string; ids?: string[]}
   | {type: 'noticeSeen'; playerId: string; upTo: number}
@@ -76,7 +79,7 @@ export type TvMomentMsg = {type: 'tvMoment'; phase: 'resolve'; gameAge: number; 
 
 export type ServerMsg =
   // seats' own settings for the current game (see the seatPref message), keyed by player id
-  | {type: 'prefs'; prefs: Record<string, {hints: boolean}>}
+  | {type: 'prefs'; prefs: Record<string, {hints: boolean; showVp?: boolean; confirmBuy?: boolean}>}
   /** phones connected per player id (any id a phone speaks for, seated or not) */
   | {type: 'phones'; phones: Record<string, number>; tvs?: number}
   | {type: 'state'; state: GameState; recent: Tick[]}

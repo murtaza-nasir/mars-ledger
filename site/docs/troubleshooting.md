@@ -2,13 +2,18 @@
 
 ## A flat board on the TV instead of the 3D one
 
-The 3D board needs WebGL2. When the board is not smooth on a screen, or a graphics driver error occurs, the
-screen is switched to the flat board, which is remembered on this screen.
+The 3D board needs WebGL2. When the board is not smooth on a screen, it first steps its quality down (resolution,
+effects, board life, simpler tiles); only when even the lightest 3D level stays slow, or a graphics driver error
+occurs, is the screen switched to the flat board, which is remembered on this screen.
 
-- Open **TV options** (the gear, bottom left). Under **3D board** you see when it was switched off and why: the
-  measured frame times and the screen size, or the graphics error.
-- Turn **3D board** back on to try again. If a TV keeps being switched back, leave it off. The flat board shows
-  the same game.
+- Open **TV options** (the gear, bottom left). The **3D:** line shows the current quality level and when it last
+  changed, with the measured frame times and screen size. **Reset to full** starts again at full quality.
+- Under **3D board** you see when it was switched off and why: the measured frame times and the screen size, or
+  the graphics error. Turn **3D board** back on to try again. If a TV keeps being switched back, leave it off. The
+  flat board shows the same game.
+- Each TV also tells the server when it changes level: the server log has lines such as
+  `3D: TV k3x9ab stepped down to reduced resolution (85%): p95 34 ms ... at 1536x729@2.5`, and `/api/health`
+  shows the latest per TV under `tv3d`.
 - Screens are judged only while the page has focus, so a hidden or covered window does not count as slow.
 - Under **Tile style**, you can choose Classic or Detailed tiles. Try Classic on a screen that struggles.
 
@@ -64,6 +69,14 @@ With `GET /api/health` you can check the app and the engine. Point an outside mo
 
 The engine's answer is cached for 10 seconds. `GET /api/health?app=1` is an app-only check. The image's Docker health
 check is based on it, so the app container stays healthy during an engine outage.
+
+The answer also has a `tv3d` section: each TV's latest 3D board quality report since the server started, by the
+TV's short id (shown at the top of its TV options), for example
+`{"k3x9ab": {"level": 1, "levelId": "res85", "label": "reduced resolution (85%)", "dir": "down", "p95": 34, "median": 28,
+"slow": 0.31, "size": "1536x729@2.5", "render": "3072x1458", "at": "2026-10-04T21:12:32.320Z"}}`. `dir` is `down`, `up`,
+`flat` (fell back to the flat board), `start` (loaded at a remembered level) or `reset`; `p95` and `median` are frame
+times in ms, `slow` the share of frames over 25 ms, `size` the page and `render` the 3D canvas in pixels. It is empty
+while every TV runs at full quality. The status code does not depend on it.
 
 When mission control is configured, the answer also has a `narrator` section. The status code does not depend on it.
 

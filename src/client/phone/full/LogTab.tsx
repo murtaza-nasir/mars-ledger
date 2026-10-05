@@ -15,14 +15,20 @@ import {CardFace} from '../../ui/CardFace';
 import {CardViewer} from '../../ui/deck/Viewer';
 import {PLAYER_HEX, ResIcon} from '../../ui/Icons';
 import {cardDef, standardProject} from './model';
-import {useLogHistory} from './logHistory';
+import {useLogHistory, useVpSnaps} from './logHistory';
+import {indexLines, moveVp, vpSegs, vpTone} from './logVp';
+import type {VpChange} from './logVp';
+import {usePrefsContext} from '../../ui/PhonePrefs';
 import {useNet} from '../../net';
 import {echoTargets, replayable} from './logLinks';
 import {MoveTvLinks} from './TvLinks';
 import {cardLabel, cardsOfMove, groupLog, headline, movesWithCard, plain, segments, shownLines, newestFirst, summary, victimOf} from './logMoves';
 import type {LogEntry, Seg} from './logMoves';
+import {useDisplayName} from '../../names';
 
 type Move = Extract<LogEntry, {kind: 'move'}>;
+/** A move's VP change, with a signature that changes when the change does (the row re-renders on it). */
+type Vp = {sig: string; changes: VpChange[]};
 /** Rows drawn at first; "Show older moves" adds as many again. */
 const ROWS_PAGE = 60;
 /** Phrases shown in a move's one-line summary before "and N more". */
@@ -78,9 +84,27 @@ export const LogTab = memo(function LogTab({model, logs: windowLines}: {model: P
   const logSig = logs.length ? `${logs.length}|${logs[0].timestamp}|${logs[logs.length - 1].timestamp}|${logs[logs.length - 1].message}` : '';
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const entries = useMemo(() => groupLog(logs, me, generation), [logSig, me, generation]);
-  const namesSig = model.players.map((p) => `${p.color}:${p.name}`).join('|');
+  // names come from the seats (a player renamed on a phone), the engine's only for seats the table does not know
+  const nameFor = useDisplayName();
+  const namesSig = model.players.map((p) => `${p.color}:${nameFor(p.color, p.name)}`).join('|');
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const names = useMemo(() => Object.fromEntries(model.players.map((p) => [p.color, p.name])) as Record<string, string>, [namesSig]);
+  const names = useMemo(() => Object.fromEntries(model.players.map((p) => [p.color, nameFor(p.color, p.name)])) as Record<string, string>, [namesSig]);
+
+  // "Show VP changes": each move's VP change (and what it did to others), from the states this phone saw around it
+  const {showVp} = usePrefsContext();
+  const {snaps, version: vpVersion} = useVpSnaps();
+  const vpMap = useMemo(() => {
+    if (!showVp) return null;
+    const index = indexLines(logs);
+    const out = new Map<string, Vp>();
+    for (const e of entries) {
+      if (e.kind !== 'move') continue;
+      const changes = moveVp(e, logs, index, snaps);
+      if (changes) out.set(e.key, {sig: JSON.stringify(changes), changes});
+    }
+    return out;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showVp, entries, logs, vpVersion]);
 
   const [viewer, setViewer] = useState<{cards: string[]; index: number; move: Move | null} | null>(null);
   const openCard = useCallback((name: string, move: Move | null) => {
@@ -115,7 +139,7 @@ export const LogTab = memo(function LogTab({model, logs: windowLines}: {model: P
       <ol ref={listRef} data-testid="log-list" style={{listStyle: 'none', margin: 0, padding: '2px 0 8px', display: 'flex', flexDirection: 'column', gap: 6, overflowAnchor: 'none'}}>
         {rows.map((e) => (
           <li key={e.key} data-log-key={e.key} style={{listStyle: 'none'}}>
-            <Entry e={e} sig={sigOf(e)} expanded={open.has(e.key)} onToggle={toggle} fresh={fresh(e.key)} />
+            <Entry e={e} sig={sigOf(e)} vp={vpMap?.get(e.key)} expanded={open.has(e.key)} onToggle={toggle} fresh={fresh(e.key)} />
           </li>
         ))}
       </ol>
@@ -165,13 +189,13 @@ function useAnchoredScroll(rows: LogEntry[]) {
 }
 
 // ---- rows -----------------------------------------------------------------------------------------------------------
-const Entry = memo(function Entry({e, expanded, onToggle, fresh: freshProp}: {e: LogEntry; sig: string; expanded: boolean; onToggle: (key: string) => void; fresh: boolean}) {
+const Entry = memo(function Entry({e, vp, expanded, onToggle, fresh: freshProp}: {e: LogEntry; sig: string; vp?: Vp; expanded: boolean; onToggle: (key: string) => void; fresh: boolean}) {
   // decided once per row: the wrapper never comes or goes after the row first drew (that would remount its card art)
   const [fresh] = useState(freshProp);
   const body = (() => {
     switch (e.kind) {
       case 'generation': return <GenerationRow g={e.generation} first={e.first} />;
-      case 'move': return <MoveRow m={e} expanded={expanded} onToggle={onToggle} />;
+      case 'move': return <MoveRow m={e} vp={vp} expanded={expanded} onToggle={onToggle} />;
       case 'research': return <ResearchRow lines={e.lines} />;
       case 'run': return <RunRow k={e.key} lines={e.lines} expanded={expanded} onToggle={onToggle} />;
       case 'line': return <LineRow line={e.line} by={e.by} />;
@@ -179,7 +203,7 @@ const Entry = memo(function Entry({e, expanded, onToggle, fresh: freshProp}: {e:
   })();
   if (!fresh) return body;
   return <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3}}>{body}</motion.div>;
-}, (a, b) => a.sig === b.sig && a.expanded === b.expanded && a.onToggle === b.onToggle);
+}, (a, b) => a.sig === b.sig && a.vp?.sig === b.vp?.sig && a.expanded === b.expanded && a.onToggle === b.onToggle);
 
 function GenerationRow({g, first}: {g: number; first?: Color}) {
   const {names, me} = useContext(LogCtx);
@@ -221,7 +245,7 @@ function MoveThumb({m}: {m: Move}) {
   );
 }
 
-function MoveRow({m, expanded, onToggle}: {m: Move; expanded: boolean; onToggle: (key: string) => void}) {
+function MoveRow({m, vp, expanded, onToggle}: {m: Move; vp?: Vp; expanded: boolean; onToggle: (key: string) => void}) {
   const nameOf = useNameOf();
   const {openCard, tv} = useContext(LogCtx);
   const phrases = useMemo(() => summary(m), [m]);
@@ -247,6 +271,12 @@ function MoveRow({m, expanded, onToggle}: {m: Move; expanded: boolean; onToggle:
           <div data-testid="log-summary" style={{display: 'flex', alignItems: 'center', gap: 4, fontSize: 12.5, lineHeight: 1.3, marginTop: 2, color: 'var(--ice-dim)'}}>
             {hit && <Bolt size={13} />}
             <span style={{minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{text}</span>
+          </div>
+        )}
+        {vp && (
+          <div data-testid="log-vp" data-vp-tone={vpTone(vp.changes, m.by)} style={{fontSize: 12.5, lineHeight: 1.3, marginTop: 2, fontWeight: 650,
+            color: vpTone(vp.changes, m.by) === 'gain' ? '#9FE3AE' : vpTone(vp.changes, m.by) === 'loss' ? '#FFB39E' : 'var(--ice-dim)'}}>
+            <Segs segs={vpSegs(vp.changes, m.by)} move={null} cards={false} />
           </div>
         )}
         {expanded && (

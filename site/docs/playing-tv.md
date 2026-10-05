@@ -53,11 +53,21 @@ Open **TV options** with the gear button in the bottom-left corner. They apply t
 - text size (Normal, Large, Extra large);
 - weather and light effects;
 - **3D board** on or off, and the tile style (Classic or Detailed);
+- the 3D board's quality on this screen (see below), with **Reset to full**;
 - camera moves;
+- **Board life**: tiny characters, things that fall from the sky and rovers on the empty land. Under it,
+  **Terraformers** turns off just the little characters and their scenes; the sky and the rovers stay;
 - the radio and its volume, when a playlist is configured;
 - experimental: board zoom and tilt, and flying over Mars.
 
-The top of the panel also shows the screen's size in page pixels and its pixel density. When the table uses
+When frames stay slow for a while, the 3D board steps down one level at a time, waiting between steps to see
+whether it helped: a lower resolution (85%, then 70%), then fewer effects (no depth of field, fog layers or light
+shafts; a lighter storm), then the terraformers pause, then the rest of board life, then simpler tiles, and only
+then the flat board. When frames have had plenty of room for a minute, it steps back up one level. The **3D:** line
+in TV options shows the current level ("3D: reduced resolution (70%) (slow frames)") and when it last changed.
+
+The top of the panel also shows the screen's size in page pixels and its pixel density, and this TV's short id
+(the server log and `/api/health` name TVs by it). When the table uses
 mission control, a status line under **Mission control voice** shows its state on this screen: for example
 "Mission control: last line 2 min ago", "voice waits for a tap or key on this TV", or "Hume is out of credits,
 using the backup voice".

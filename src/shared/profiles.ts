@@ -14,6 +14,10 @@ export type Profile = {
   created: number;
   /** smart hints on this person's phone; off unless they turn it on */
   hints?: boolean;
+  /** show VP changes in previews and the log; present only when on */
+  showVp?: boolean;
+  /** confirm card purchases before they are sent; present only when on */
+  confirmBuy?: boolean;
 };
 
 /** What the lobby and join screen show about a person. */

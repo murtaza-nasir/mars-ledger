@@ -15,3 +15,6 @@ __pycache__/
 # Release exports (tools/release/export.sh) and docs builds
 /release-out/
 /site/site/
+
+# Private assets (never committed)
+/private-assets/

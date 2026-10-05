@@ -1,6 +1,8 @@
-// When this TV could not keep the 3D board at 60 fps, it falls back to the flat board for the session (and
-// remembers it on this screen). Turning "3D board" back on in the TV options clears it.
+// When this TV could not keep the 3D board at 60 fps even at the quality ladder's lowest 3D level (quality.ts), it falls
+// back to the flat board for the session (and remembers it on this screen). Turning "3D board" back on in the TV
+// options clears it, and the board resumes one level above flat.
 import {useSyncExternalStore} from 'react';
+import {resumeFromFlat} from './quality';
 
 const KEY = 'mars-ledger-board3d-fallback';
 const WHY = 'mars-ledger-board3d-fallback-why';
@@ -29,6 +31,7 @@ export function markBoardFallback(why?: FallbackReason) {
 
 export function clearBoardFallback() {
   fell = false;
+  resumeFromFlat();
   try { localStorage.removeItem(KEY); } catch { /* storage blocked */ }
   emit();
 }

@@ -140,15 +140,19 @@ function TvLobby({state, joinUrl}: {state: GameState; joinUrl: string}) {
         </div>
         <FamePanel />
       </div>
+      {/* the join code, with the fan-project notice and the source address under it (on the left they ran over the hall
+          of fame's panels) */}
+      <div data-lobby-join="" style={{justifySelf: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', width: 'calc(min(26vw, 50vh) + 4.8vw)'}}>
       <motion.div initial={{opacity: 0, rotateY: -25}} animate={{opacity: 1, rotateY: 0}} transition={{duration: 1.4, delay: 0.3}}
-        style={{justifySelf: 'center', padding: '2.4vw', borderRadius: '2vw', background: 'var(--ice)', backdropFilter: 'blur(14px)', boxShadow: '0 0 0 1px var(--rim-strong), 0 40px 80px rgba(0,0,0,.5)'}}>
-        <img src={`/api/qr.svg?url=${encodeURIComponent(joinUrl)}`} alt={`Join at ${joinUrl}`} style={{width: '26vw', height: '26vw', display: 'block'}} />
+        style={{padding: '2.4vw', borderRadius: '2vw', background: 'var(--ice)', backdropFilter: 'blur(14px)', boxShadow: '0 0 0 1px var(--rim-strong), 0 40px 80px rgba(0,0,0,.5)'}}>
+        <img src={`/api/qr.svg?url=${encodeURIComponent(joinUrl)}`} alt={`Join at ${joinUrl}`} style={{width: 'min(26vw, 50vh)', height: 'min(26vw, 50vh)', display: 'block'}} />
         <div className="cond" style={{textAlign: 'center', marginTop: '1.2vw', fontSize: '1.3vw', color: 'var(--dusk-2)'}}>{joinUrl.replace(/^https?:\/\//, '')}</div>
       </motion.div>
-      {/* left of the sound prompt, which sits in the bottom-right corner until a key is pressed */}
-      <div style={{position: 'absolute', left: '7vw', right: '26vw', bottom: '2.2vh', textAlign: 'left'}}>
+      {/* the group is centred, so the notice keeps clear of the sound prompt in the bottom-right corner */}
+      <div data-lobby-notice="" style={{width: '100%', marginTop: '1.4vw', textAlign: 'center'}}>
         <Unofficial style={{fontSize: 'max(11px, 0.72vw)'}} />
         <SourceLink plain style={{fontSize: 'max(11px, 0.72vw)', marginTop: '0.3vh'}} />
+      </div>
       </div>
     </div>
   );

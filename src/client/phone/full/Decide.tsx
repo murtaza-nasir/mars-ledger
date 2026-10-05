@@ -14,7 +14,11 @@ import {cardDef, isBuyTitle, isTurnMenu, MENU_ROWS, msg, OPTION_LABEL, OPTION_OR
 import type {OptionKind} from './model';
 import {defaultPayment, moveLabel, previewText, project, spaceBonus, worldFromView} from '../../../shared/projection';
 import type {Move, World} from '../../../shared/projection';
-import {EffectPreview} from './plan/Preview';
+import {EffectPreview, VpLines} from './plan/Preview';
+import {usePrefsContext} from '../../ui/PhonePrefs';
+import {ConfirmStep} from '../../ui/ConfirmBuy';
+import {confirmFor} from '../../../shared/confirmBuy';
+import {spaceVpLines, tileKindFromTitle, withVp} from '../../../shared/vp';
 import {DuePlan, PlanSlot, WaitingPlan} from './plan/Planner';
 import {planPreselect} from './plan/rules';
 import type {PlannedMove} from './plan/rules';
@@ -98,9 +102,11 @@ function OrInput({input, ctx, onSubmit, onBack, preselect}: Props) {
   const [planPre, setPlanPre] = useState<string | undefined>();
   const [leaf, setLeaf] = useState<number | null>(null);
   const world = useWorld(ctx.model);
+  const {showVp} = usePrefsContext();
   const previewOf = (k: OptionKind): string | null => {
     if (!world || (k !== 'heat' && k !== 'plants')) return null;
-    return previewText(project(world, {kind: k}));
+    const p = project(world, {kind: k});
+    return previewText(showVp ? withVp(world, p) : p);
   };
   const confirmPlan = (option: number, m: PlannedMove) => {
     const o = options[option];
@@ -141,7 +147,7 @@ function OrInput({input, ctx, onSubmit, onBack, preselect}: Props) {
     return (
       <Slide k={`leaf-${leaf}`}>
         {title(msg(ctx.model, options[leaf].title) || OPTION_LABEL[k])}
-        {world && <EffectPreview p={project(world, {kind: k === 'heat' ? 'heat' : 'plants'})} />}
+        {world && <EffectPreview p={project(world, {kind: k === 'heat' ? 'heat' : 'plants'})} world={world} />}
         <button className="btn warm" data-testid="plan-leaf-confirm" style={{width: '100%'}} disabled={ctx.busy} onClick={() => void wrap(leaf)({type: 'option'})}>
           {options[leaf].buttonLabel || 'Confirm'}
         </button>
@@ -452,11 +458,12 @@ function SpaceInput({input, ctx, onSubmit, onBack}: Props) {
   const bonus = at ? spaceBonus(ctx.model, at) : null;
   const plants = ctx.first === 'plants' && isTurnMenu(ctx.model.waitingFor);
   const world = useWorld(ctx.model);
+  const {showVp} = usePrefsContext();
   const greenery: Move = {kind: 'plants'};
   return (
     <Slide k="space">
       {title(t)}
-      {plants && world && <EffectPreview p={project(world, greenery, at ? {space: at} : {})} />}
+      {plants && world && <EffectPreview p={project(world, greenery, at ? {space: at} : {})} world={world} space={at ?? undefined} />}
       <SpacePicker spaces={ctx.model.game.spaces} valid={(input as {spaces: string[]}).spaces} color={ctx.model.color} kind={kind} busy={ctx.busy}
         title={kind === 'special' ? 'Place tile' : `Place ${kind}`}
         onHover={(id) => { setAt(id); ctx.onHover(id, id ? kind : null); }} onConfirm={(id) => { ctx.onHover(null, null); return onSubmit({type: 'space', spaceId: id}); }} />
@@ -465,6 +472,7 @@ function SpaceInput({input, ctx, onSubmit, onBack}: Props) {
           {bonus.words.length ? `This space gives ${bonus.words.join(' · ')}` : 'This space gives no placement bonus'}
         </p>
       )}
+      {showVp && at && !plants && <VpLines lines={spaceVpLines(ctx.model, at, tileKindFromTitle(t))} />}
       {plants && <PlanSlot model={ctx.model} first={greenery} firstLabel="turn plants into a greenery" />}
       <Back onBack={onBack && (() => { ctx.onHover(null, null); onBack(); })} />
     </Slide>
@@ -495,6 +503,18 @@ function CardInput({input, ctx, onSubmit, onBack, preselect}: Props) {
     return n;
   });
   const ok = sel.size >= c.min && sel.size <= c.max;
+  // "Confirm card purchases": buying (or skipping) cards and keeping a draft pick ask once before they are sent
+  const {confirmBuy} = usePrefsContext();
+  const ask = confirmFor(confirmBuy, t, [...sel], single, mc);
+  const [asking, setAsking] = useState(false);
+  const send = () => onSubmit({type: 'card', cards: [...sel]});
+  if (asking && ask) {
+    return (
+      <Slide k="card-confirm">
+        <ConfirmStep question={ask.question} detail={ask.detail} busy={ctx.busy} onConfirm={() => void send()} onBack={() => setAsking(false)} />
+      </Slide>
+    );
+  }
   return (
     <Slide k="card">
       {title(t)}
@@ -513,14 +533,14 @@ function CardInput({input, ctx, onSubmit, onBack, preselect}: Props) {
       <CardPicker cards={c.cards} selected={sel} onToggle={toggle} compact={c.selectBlueCardAction || c.cards.length > 6 && !buying} />
       {action && world && (
         <div style={{marginTop: 12}}>
-          <EffectPreview p={project(world, action)} label={`What ${action.kind === 'action' ? action.card : ''} does`} />
+          <EffectPreview p={project(world, action)} world={world} label={`What ${action.kind === 'action' ? action.card : ''} does`} />
           <PlanSlot model={ctx.model} first={action} firstLabel={moveLabel(action)} />
         </div>
       )}
       <div style={{position: 'sticky', bottom: -20, zIndex: 8, paddingTop: 14, paddingBottom: 4, background: 'linear-gradient(180deg, transparent, var(--dusk-1) 35%)'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
         {!single && sel.size > 0 && <KeepPile names={[...sel]} label={buying ? `${sel.size} to buy` : `${sel.size} picked`} />}
-        <button className="btn warm" style={{flex: 1}} disabled={!ok || ctx.busy} onClick={() => onSubmit({type: 'card', cards: [...sel]})}>
+        <button className="btn warm" style={{flex: 1}} disabled={!ok || ctx.busy} onClick={() => (ask ? setAsking(true) : void send())}>
           {buying ? (sel.size ? `Buy ${sel.size} for ${cost} M€` : 'Buy nothing') : c.selectBlueCardAction && sel.size ? `Use ${[...sel][0]}` : corpPick && sel.size ? `Found ${[...sel][0]}` : sel.size && single ? `Choose ${[...sel][0]}` : input.buttonLabel || 'Confirm'}
         </button>
         </div>
@@ -585,7 +605,7 @@ function MovePreview({world, move}: {world: World; move: Move}) {
   const key = JSON.stringify(move);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const p = useMemo(() => project(world, move), [world, key]);
-  return <EffectPreview p={p} />;
+  return <EffectPreview p={p} world={world} />;
 }
 
 /** "Play a card": one row per playable card with what it does; the info button opens the full card. */

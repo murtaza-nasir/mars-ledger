@@ -78,7 +78,9 @@ export type LodTile = {id: string; detail: Detail; changedAt: number};
  */
 export function lodStep(tiles: Array<LodTile & LodInput>, now: number, o: {up: number; down: number; dwellMs: number; perFrame: number} = LOD):
   Array<{id: string; detail: Detail}> {
-  const want = tiles.map((t) => ({t, d: wantDetail(t.detail, t, now - t.changedAt, o)})).filter((x) => x.d !== x.t.detail);
+  // (a plain loop: this runs every frame, and only the tiles that change get an entry)
+  const want: Array<{t: LodTile & LodInput; d: Detail}> = [];
+  for (const t of tiles) { const d = wantDetail(t.detail, t, now - t.changedAt, o); if (d !== t.detail) want.push({t, d}); }
   want.sort((a, b) => Number(b.t.focused) - Number(a.t.focused) || b.t.size - a.t.size);
   const out: Array<{id: string; detail: Detail}> = [];
   let budget = o.perFrame;

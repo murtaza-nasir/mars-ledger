@@ -750,8 +750,11 @@ export function apply(state: GameState, cmd: Command, answers?: Answer[]): Apply
     break;
   case 'rename': {
     const p = player(s, cmd.playerId);
-    p.name = cmd.name.trim().slice(0, 20) || p.name;
-    p.color = cmd.color;
+    const name = cmd.name.trim().slice(0, 20) || p.name;
+    if (s.players.some((x) => x.id !== p.id && x.name.toLowerCase() === name.toLowerCase())) throw new RuleError(`${name} is already at the table`);
+    p.name = name;
+    // colours are picked in the lobby; once the game runs (the engine's colours in full games) a rename keeps the colour
+    if (s.phase === 'lobby') p.color = cmd.color;
     if (cmd.beginner !== undefined) p.beginner = cmd.beginner;
     break;
   }

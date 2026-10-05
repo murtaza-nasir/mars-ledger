@@ -7,7 +7,7 @@ import {BOARD_NAMES} from '../src/shared/board';
 import type {SpaceModel} from '../src/shared/full';
 import {HEX_R, HEX_W, layout} from '../src/client/tv/full/geometry';
 import {board3d, HEIGHT, MODEL_TALL, prismHeight, PRISM_R, restPoints, restScale, TILE_HEIGHT, UNIT} from '../src/client/tv/full/board3d/geometry3d';
-import {cameraPosition, fallbackStep, FALLBACK, FOCUS, focusView, FOV, frameXY, lensOf, MOMENT, momentView, moveAmount, p95, refDist, REST_POLAR, REST_TILT, restView, stepView, ZERO_VEL}
+import {cameraPosition, FOCUS, focusView, FOV, frameXY, lensOf, MOMENT, momentView, moveAmount, p95, refDist, REST_POLAR, REST_TILT, restView, stepView, ZERO_VEL}
   from '../src/client/tv/full/board3d/camera3d';
 import type {View} from '../src/client/tv/full/board3d/camera3d';
 import {KICK, seeded, SPECIAL_MODELS, TILE_RENDERERS} from '../src/client/tv/full/board3d/tiles3d';
@@ -289,39 +289,11 @@ describe('the 3D camera', () => {
   });
 });
 
-describe('the frame-time fallback', () => {
-  const fast = Array(180).fill(16.7);
-  const slow = Array(60).fill(40);
+describe('frame times', () => {
   it('computes the 95th percentile', () => {
     expect(p95([...Array(95).fill(10), ...Array(5).fill(50)])).toBe(50);
     expect(p95([...Array(96).fill(10), ...Array(4).fill(50)])).toBe(10);
     expect(p95([])).toBe(0);
-  });
-  it('ignores the warm-up and windows with too few frames', () => {
-    expect(fallbackStep({bad: 0}, slow, FALLBACK.warmupMs - 1)).toEqual({bad: 0, fallback: false});
-    expect(fallbackStep({bad: 1}, slow.slice(0, 10), 10000)).toEqual({bad: 1, fallback: false});
-  });
-  it('falls back only after consecutive slow windows; one good window resets', () => {
-    let st = fallbackStep({bad: 0}, slow, 5000);
-    expect(st).toMatchObject({bad: 1, fallback: false});
-    st = fallbackStep(st, fast, 8000);
-    expect(st).toMatchObject({bad: 0, fallback: false});
-    st = fallbackStep(st, slow, 11000);
-    st = fallbackStep(st, slow, 14000);
-    expect(st.fallback).toBe(true);
-  });
-  it('skips windows in which the page did not have focus', () => {
-    expect(fallbackStep({bad: 1}, slow, 9000, false)).toEqual({bad: 1, fallback: false});
-    const st = fallbackStep(fallbackStep({bad: 0}, slow, 5000), slow, 8000);
-    expect(st.fallback).toBe(true);
-    expect(st.stats).toEqual({p95: 40, median: 40, gaps: 0, frames: 60});
-  });
-  it('reports the share of held-back frames', () => {
-    const st = fallbackStep({bad: 0}, [...Array(30).fill(16.7), ...Array(10).fill(120)], 5000);
-    expect(st.stats?.gaps).toBe(0.25);
-  });
-  it('treats a frame just inside the budget as fine', () => {
-    expect(fallbackStep({bad: 1}, Array(100).fill(FALLBACK.budgetP95), 9000)).toMatchObject({bad: 0, fallback: false});
   });
 });
 

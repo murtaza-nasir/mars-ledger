@@ -3,6 +3,7 @@
 // bands moving by transform. Both stay faint so the board under them remains readable.
 import {motion} from 'motion/react';
 import {useEffect, useRef} from 'react';
+import {qualityLevel} from '../full/board3d/quality';
 
 export const STORM_MS = 2200;
 export const MIST_MS = 4600;
@@ -22,12 +23,14 @@ export function DustStorm({at, mode}: {at: number; mode: 'storm' | 'haze'}) {
     const c = canvas.current;
     const ctx = c?.getContext('2d');
     if (!c || !ctx) return;
-    const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+    // a TV whose 3D board had to step its effects down (board3d/quality.ts) draws half the streaks at 1×
+    const lean = !qualityLevel().effects;
+    const dpr = lean ? 1 : Math.min(1.5, window.devicePixelRatio || 1);
     const w = c.clientWidth, h = c.clientHeight;
     c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const scale = h / 900;
-    const n = Math.min(MAX_STREAKS, Math.round((w * h) / 9000));
+    const n = Math.round(Math.min(MAX_STREAKS, Math.round((w * h) / 9000)) * (lean ? 0.5 : 1));
     // a deterministic spread per storm, so every TV draws the same weather for the same attack
     let seed = Math.floor(at) % 2147483647 || 7;
     const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;

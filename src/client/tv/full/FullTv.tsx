@@ -7,6 +7,8 @@ import type {PublicPlayerModel, SpectatorModel} from '../../../shared/full';
 import {useNet} from '../../net';
 import {BoardView} from './BoardView';
 import {useBoardRegion} from './boardRegion';
+import {insetBox, TrTrack} from './TrTrack';
+import type {TrSeat} from './TrTrack';
 import {diffModels} from './diff';
 import {Globals} from './Globals';
 import {AttackMoment, Banner, LogTicker, Podium} from './Moments';
@@ -52,6 +54,7 @@ import {director} from '../sound/director';
 import {tileCue} from '../sound/cues';
 import type {Color} from '../../../shared/full';
 import {EchoLayer} from './Echo';
+import {useDisplayName} from '../../names';
 
 type Moment = BaseMoment | ActionMomentModel;
 
@@ -378,7 +381,8 @@ export function FullTv({state}: {state: GameState}) {
   // When the side column runs short of height the panels fold (tag row first, then a compact header); useFold
   // also unfolds once the room is back. While the "tap for sound" chip shows, the column ends above it.
   const columnRef = useRef<HTMLDivElement>(null);
-  const {textSize} = useTvSettings();
+  const {textSize, trTrack} = useTvSettings();
+  const profiles = useNet((s) => s.profiles);
   const chip = useSoundChipVisible();
   const [screen, setScreen] = useState(() => `${window.innerWidth}x${window.innerHeight}`);
   useEffect(() => {
@@ -397,6 +401,14 @@ export function FullTv({state}: {state: GameState}) {
   const hoverList = useMemo(() => Object.values(hovers).filter((h) => h.spaceId), [hovers]);
   // the board's box: all the room between the columns, above the log lane (measured from the page)
   const region = useBoardRegion(columnRef, [!!model]);
+  // the TR track runs round the room's edge (TrTrack); the board takes what is inside it
+  const trNames = useDisplayName();
+  const trKey = JSON.stringify((model?.players ?? []).map((p) => {
+    const seat = state.players.find((x) => x.color === p.color);
+    return {color: p.color, name: trNames(p.color, p.name), tr: p.terraformRating, avatar: profiles.find((x) => x.id === seat?.profileId)?.avatar ?? null};
+  }));
+  const trSeats = useMemo<TrSeat[]>(() => JSON.parse(trKey), [trKey]);
+  const boardBox = region && trTrack ? insetBox(region, window.innerWidth) : region;
   // tiles waiting for their card's drop phase stay off the board (and out of the oceans count) until then
   const rawSpaces = model?.game.spaces;
   const shownSpaces = useMemo(() => {
@@ -436,12 +448,13 @@ export function FullTv({state}: {state: GameState}) {
 
       {/* the board fills the room between the columns; the planet behind it reaches under them (they come later, on top) */}
       <div ref={boardRef} data-board-box="" style={{position: 'absolute',
-        ...(region ? {left: region.left, top: region.top, width: region.width, height: region.height} : {left: '11.6vw', top: '3vh', bottom: '8vh', width: '55.6vw'})}}>
+        ...(boardBox ? {left: boardBox.left, top: boardBox.top, width: boardBox.width, height: boardBox.height} : {left: '11.6vw', top: '3vh', bottom: '8vh', width: '55.6vw'})}}>
         <BoardView spaces={shownSpaces ?? g.spaces} fresh={fresh} hovers={hoverList} names={names} progress={progress} avoid={region?.avoid}
           camera={{focus: [...fresh], enabled: !showing && !busy, moment}} light={light} inView={!showing && !busy && !covering} />
         {weather.now.mist && <Mist key={`m${weather.now.mist.at}`} at={weather.now.mist.at} />}
         {weather.now.storm && <DustStorm key={`s${weather.now.storm.at}`} at={weather.now.storm.at} mode={weather.now.storm.mode} />}
       </div>
+      {region && trTrack && trSeats.length > 0 && <TrTrack room={region} seats={trSeats} vw={window.innerWidth} />}
       {/* the gauges have no panels of their own: a soft shade keeps the planet's rim from showing through their numbers */}
       {region && <div aria-hidden="true" data-board-shade="" style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: region.left,
         background: 'linear-gradient(90deg, rgba(16,7,4,.82), rgba(16,7,4,.72) 70%, rgba(16,7,4,0))', pointerEvents: 'none'}} />}
@@ -526,9 +539,10 @@ function EndStory({gameKey, history, players}: {gameKey: string; history: NonNul
   const id = `${gameKey}:story`;
   const [again] = useState(() => wasSeen(id));
   useEffect(() => { markSeen(id); }, [id]);
+  const nameFor = useDisplayName();
   const scores: FinalScore[] = players.map((p) => {
     const b = p.victoryPointsBreakdown;
-    return {color: p.color, name: p.name, total: b?.total ?? p.terraformRating, parts: [
+    return {color: p.color, name: nameFor(p.color, p.name), total: b?.total ?? p.terraformRating, parts: [
       {label: 'TR', value: b?.terraformRating ?? p.terraformRating}, {label: 'Greenery', value: b?.greenery ?? 0}, {label: 'Cities', value: b?.city ?? 0},
       {label: 'Cards', value: b?.victoryPoints ?? 0}, {label: 'Milestones', value: b?.milestones ?? 0}, {label: 'Awards', value: b?.awards ?? 0},
     ]};

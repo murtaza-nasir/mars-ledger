@@ -138,7 +138,7 @@ export function CardStage({m, plan, players, boardRef}: {m: CardMomentModel; pla
   const verb = m.replay?.verb ?? (def?.type === 'event' ? 'played an event' : 'played');
   const block: CSSProperties = {position: 'absolute', left: geo.left, top: geo.top, width: geo.w, transformOrigin: '50% 50%', willChange: 'transform, opacity', pointerEvents: 'none'};
   return (
-    <div data-card-stage={m.name} data-stage={stage} style={{position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40}}>
+    <div data-card-stage={m.name} data-stage={stage} data-moment-key={m.k} data-moment-color={m.color} style={{position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40}}>
       {/* the motion trail: soft panes in the player's colour following the card's path a little behind it */}
       {stage === 'travel' && !reduced && [1, 2, 3, 4].map((i) => (
         <motion.div key={i} aria-hidden="true" initial={target.pre} animate={{x: 0, y: 0, scale: 1, opacity: [0, 0.42 - i * 0.08, 0]}}

@@ -82,7 +82,7 @@ export function Planner({model, first, firstLabel, onClose}: {model: PlayerViewM
       <p className="muted" style={{margin: '0 0 12px', fontSize: 14}}>
         {first ? `After you ${lowerFirst(firstLabel)}. ` : ''}Only you see this. Nothing is sent to the table, and nothing happens until you confirm.
       </p>
-      {p1 && <EffectPreview p={p1} label="Your first move" testId="first-preview" />}
+      {p1 && <EffectPreview p={p1} world={world} label="Your first move" testId="first-preview" />}
       {p1?.ok && (
         <>
           <span className="cond faint" style={{display: 'block', fontSize: 12.5, margin: '0 0 4px'}}>Your numbers after it</span>
@@ -110,7 +110,7 @@ export function Planner({model, first, firstLabel, onClose}: {model: PlayerViewM
                   <VerdictLine v={c.verdict} />
                   {on && (
                     <div style={{padding: '8px 6px 4px'}}>
-                      <EffectPreview p={p2} label={first ? 'What it would do then' : 'What it would do'} testId="second-preview" />
+                      <EffectPreview p={p2} world={world} base={info.outcomes[0]} label={first ? 'What it would do then' : 'What it would do'} testId="second-preview" />
                       <button className="btn warm" data-testid="plan-this" style={{width: '100%'}}
                         onClick={() => { setPlan(newPlan(model, plan && !first ? plan.after : firstLabel, c.move)); onClose(); }}>
                         {plan && moveKey(plan.second as Move) === k ? 'Keep this plan' : 'Plan this'}
@@ -180,6 +180,7 @@ export function DuePlan({model, onConfirm}: {model: PlayerViewModel; onConfirm: 
   const fate = usePlans((s) => s.fate);
   const [changing, setChanging] = useState(false);
   const check = useMemo(() => (plan ? checkPlan(model, plan.second) : null), [model, plan]);
+  const world = useMemo(() => worldFromView(model), [model]);
   if (!plan || !check || fate?.s !== 'ready') return null;
   return (
     <div data-testid="plan-due" data-valid={check.ok ? 'true' : 'false'} style={{...tentative, padding: '12px 12px 10px', marginBottom: 12}}>
@@ -189,7 +190,7 @@ export function DuePlan({model, onConfirm}: {model: PlayerViewModel; onConfirm: 
       </div>
       <div style={{fontWeight: 700, fontSize: 18, margin: '4px 0 2px'}} data-testid="plan-due-title">{planLabel(plan.second)}</div>
       {check.ok
-        ? <EffectPreview p={check.preview} compact testId="plan-due-preview" />
+        ? <EffectPreview p={check.preview} world={world} compact testId="plan-due-preview" />
         : <p role="alert" data-testid="plan-due-reason" style={{margin: '2px 0 0', color: '#FFB39E', fontWeight: 600, fontSize: 14.5}}>{check.reason}</p>}
       <div style={{display: 'flex', gap: 8, marginTop: 10}}>
         <button className="btn warm" data-testid="plan-confirm" style={{flex: 1.4, minHeight: 42, fontSize: 16}} disabled={!check.ok}

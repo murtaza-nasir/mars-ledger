@@ -12,6 +12,7 @@ import {PosterArtPick} from './PosterArtPick';
 import {TurnClockPick} from './TurnClockPick';
 import {BotSpeedPick} from './BotSpeedPick';
 import {HintsPick} from './Hints';
+import {PhonePrefPick} from './PhonePrefs';
 import {useProfileSheet} from '../phone/profile/ProfileSheet';
 import {RadioRemote} from '../tv/radio/RadioRemote';
 import {PerfPick} from '../perf/PerfMenu';
@@ -58,7 +59,11 @@ export function GameMenu({state, playerId, onDone, gameOver}: {state: GameState;
         <div style={{paddingBottom: 12, borderBottom: '1px solid var(--rim)'}}><FlyRemoteItem onDone={onDone} /></div>
       )}
       {!ended && state.players.some((p) => p.id === playerId) && (
-        <div style={{paddingBottom: 12, borderBottom: '1px solid var(--rim)'}}><HintsPick state={state} playerId={playerId} /></div>
+        <div style={{paddingBottom: 12, borderBottom: '1px solid var(--rim)', display: 'grid', gap: 12}}>
+          <HintsPick state={state} playerId={playerId} />
+          {full && <PhonePrefPick state={state} playerId={playerId} which="showVp" />}
+          <PhonePrefPick state={state} playerId={playerId} which="confirmBuy" />
+        </div>
       )}
       <div style={{paddingBottom: 12, marginBottom: 4, borderBottom: '1px solid var(--rim)', display: 'grid', gap: 12}}>
         <NarratorPick state={state} playerId={playerId} />

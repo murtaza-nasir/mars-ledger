@@ -97,6 +97,8 @@ const CONSEQUENCES: RegExp[] = [
   /^There was nobody to steal plants or animals from\.$/,
 ];
 const isConsequence = (l: LogLine) => CONSEQUENCES.some((re) => re.test(l.message));
+/** A line that can change what the game holds (a move's head or consequence, a purchase): VP counted before it is not counted after. */
+export const changesGame = (l: LogLine) => !!headOf(l) || isConsequence(l) || isPurchase(l) || isPrivatePurchase(l);
 /** A private line ("You drew …", sent as `${0} drew ${1}` with the word You) is only ever about the seat it was sent to. */
 const saysYou = (l: LogLine) => l.data[0]?.type === LOG_DATA.STRING && valueAt(l, 0) === 'You';
 const isPrivate = (l: LogLine) => /^You /.test(l.message) || /^Drew and discarded /.test(l.message) || saysYou(l);

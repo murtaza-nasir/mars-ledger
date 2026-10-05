@@ -17,6 +17,7 @@ import type {ActionSummary, Flight} from './actions';
 import type {Color} from '../../../shared/full';
 import {pulsePanel} from './pipeline/store';
 import {sendResolve} from './pipeline/resolve';
+import {useDisplayName} from '../../names';
 
 /** `gameAge`: the update it came in; `targets`: players an attack by the same move hits (sent with its resolve);
  *  `gap`: ms since the previous moment's update (pacing). */
@@ -30,6 +31,7 @@ type Region = {top: number; height: number};
 
 export function ActionMoment({m, players}: {m: ActionMomentModel; players: PublicPlayerModel[]}) {
   const p = players.find((x) => x.color === m.color);
+  const nameFor = useDisplayName();
   const color = PLAYER_HEX[m.color] ?? '#F2C230';
   const def = findCard(m.cards[0]);
   const box = useRef<HTMLDivElement>(null);
@@ -121,7 +123,7 @@ export function ActionMoment({m, players}: {m: ActionMomentModel; players: Publi
             <motion.div initial={{opacity: 0, y: 8}} animate={{opacity: 1, y: 0}} transition={{delay: 0.12}}
               style={{display: 'flex', alignItems: 'center', gap: '0.55vw', fontSize: tvt(1.15), fontWeight: 650, lineHeight: 1.2}}>
               <span style={{width: '0.8vw', height: '0.8vw', borderRadius: '0.2vw', background: color, flexShrink: 0}} />
-              <span style={{color, minWidth: 0, overflowWrap: 'anywhere'}}>{p?.name ?? ''} <span style={{fontWeight: 500, whiteSpace: 'nowrap'}}>uses its action</span></span>
+              <span style={{color, minWidth: 0, overflowWrap: 'anywhere'}}>{nameFor(m.color, p?.name)} <span style={{fontWeight: 500, whiteSpace: 'nowrap'}}>uses its action</span></span>
             </motion.div>
             <motion.div initial={{opacity: 0, y: 12}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2, duration: 0.5, ease: [0.2, 0.9, 0.25, 1]}}
               style={{fontSize: m.cards[0].length > 20 ? '1.75vw' : '2.1vw', lineHeight: 1.02, fontWeight: 850, fontVariationSettings: "'wdth' 110"}}>

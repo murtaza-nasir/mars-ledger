@@ -32,7 +32,8 @@ export default function LavaFlows(p: ModelProps) {
   const full = p.detail !== 'lite';
   const sc = useMemo(() => lavaScene(full), [full]);
   const ownerHex = PLAYER_HEX[p.color ?? 'red'] ?? '#ffffff';
-  const rotY = useMemo(() => seeded(p.id, 7)() * 6.283, [p.id]);
+  // whole hex turns only (60 degrees): the detailed ground fills the hex footprint, so any other yaw leaves its edges off the tile
+  const rotY = useMemo(() => Math.floor(seeded(p.id, 7)() * 6) * (Math.PI / 3), [p.id]);
   const pts = useMemo(() => lavaPointsGeometry(full ? {sparks: 60, embers: 40, ash: 30, bombs: 7} : {sparks: 26, embers: 16, ash: 14, bombs: 4}, sc.beacons, seeded(p.id, 8)), [p.id, sc, full]);
   const fx = useMemo(() => {
     const rig = moleMaterial();

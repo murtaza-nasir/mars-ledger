@@ -17,13 +17,19 @@ import type {TileStyle} from '../../settings';
 import type {BoardType} from '../boardType';
 import {HEX_R, HEX_W} from '../geometry';
 import {cellKey, cellMarkup, paintCell, texelsFor} from './atlas';
-import {adjustedRest, cameraPosition, fallbackStep, FALLBACK, focusView, FOV, lensOf, MOMENT, momentView, moveAmount, refDist, REST_POLAR, restView, stepView, ZERO_VEL} from './camera3d';
-import type {FrameRect, View, WindowStats} from './camera3d';
+import {adjustedRest, cameraPosition, focusView, FOV, lensOf, MOMENT, momentView, moveAmount, refDist, REST_POLAR, restView, stepView, ZERO_VEL} from './camera3d';
+import type {FrameRect, View} from './camera3d';
+import {applicableFor, commitLadder, FLAT, LADDER, ladderState, ladderStep, LEVELS, renderDpr, useQuality} from './quality';
+import type {Level, LadderConfig, LadderChange, LevelReason, WindowStats} from './quality';
+import {reportTv3d} from './report';
 import {board3d, keepPoints, MODEL_TALL, PAD_LIFT, prismHeight, PRISM_R, restPoints, restScale, UNIT} from './geometry3d';
 import type {Board3} from './geometry3d';
 import {Atmosphere, DepthOfField, fogState, patchHeightFog} from './atmosphere';
-import {cameraHold, ClaimFlag, holdCamera, kick, kickOffset, KICK, loadModels, ModelPrep, ModelWarmup, setTileDetail, setTileSet, tileDetail, tileSet, TILE_RENDERERS, world, WorldTicker} from './tiles3d';
+import {cameraHold, ClaimFlag, holdCamera, kick, kickOffset, KICK, loadModels, ModelPrep, ModelWarmup, ownerRims, RIM, RIM_DARK, RIM_UNDER, setTileDetail, setTileSet, tileDetail, tileSet, TILE_RENDERERS,
+  world, WorldTicker} from './tiles3d';
 import {lodStep, oceanEdgeMap, screenSize} from './tilesets';
+import {BoardLife} from './life/LifeDirector';
+import {lifeVisit} from './life/visit';
 import {FlyControls} from './FlyControls';
 import {flyControls, landed, setRestInfo, useFly} from './flyStore';
 import {floorAt, flyFrom, landEase, mixInputs, nearFor, stepFlight} from './flight';
@@ -40,7 +46,7 @@ export type Camera3Brief = {focus: string[]; enabled: boolean; mode?: 'live' | '
 export type Board3DProps = {
   spaces: SpaceModel[]; fresh: Set<string>; hovers: Hover[]; names: Record<string, string>; progress: number;
   camera?: Camera3Brief; light?: SkyLight;
-  /** the TV could not hold the frame budget: switch to the flat board */
+  /** the quality ladder reached its last level: switch to the flat board */
   onSlow: (stats: WindowStats) => void;
   /** the board is on screen (no cinematic or production show over it): only then do its frame times count */
   watch?: boolean;
@@ -89,6 +95,9 @@ const PAD_SHADOW = (() => {
   return new THREE.CanvasTexture(c);
 })();
 RING.rotateX(-Math.PI / 2);
+
+// the board draws every owned tile's rim in two instanced draws (OwnerRims), not two per tile
+ownerRims.board = true;
 
 const SIDE_LAND = new THREE.MeshStandardMaterial({color: '#5A2A1C', roughness: 0.95});
 const SIDE_OCEAN = new THREE.MeshStandardMaterial({color: '#1F3A52', roughness: 0.8});
@@ -216,6 +225,20 @@ export default function Board3D(outer: Board3DProps) {
   const settings = useTvSettings();
   const {textSize, cameraMoves} = settings;
   const tileStyle = tileStyleOf(settings);
+  // the quality ladder: how much this screen draws (quality.ts), stepped by the frame-time watch in the Rig
+  const level = LEVELS[useQuality().level];
+  const applicable = applicableFor({boardLife: settings.boardLife, terraformers: settings.terraformers, detailed: tileStyle === 'detailed'});
+  const onSlow = outer.onSlow;
+  const judged = useRef<(r: Judged) => void>(() => {});
+  judged.current = (r) => {
+    if (!r.change || !r.stats) { commitLadder(r.state); return; }
+    const size = `${window.innerWidth}x${window.innerHeight}@${Math.round(window.devicePixelRatio * 100) / 100}`;
+    const why: LevelReason = {at: Date.now(), dir: r.change.dir, from: r.change.from, to: r.change.to, p95: r.stats.p95, median: r.stats.median, slow: r.stats.slow, size};
+    commitLadder(r.state, why);
+    reportTv3d({level: r.change.to, dir: r.change.to === FLAT ? 'flat' : r.change.dir, p95: r.stats.p95, median: r.stats.median, slow: r.stats.slow, size, render: r.render});
+    console.warn(`[board3d] ${r.change.dir === 'down' ? 'stepped down' : 'stepped up'} to ${LEVELS[r.change.to].label}`, r.stats);
+    if (r.change.to === FLAT) onSlow(r.stats);
+  };
   // The tile set this screen draws; its model files load on first use (tiles keep their models until it is warm)
   useEffect(() => { setTileSet(tileStyle); void loadModels(tileStyle); }, [tileStyle]);
   useEffect(() => {
@@ -266,6 +289,7 @@ export default function Board3D(outer: Board3DProps) {
   if (scale && type) (window as unknown as {__board3dType?: unknown}).__board3dType = {screenH, farTextPx: type.text * scale.pxPerUnit,
     farMinPx: type.min * scale.pxPerUnit, farTextPct: (type.text * scale.pxPerUnit) / screenH * 100, hexPx: scale.hexPx, farHexPx: scale.pxPerUnit * 2 * HEX_R};
   const texSize = scale ? texelsFor(scale.hexPx * 1.75 * Math.min(2, window.devicePixelRatio || 1)) : 256;
+  const dpr = renderDpr(place?.vw ?? window.innerWidth, place?.vh ?? window.innerHeight, window.devicePixelRatio || 1, level.scale);
   const labels = useRef(new Map<string, HTMLDivElement | null>());
   const labelPx = (1.65 / 100) * screenH * TEXT_SCALE[textSize];
   const offLabels = geo.offMap.map((o) => ({id: `off-${o.id}`, text: o.label}));
@@ -286,10 +310,11 @@ export default function Board3D(outer: Board3DProps) {
       <div data-board3d-stage="" style={{position: 'absolute', left: -place.left, top: -place.top, width: place.vw, height: place.vh, pointerEvents: 'none',
         maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK, maskComposite: 'intersect', WebkitMaskComposite: 'source-in'}}>
       {size.w > 0 && type && rest && frame && (
-        <Canvas shadows frameloop={pace === 'full' ? 'always' : 'demand'} dpr={Math.min(2, window.devicePixelRatio || 1)} gl={{antialias: true, alpha: true, powerPreference: 'high-performance'}}
+        <Canvas shadows frameloop={pace === 'full' ? 'always' : 'demand'} dpr={dpr} gl={{antialias: true, alpha: true, powerPreference: 'high-performance'}}
           camera={{fov: FOV, near: 0.5, far: 120, position: cameraPosition(rest)}}
           style={{position: 'absolute', inset: 0}}>
-          <Scene {...props} geo={geo} type={type} texSize={texSize} moves={moves} reduced={!!reduced} labels={labels} rest={rest} frame={frame} bank={settings.flyBank} />
+          <Scene {...props} geo={geo} type={type} texSize={texSize} moves={moves} reduced={!!reduced} labels={labels} rest={rest} frame={frame} bank={settings.flyBank}
+            level={level} judged={judged} applicable={applicable} />
         </Canvas>
       )}
       {/* labels drawn as HTML so they stay crisp; the scene moves them to their projected positions each frame */}
@@ -325,10 +350,13 @@ export default function Board3D(outer: Board3DProps) {
 // ---- the scene ----------------------------------------------------------------------------------------------
 /** The board's box inside the canvas, in canvas px: the resting view fills it. */
 type Frame = {x: number; y: number; w: number; h: number};
-type SceneProps = Board3DProps & {geo: Board3; type: BoardType; texSize: number; moves: boolean; reduced: boolean;
+/** One judged window of the frame-time watch, handed to the component that owns the ladder (the canvas size goes to the report). */
+type Judged = {state: ReturnType<typeof ladderState>; change: LadderChange | null; stats?: WindowStats; render: string};
+type Ladder = {level: Level; judged: React.MutableRefObject<(r: Judged) => void>; applicable: (i: number) => boolean};
+type SceneProps = Board3DProps & Ladder & {geo: Board3; type: BoardType; texSize: number; moves: boolean; reduced: boolean;
   labels: React.MutableRefObject<Map<string, HTMLDivElement | null>>; rest: View; frame: Frame; bank: boolean};
 
-function Scene({spaces, fresh, hovers, progress, camera, light, onSlow, watch = true, geo, type, texSize, moves, reduced, labels, rest, frame, bank}: SceneProps) {
+function Scene({spaces, fresh, hovers, progress, camera, light, watch = true, geo, type, texSize, moves, reduced, labels, rest, frame, bank, level, judged, applicable}: SceneProps) {
   const byId = useMemo(() => new Map(spaces.map((s) => [s.id, s])), [spaces]);
   const textures = useCellTextures(spaces, type, texSize);
   // test hook: the drawing a space's top is painted from
@@ -337,18 +365,21 @@ function Scene({spaces, fresh, hovers, progress, camera, light, onSlow, watch = 
   const oceanEdges = useOceanEdges(geo, byId);
   return (
     <>
-      <Rig geo={geo} spaces={byId} camera={camera} moves={moves} hovers={hovers} labels={labels} onSlow={onSlow} watch={watch} textures={textures.size} rest={rest} frame={frame}
+      <Rig geo={geo} spaces={byId} camera={camera} moves={moves} hovers={hovers} labels={labels} judged={judged} applicable={applicable} lite={level.lite} effects={level.effects} watch={watch} textures={textures.size} rest={rest} frame={frame}
         reduced={reduced} bank={bank} />
-      <Lights light={light} />
+      <Lights light={light} effects={level.effects} />
       {/* a build-in waits ~0.8 s for the camera's dive when the camera moves; it starts at once when it stays put */}
       <WorldTicker night={night} reduced={reduced} lead={moves ? 0.8 : 0} />
       <Plate geo={geo} progress={progress} />
       {/* the move pipeline's targeting reticle (Phase 4): pings a hex before its tile drops */}
       <Reticle geo={geo} byId={byId} />
+      {/* the map's prism sides, three instanced draws (and three in the shadow pass) for all 61 hexes */}
+      <HexSides geo={geo} byId={byId} />
       {geo.cells.map((c) => {
         const s = byId.get(c.id) ?? c.space;
-        return <Hex key={c.id} id={c.id} x={c.x} z={c.z} s={s} tex={textures.get(c.id)} fresh={fresh.has(c.id)} night={night} oceanEdges={oceanEdges.get(c.id)} />;
+        return <Hex key={c.id} id={c.id} x={c.x} z={c.z} s={s} tex={textures.get(c.id)} fresh={fresh.has(c.id)} night={night} oceanEdges={oceanEdges.get(c.id)} sides={false} />;
       })}
+      <OwnerRims geo={geo} byId={byId} />
       {geo.offMap.map((o) => {
         const s = byId.get(o.id) ?? o.space;
         return (
@@ -389,7 +420,9 @@ function Scene({spaces, fresh, hovers, progress, camera, light, onSlow, watch = 
       <Atmosphere geo={geo} spaces={byId} />
       <ModelWarmup radius={PRISM_R} />
       <ModelPrep />
-      <DepthOfField enabled={!reduced} variants={topVariants} variantKey={textures.size ? 'tops' : ''} sceneKey={`${[...fresh].join(',')}|${spaces.map((s) => s.tileType ?? '').join(',')}`} />
+      {/* board life: tiny miniatures, things from the sky and ambient life on the empty land (life/) */}
+      <BoardLife geo={geo} spaces={byId} hovers={hovers} night={night} reduced={reduced} moves={moves} watch={watch} focus={camera?.focus ?? []} />
+      <DepthOfField enabled={!reduced && level.effects} variants={topVariants} variantKey={textures.size ? 'tops' : ''} sceneKey={`${[...fresh].join(',')}|${spaces.map((s) => s.tileType ?? '').join(',')}`} />
     </>
   );
 }
@@ -450,11 +483,15 @@ function useCellTextures(spaces: SpaceModel[], type: BoardType, size: number): M
 }
 
 // ---- pieces -------------------------------------------------------------------------------------------------
-const Hex = memo(function Hex({id, x, z, s, tex, fresh, night, oceanEdges}: {id: string; x: number; z: number; s: SpaceModel; tex?: THREE.CanvasTexture; fresh: boolean; night: number; oceanEdges?: readonly boolean[]}) {
+const Hex = memo(function Hex({id, x, z, s, tex, fresh, night, oceanEdges, sides = true}: {id: string; x: number; z: number; s: SpaceModel; tex?: THREE.CanvasTexture; fresh: boolean; night: number;
+  oceanEdges?: readonly boolean[];
+  /** false: HexSides draws this hex's prism side (the map's hexes); the off-map pads draw their own */
+  sides?: boolean}) {
   const kind = tileKind(s.tileType);
   const height = prismHeight(s);
   const group = useRef<THREE.Group>(null);
   const ring = useRef<THREE.Mesh>(null);
+  const cap = useRef<THREE.Mesh>(null);
   const Model = kind ? TILE_RENDERERS[kind].Model : undefined;
   // a tile with a model plays its own build-in (tiles3d.tsx); the plain prism drops in
   const born = useRef<number | null>(fresh && !Model ? performance.now() : null);
@@ -480,14 +517,17 @@ const Hex = memo(function Hex({id, x, z, s, tex, fresh, night, oceanEdges}: {id:
     const fade = world.topFade;
     const op = tex ? 1 - fade : 1;
     if (topMat.opacity !== op) { topMat.opacity = op; topMat.transparent = op < 0.999; topMat.visible = op > 0.01; }
+    // the plain ground under the top shows only while the top fades (the opaque top hides it at rest: 61 draws saved)
+    if (cap.current) cap.current.visible = op < 0.999;
     const g = group.current;
     if (!g) return;
     const t0 = born.current;
-    if (t0 === null) { g.position.y = 0; if (ring.current) ring.current.visible = false; return; }
+    if (t0 === null) { if (g.position.y !== 0) { g.position.y = 0; HEX_DROP.delete(id); } if (ring.current) ring.current.visible = false; return; }
     const t = (performance.now() - t0) / 1000;
     // the tile drops in with a little bounce, then a ring in the owner's colour spreads from it
     const drop = Math.max(0, 1 - t / 0.55);
     g.position.y = 1.6 * drop * drop - (t > 0.55 && t < 0.8 ? Math.sin((t - 0.55) / 0.25 * Math.PI) * 0.03 : 0);
+    HEX_DROP.set(id, g.position.y);
     const r = ring.current;
     if (r) {
       const k = Math.max(0, (t - 0.5) / 1.1);
@@ -500,8 +540,8 @@ const Hex = memo(function Hex({id, x, z, s, tex, fresh, night, oceanEdges}: {id:
   return (
     <group position={[x, 0, z]} data-id={id}>
       <group ref={group}>
-        <mesh geometry={SIDE} material={kind ? SIDE_TILE : s.spaceType === 'ocean' ? SIDE_OCEAN : SIDE_LAND} scale={[1, height, 1]} castShadow receiveShadow />
-        <mesh geometry={TOP} material={CAP_MATS[kind ?? (s.spaceType === 'ocean' ? 'ocean' : 'land')]} position={[0, height + 0.0002, 0]} receiveShadow />
+        {sides && <mesh geometry={SIDE} material={sideMat(s)} scale={[1, height, 1]} castShadow receiveShadow />}
+        <mesh ref={cap} geometry={TOP} material={CAP_MATS[kind ?? (s.spaceType === 'ocean' ? 'ocean' : 'land')]} position={[0, height + 0.0002, 0]} receiveShadow visible={false} />
         <mesh geometry={TOP} material={topMat} position={[0, height + 0.0006, 0]} receiveShadow />
         {!kind && s.color && s.color !== 'neutral' && (
           <group position={[0, height + 0.0006, 0]}><ClaimFlag color={s.color as Color} R={PRISM_R} /></group>
@@ -518,6 +558,82 @@ const Hex = memo(function Hex({id, x, z, s, tex, fresh, night, oceanEdges}: {id:
     </group>
   );
 });
+
+/** A hex's side material: a tile's, an ocean space's or land's. */
+function sideMat(s: SpaceModel): THREE.MeshStandardMaterial { return tileKind(s.tileType) ? SIDE_TILE : s.spaceType === 'ocean' ? SIDE_OCEAN : SIDE_LAND; }
+/** Hexes dropping in (their lift, by space id): Hex writes it, HexSides follows it. */
+const HEX_DROP = new Map<string, number>();
+
+/** The map's prism sides as one instanced mesh per side material: each hex's side stands at its height and follows its
+ *  drop-in. Three draws (and three shadow draws) instead of 61 of each. */
+function HexSides({geo, byId}: {geo: Board3; byId: Map<string, SpaceModel>}) {
+  const n = geo.cells.length;
+  const meshes = useMemo(() => [SIDE_LAND, SIDE_OCEAN, SIDE_TILE].map((mat) => {
+    const m = new THREE.InstancedMesh(SIDE, mat, n);
+    m.castShadow = true; m.receiveShadow = true; m.frustumCulled = false; m.count = 0;
+    return m;
+  }), [n]);
+  useEffect(() => () => { for (const m of meshes) m.dispose(); }, [meshes]);
+  // which mesh and slot each hex uses, and its height; rebuilt when a tile lands
+  const slots = useMemo(() => {
+    const counts = [0, 0, 0];
+    return geo.cells.map((c) => {
+      const s = byId.get(c.id) ?? c.space;
+      const mesh = [SIDE_LAND, SIDE_OCEAN, SIDE_TILE].indexOf(sideMat(s));
+      return {id: c.id, x: c.x, z: c.z, h: prismHeight(s), mesh, slot: counts[mesh]++, lift: NaN};
+    });
+  }, [geo, byId]);
+  const m4 = useMemo(() => new THREE.Matrix4(), []);
+  const put = (sl: (typeof slots)[number], lift: number) => {
+    m4.makeScale(1, sl.h, 1).setPosition(sl.x, lift, sl.z);
+    meshes[sl.mesh].setMatrixAt(sl.slot, m4);
+    meshes[sl.mesh].instanceMatrix.needsUpdate = true;
+    sl.lift = lift;
+  };
+  useLayoutEffect(() => {
+    const counts = [0, 0, 0];
+    for (const sl of slots) { counts[sl.mesh]++; put(sl, HEX_DROP.get(sl.id) ?? 0); }
+    meshes.forEach((m, i) => { m.count = counts[i]; });
+  }, [slots, meshes]); // eslint-disable-line react-hooks/exhaustive-deps
+  useFrame(() => {
+    if (!HEX_DROP.size && !slots.some((sl) => sl.lift !== 0)) return;
+    for (const sl of slots) { const lift = HEX_DROP.get(sl.id) ?? 0; if (lift !== sl.lift) put(sl, lift); }
+  });
+  return <>{meshes.map((m, i) => <primitive key={i} object={m} />)}</>;
+}
+
+/** Every owned tile's rim (tiles3d Owner): a dark under-stroke and a band of the owner's colour, one instanced draw
+ *  each for the whole board, where each tile drew two of its own. */
+function OwnerRims({geo, byId}: {geo: Board3; byId: Map<string, SpaceModel>}) {
+  const n = geo.cells.length + geo.offMap.length;
+  const parts = useMemo(() => {
+    const band = new THREE.MeshBasicMaterial({color: '#ffffff', transparent: true, opacity: 0.9, toneMapped: false, depthWrite: false});
+    const under = new THREE.InstancedMesh(RIM_UNDER, RIM_DARK, n), top = new THREE.InstancedMesh(RIM, band, n);
+    under.renderOrder = 3; top.renderOrder = 4;
+    for (const m of [under, top]) { m.frustumCulled = false; m.count = 0; }
+    return {under, top, band};
+  }, [n]);
+  useEffect(() => () => { parts.under.dispose(); parts.top.dispose(); parts.band.dispose(); }, [parts]);
+  useLayoutEffect(() => {
+    const m4 = new THREE.Matrix4(), col = new THREE.Color();
+    let k = 0;
+    for (const c of [...geo.cells, ...geo.offMap]) {
+      const s = byId.get(c.id) ?? c.space;
+      const hex = s.color && s.color !== 'neutral' && tileKind(s.tileType) ? PLAYER_HEX[s.color as Color] : undefined;
+      if (!hex) continue;
+      // as the tile's own rim stood: on the hex top (plus the orbital pad's lift), 0.003 and 0.0045 above it
+      const y = ('label' in c ? PAD_LIFT : 0) + prismHeight(s) + 0.0006;
+      parts.under.setMatrixAt(k, m4.makeScale(PRISM_R, 1, PRISM_R).setPosition(c.x, y + 0.003, c.z));
+      parts.top.setMatrixAt(k, m4.makeScale(PRISM_R, 1, PRISM_R).setPosition(c.x, y + 0.0045, c.z));
+      parts.top.setColorAt(k, col.set(hex));
+      k++;
+    }
+    parts.under.count = parts.top.count = k;
+    parts.under.instanceMatrix.needsUpdate = parts.top.instanceMatrix.needsUpdate = true;
+    if (parts.top.instanceColor) parts.top.instanceColor.needsUpdate = true;
+  }, [geo, byId, parts]);
+  return <><primitive object={parts.under} /><primitive object={parts.top} /></>;
+}
 
 function Ghost({x, z, y, color}: {x: number; z: number; y: number; color: Color}) {
   const c = PLAYER_HEX[color] ?? '#fff';
@@ -606,10 +722,11 @@ function Plate({geo, progress}: {geo: Board3; progress: number}) {
 
 const DUSK = new THREE.Color('#FFB27A'), DAWN = new THREE.Color('#FFD6B0'), NOON = new THREE.Color('#FFE8D6'), NIGHT = new THREE.Color('#8EA0D8');
 
-function Lights({light}: {light?: SkyLight}) {
+function Lights({light, effects}: {light?: SkyLight; effects: boolean}) {
   const key = useRef<THREE.DirectionalLight>(null);
   const amb = useRef<THREE.HemisphereLight>(null);
   const cur = useRef({dusk: 0, night: 0, dawn: 0});
+  const tint = useMemo(() => new THREE.Color(), []);
   useFrame((_, dt) => {
     const want = light ?? {dusk: 0, night: 0, dawn: 0};
     const k = 1 - Math.exp(-dt * 0.8); // the same slow fade as the feature-12 sky
@@ -618,7 +735,7 @@ function Lights({light}: {light?: SkyLight}) {
     const {dusk, night, dawn} = cur.current;
     fogState.night = night;
     fogState.still = !!world.reduced;
-    const c = NOON.clone().lerp(DUSK, dusk * 0.8).lerp(DAWN, dawn * 0.6).lerp(NIGHT, night * 0.75);
+    const c = tint.copy(NOON).lerp(DUSK, dusk * 0.8).lerp(DAWN, dawn * 0.6).lerp(NIGHT, night * 0.75);
     if (key.current) {
       key.current.color.copy(c);
       // nights are dark enough that the cities' windows and the specials' lights carry the scene
@@ -633,7 +750,7 @@ function Lights({light}: {light?: SkyLight}) {
   return (
     <>
       <hemisphereLight ref={amb} args={['#FFE2CC', '#3A1C14', 1.05]} />
-      <directionalLight ref={key} position={[-2.5, 7, 4]} intensity={2.3} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048}
+      <directionalLight ref={key} position={[-2.5, 7, 4]} intensity={2.3} castShadow shadow-mapSize-width={effects ? 2048 : 1024} shadow-mapSize-height={effects ? 2048 : 1024}
         shadow-camera-left={-6} shadow-camera-right={6} shadow-camera-top={6} shadow-camera-bottom={-6} shadow-bias={-0.0006} />
     </>
   );
@@ -671,20 +788,24 @@ function tagOccluded(cam: THREE.Camera, id: string, x: number, y: number, z: num
 }
 
 // ---- level of detail ----------------------------------------------------------------------------------
-type LodState = {changed: Map<string, number>; pos: THREE.Vector3; frustum: THREE.Frustum; m: THREE.Matrix4; sphere: THREE.Sphere};
+type LodState = {changed: Map<string, number>; pos: THREE.Vector3; frustum: THREE.Frustum; m: THREE.Matrix4; sphere: THREE.Sphere;
+  /** the tiles' inputs, reused frame to frame */
+  tiles: Parameters<typeof lodStep>[0]; pool: Parameters<typeof lodStep>[0]};
 /** Sets each tile's detail level for this frame: full when it is in focus or large on screen, lite otherwise, with
  *  hysteresis and at most a few switches per frame (tilesets.ts lodStep). Test hook: window.__board3dDetail = 'full' |
  *  'lite' forces one level on every tile. */
-function updateLod(focusIds: string[], cam: THREE.Camera, geo: Board3, spaces: Map<string, SpaceModel>, st: LodState) {
+function updateLod(focusIds: string[], cam: THREE.Camera, cells: ReadonlyArray<Board3['cells'][number] | Board3['offMap'][number]>, spaces: Map<string, SpaceModel>, st: LodState, lite = false) {
   const now = performance.now();
-  const forced = (window as unknown as {__board3dDetail?: Detail | null}).__board3dDetail;
+  // (the quality ladder's lite level puts every tile at its lite level)
+  const forced = (window as unknown as {__board3dDetail?: Detail | null}).__board3dDetail ?? (lite ? 'lite' : null);
   const pc = cam as THREE.PerspectiveCamera;
   pc.updateMatrixWorld();
   st.m.multiplyMatrices(pc.projectionMatrix, pc.matrixWorldInverse);
   st.frustum.setFromProjectionMatrix(st.m);
-  const tiles: Parameters<typeof lodStep>[0] = [];
+  const tiles = st.tiles;
+  tiles.length = 0;
   let full = 0, placed = 0;
-  for (const c of [...geo.cells, ...geo.offMap]) {
+  for (const c of cells) {
     const sp = spaces.get(c.id) ?? c.space;
     if (sp.tileType === undefined) continue;
     placed++;
@@ -694,17 +815,20 @@ function updateLod(focusIds: string[], cam: THREE.Camera, geo: Board3, spaces: M
     const y = ('label' in c ? 0.32 : 0) + prismHeight(sp);
     st.pos.set(c.x, y, c.z);
     st.sphere.set(st.pos, PRISM_R * 1.6);
-    tiles.push({id: c.id, detail, changedAt: st.changed.get(c.id) ?? -1e9, size: screenSize(PRISM_R, pc.position.distanceTo(st.pos), FOV),
-      focused: focusIds.includes(c.id), onScreen: st.frustum.intersectsSphere(st.sphere)});
+    const t = st.pool[tiles.length] ?? (st.pool[tiles.length] = {id: c.id, detail, changedAt: 0, size: 0, focused: false, onScreen: false});
+    t.id = c.id; t.detail = detail; t.changedAt = st.changed.get(c.id) ?? -1e9; t.size = screenSize(PRISM_R, pc.position.distanceTo(st.pos), FOV);
+    t.focused = focusIds.includes(c.id); t.onScreen = st.frustum.intersectsSphere(st.sphere);
+    tiles.push(t);
   }
   for (const {id, detail} of lodStep(tiles, now)) { setTileDetail(id, detail); st.changed.set(id, now); }
-  (window as unknown as {__board3dLod?: unknown}).__board3dLod = {full, tiles: placed, last: tiles};
+  const hook = ((window as unknown as {__board3dLod?: {full: number; tiles: number; last: typeof tiles}}).__board3dLod ??= {full: 0, tiles: 0, last: tiles});
+  hook.full = full; hook.tiles = placed; hook.last = tiles;
 }
 
 // ---- the camera rig, labels, fog and the frame-time watch ---------------------------------------------------
 type RigProps = {geo: Board3; spaces: Map<string, SpaceModel>; camera?: Board3DProps['camera']; moves: boolean; hovers: Hover[];
-  labels: React.MutableRefObject<Map<string, HTMLDivElement | null>>; onSlow: (stats: WindowStats) => void; watch: boolean; textures: number; rest: View; frame: Frame;
-  reduced: boolean; bank: boolean};
+  labels: React.MutableRefObject<Map<string, HTMLDivElement | null>>; judged: Ladder['judged']; applicable: Ladder['applicable']; lite: boolean; effects: boolean; watch: boolean;
+  textures: number; rest: View; frame: Frame; reduced: boolean; bank: boolean};
 
 /** The lens: FOV spans the frame's height and the view's centre sits at the frame's centre, while the canvas around
  *  it shows the rest of the world (an off-centre window on a larger image; fov is the canvas's, so anything that
@@ -719,8 +843,8 @@ function applyLens(cam: THREE.PerspectiveCamera, W: number, H: number, f: Frame,
   cam.setViewOffset(...l.view);
 }
 
-function Rig({geo, spaces, camera, moves, hovers, labels, onSlow, watch, textures, rest, frame, reduced, bank}: RigProps) {
-  const {camera: cam, size, scene} = useThree();
+function Rig({geo, spaces, camera, moves, hovers, labels, judged, applicable, lite, effects, watch, textures, rest, frame, reduced, bank}: RigProps) {
+  const {camera: cam, size, scene, gl} = useThree();
   const view = useRef<View | null>(null);
   const vel = useRef({...ZERO_VEL});
   const fog = useMemo(() => new THREE.FogExp2('#C49A82', 0), []);
@@ -730,10 +854,24 @@ function Rig({geo, spaces, camera, moves, hovers, labels, onSlow, watch, texture
     };
   }, []);
   useEffect(() => { scene.fog = fog; return () => { scene.fog = null; }; }, [scene, fog]);
+  useEffect(() => {
+    // test hook: what the last frame drew (calls and triangles include the shadow pass), and what the scene holds
+    (window as unknown as {__board3dInfo?: unknown}).__board3dInfo = () => {
+      let meshes = 0, casters = 0, transparent = 0;
+      scene.traverseVisible((o) => {
+        const m = o as THREE.Mesh;
+        if (!m.isMesh) return;
+        meshes++;
+        if (m.castShadow) casters++;
+        if (!Array.isArray(m.material) && m.material?.transparent) transparent++;
+      });
+      return {calls: gl.info.render.calls, triangles: gl.info.render.triangles, programs: gl.info.programs?.length ?? 0, geometries: gl.info.memory.geometries,
+        textures: gl.info.memory.textures, meshes, casters, transparent, canvas: [gl.domElement.width, gl.domElement.height], pixelRatio: gl.getPixelRatio()};
+    };
+  }, [scene, gl]);
   const frames = useRef<number[]>([]);
   const windowStart = useRef(performance.now());
   const mounted = useRef(performance.now());
-  const verdict = useRef({bad: 0});
   const mode = camera?.mode ?? 'live';
   // each focus point carries the middle height of what stands there, so a dive centres the model, not its foot
   const focusOf = (ids: string[]) => ids.map((id) => {
@@ -748,7 +886,9 @@ function Rig({geo, spaces, camera, moves, hovers, labels, onSlow, watch, texture
   const freeSince = useRef(performance.now());
   const tagState = useRef({at: 0, hidden: new Map<string, boolean>(), vis: new Map<string, number>(), boxes: new Map<string, {boxes: THREE.Box3[]; at: number}>()});
   const flight = useRef<{seen: number; start: number | null; strength: 'step' | 'max'}>({seen: 0, start: null, strength: 'step'});
-  const lod = useRef({changed: new Map<string, number>(), pos: new THREE.Vector3(), frustum: new THREE.Frustum(), m: new THREE.Matrix4(), sphere: new THREE.Sphere()});
+  const lod = useRef<LodState>({changed: new Map<string, number>(), pos: new THREE.Vector3(), frustum: new THREE.Frustum(), m: new THREE.Matrix4(), sphere: new THREE.Sphere(), tiles: [], pool: []});
+  // every space on and off the map, in one list (walked every frame)
+  const allCells = useMemo(() => [...geo.cells, ...geo.offMap], [geo]);
 
   const lens = useRef({key: ''});
   // dives and passes are sized from the plate, not from how close the resting view stands
@@ -836,7 +976,7 @@ function Rig({geo, spaces, camera, moves, hovers, labels, onSlow, watch, texture
     fogState.dive = Math.max(0, Math.min(1, (zoomEq - 1.25) / 2.6));
     const hit = flyTmp.dir.y < -0.03 ? pc.position.y / -flyTmp.dir.y : rest.dist;
     fogState.focus = Math.max(0.6, Math.min(rest.dist, hit));
-    fogState.enabled = (window as unknown as {__board3dFx?: boolean}).__board3dFx !== false;
+    fogState.enabled = (window as unknown as {__board3dFx?: boolean}).__board3dFx !== false && effects;
     fogState.camY = pc.position.y;
     fogState.flying = true;
     fog.density = (fogState.dive * 0.2) / Math.max(1.2, fogState.focus);
@@ -845,139 +985,14 @@ function Rig({geo, spaces, camera, moves, hovers, labels, onSlow, watch, texture
     fog.color.copy(fogState.tint);
   };
 
-  useFrame((state, dt) => {
-    applyLens(cam as THREE.PerspectiveCamera, size.width, size.height, frame, lens.current);
-    // test hook: window.__board3dPoke(ids) looks at these spaces for 2.6 s, as a placement would
-    const poke = (window as unknown as {__board3dPoked?: {ids: string[]; until: number}}).__board3dPoked;
-    // a fresh placement keeps the camera while its model builds, after the brief has let go
-    const held = cameraHold.until > performance.now() ? focusOf(cameraHold.ids) : [];
-    const focusPts = poke && poke.until > performance.now() ? focusOf(poke.ids) : briefPts.length ? briefPts : held;
-    // experimental: Fly over Mars takes the camera while flying, and eases it back to the resting view after
-    const phase = useFly.getState().phase;
-    let target: View = rest;
-    if (phase !== 'off' || flyRef.current.state) {
-      flyFrame(phase, dt);
-      // moments that arrive while flying are not flown later: by then they are old news
-      if (camera?.moment) flight.current = {seen: camera.moment.at, start: null, strength: flight.current.strength};
-      freeSince.current = performance.now();
-      view.current = rest; vel.current = {...ZERO_VEL};
-    } else {
-      target = focusView(focusPts, rest, {enabled: moves, mode, R: geo.discR});
-      // a big moment flies over once the board is free; a placement in focus takes precedence
-      const m = camera?.moment;
-      const nowMs = Date.now();
-      if (m && m.at !== flight.current.seen) {
-        if (nowMs - m.at > MOMENT.maxDelayMs) flight.current.seen = m.at;
-        // the moment's cinematic takes a beat to cover the board: wait for it, then fly once the board is free
-        else if (moves && !focusPts.length && nowMs - m.at > MOMENT.settleMs && performance.now() - freeSince.current > MOMENT.settleMs) {
-          flight.current = {seen: m.at, start: state.clock.elapsedTime, strength: m.strength};
-        }
-      }
-      // (test hook: window.__board3dFly('max' | 'step') starts a big-moment pass now, as a real moment would)
-      const fly = (window as unknown as {__board3dFly?: 'max' | 'step' | null});
-      if (fly.__board3dFly && moves) { flight.current = {seen: flight.current.seen, start: state.clock.elapsedTime, strength: fly.__board3dFly}; fly.__board3dFly = null; }
-      if (!moves) freeSince.current = performance.now();
-      if (flight.current.start !== null && moves && !focusPts.length) {
-        const mv = momentView(rest, state.clock.elapsedTime - flight.current.start, flight.current.strength, ref);
-        if (mv) target = mv; else flight.current.start = null;
-      } else if (flight.current.start !== null) {
-        // cut short (a cinematic or a placement took over): fly again once the board is free
-        flight.current = {seen: 0, start: null, strength: flight.current.strength};
-      }
-      if (!view.current) view.current = rest;
-      if (moves || Math.abs(view.current.dist - rest.dist) > 1e-3 || Math.abs(view.current.polar - rest.polar) > 1e-4) {
-        const r = stepView(view.current, vel.current, target, dt);
-        view.current = r.view; vel.current = r.vel;
-      } else { view.current = target; vel.current = {...ZERO_VEL}; }
-      const v = view.current;
-      cam.position.set(...cameraPosition(v));
-      cam.lookAt(v.tx, 0, v.tz);
-      // a placement lands with a small bounce of the camera
-      if (moves) cam.position.y += kickOffset() * v.dist / 10;
-      // fog: thickest while the camera travels, a light haze while it holds close, clear at rest
-      const amt = moveAmount(v, rest, mode, ref);
-      const speed = Math.min(1, Math.abs(vel.current.dist) / (rest.dist * 0.55));
-      fogState.amount = Math.min(1, speed * 0.9 + amt * 0.18);
-      // painted tops fade out as the camera dives past the default view: close-ups show models, not text
-      world.topFade = Math.max(0, Math.min(1, (rest.dist / v.dist - 1.15) / 0.5));
-      // How far down in the world the camera is (0 at rest, 1 at a placement close-up); while down, a distance
-      // haze softens what lies far behind the tile (near tiles stay crisp), on top of the travel fog
-      const zoom = rest.dist / v.dist;
-      fogState.dive = Math.max(0, Math.min(1, (zoom - 1.25) / 2.6));
-      fogState.focus = v.dist;
-      // (test hook: window.__board3dFx = false turns the atmosphere off, for comparisons)
-      fogState.enabled = (window as unknown as {__board3dFx?: boolean}).__board3dFx !== false;
-      fogState.camY = cam.position.y;
-      fogState.flying = false;
-      fog.density = (fogState.amount * 0.45 + fogState.dive * 0.2) / v.dist;
-      // the fog decks hang at fractions of the reference camera's height (where a plate-framing camera would stand), so a
-      // dive passes through them however close the resting view stands
-      fogState.restY = ref * Math.cos(REST_POLAR);
-      fogState.tint.copy(FOG_DAY).lerp(FOG_NIGHT, fogState.night * 0.85);
-      fog.color.copy(fogState.tint);
-    }
-
-    // Each tile's level of detail ('full' when focused or large on screen, 'lite' at the resting view)
-    if (tileSet() !== 'classic') updateLod(focusPts.length ? (poke && poke.until > performance.now() ? poke.ids : camera?.focus?.length ? camera.focus : cameraHold.ids) : [], cam, geo, spaces, lod.current);
-
-    // labels follow their anchors on screen
-    const put = (id: string, x: number, y: number, z: number, below: number, centre = false) => {
-      const el = labels.current.get(id);
-      if (!el) return;
-      v3.set(x, y, z).project(cam);
-      if (v3.z > 1) { el.style.transform = 'translate(-9999px, 0)'; return; }
-      const px = (v3.x + 1) / 2 * size.width, py = (1 - v3.y) / 2 * size.height;
-      el.style.transform = `translate(${px.toFixed(1)}px, ${(py + below).toFixed(1)}px) translate(-50%, ${centre ? '-50%' : '0'})`;
-    };
-    for (const o of geo.offMap) put(`off-${o.id}`, o.x, 0.32, o.z + PRISM_R * 1.3, 4);
-    const v = view.current!;
-    // special names show only in a dive, small, under the tile's front edge (the model names it at the default view);
-    // a name whose spot a model in front hides fades out (tagOccluded), so it never shows through a tower
-    const nameOp = Math.max(0, world.topFade * 1.4 - 0.4);
-    const tags = tagState.current;
-    const check = nameOp > 0 && performance.now() - tags.at > 100;
-    if (check) tags.at = performance.now();
-    const kf = 1 - Math.exp(-dt * 9);
-    for (const c of [...geo.cells, ...geo.offMap]) {
-      const sp = spaces.get(c.id);
-      if (!sp || tileKind(sp.tileType) !== 'special') continue;
-      // in the hex's front band, at the height of its top
-      const ax = c.x, ay = ('label' in c ? 0.32 : 0) + prismHeight(sp), az = c.z + PRISM_R * 0.92;
-      put(`sp-${c.id}`, ax, ay, az, 6);
-      if (check) tags.hidden.set(c.id, tagOccluded(cam, c.id, ax, ay, az, tags.boxes));
-      const want = nameOp > 0 && !tags.hidden.get(c.id) ? 1 : 0;
-      const vis = (tags.vis.get(c.id) ?? want) + (want - (tags.vis.get(c.id) ?? want)) * kf;
-      tags.vis.set(c.id, vis);
-      const op = (nameOp * vis).toFixed(3);
-      const el = labels.current.get(`sp-${c.id}`);
-      if (el && el.style.opacity !== op) el.style.opacity = op;
-    }
-    for (const hv of hovers) {
-      const c = geo.cells.find((x) => x.id === hv.spaceId) ?? geo.offMap.find((x) => x.id === hv.spaceId);
-      if (c) put(`ghost-${hv.playerId}`, c.x, ('label' in c ? 0.32 : 0) + prismHeight(spaces.get(c.id) ?? c.space), c.z + PRISM_R, 6);
-    }
-
-    // frame-time watch: a TV that cannot hold the budget falls back to the flat board
-    const now = performance.now();
-    // (test hook: window.__board3dFakeFrameMs stands in for the measured frame time, to force the fallback)
-    const fake = (window as unknown as {__board3dFakeFrameMs?: number}).__board3dFakeFrameMs;
-    if (document.visibilityState === 'visible' && watch) frames.current.push(typeof fake === 'number' ? fake : dt * 1000);
-    if (now - windowStart.current >= FALLBACK.windowMs) {
-      const r = fallbackStep(verdict.current, frames.current, now - mounted.current, document.hasFocus());
-      verdict.current = {bad: r.bad};
-      // (test hook: window.__board3dNoFallback keeps the 3D board for screenshot runs, which stall frames themselves)
-      const w = window as unknown as {__board3dNoFallback?: boolean; __board3dSlowWindows?: number};
-      if (r.bad) w.__board3dSlowWindows = (w.__board3dSlowWindows ?? 0) + 1;
-      if (r.fallback && r.stats && !w.__board3dNoFallback) onSlow(r.stats);
-      frames.current = [];
-      windowStart.current = now;
-    }
-    // test hook (like window.__cam): the 3D camera's state and a projector for overlays and checks
-    (window as unknown as {__board3d?: unknown}).__board3d = {view: v, target, rest, moves, mode, fog: fogState.amount, dive: fogState.dive, textures, flying: flight.current.start !== null,
-      // experimental: Fly over Mars (the phase, the flight, the room under the camera and the near plane)
-      fly: {phase, state: flyRef.current.state, over: flyRef.current.floor, near: (cam as THREE.PerspectiveCamera).near, cam: cam.position.toArray()},
-      // special names hidden because a model stands in front of them
-      tagsHidden: [...tagState.current.hidden].filter(([, h]) => h).map(([id]) => id),
+  // the test hook's object (window.__board3d): the checks' functions, and the camera's state filled in each frame
+  const hook = useRef<{fly: {phase: string; state: FlyState | null; over: number; near: number; cam: number[]}} & Record<string, unknown>>(
+    {fly: {phase: 'off', state: null, over: 0, near: 0.5, cam: [0, 0, 0]}});
+  useEffect(() => {
+    const h = hook.current;
+    // special names hidden because a model stands in front of them
+    Object.defineProperty(h, 'tagsHidden', {configurable: true, enumerable: true, get: () => [...tagState.current.hidden].filter(([, x]) => x).map(([id]) => id)});
+    Object.assign(h, {
       // how much of each empty space's top the models in front of it hide from the camera (7 sample points: centre,
       // and six at half radius), for the legibility check
       occlusion: () => {
@@ -987,7 +1002,7 @@ function Rig({geo, spaces, camera, moves, hovers, labels, onSlow, watch, texture
           return (o as THREE.Mesh).isMesh && !!m && !Array.isArray(m) && m.visible && m.depthWrite && !(m.transparent && m.opacity < 0.5);
         };
         const meshes: THREE.Object3D[] = [];
-        state.scene.traverseVisible((o) => { if (solid(o)) meshes.push(o); });
+        scene.traverseVisible((o) => { if (solid(o)) meshes.push(o); });
         for (const c of geo.cells) {
           const sp = spaces.get(c.id) ?? c.space;
           if (sp.tileType !== undefined) continue;
@@ -1052,15 +1067,163 @@ function Rig({geo, spaces, camera, moves, hovers, labels, onSlow, watch, texture
           });
           out[id] = {model, set, detail, calls, tris};
         }
-        return {tiles: out, render: {...state.gl.info.render}};
+        return {tiles: out, render: {...gl.info.render}};
       },
       project: (id: string) => {
         const c = geo.cells.find((x) => x.id === id);
         if (!c) return null;
         const p = new THREE.Vector3(c.x, prismHeight(spaces.get(id) ?? c.space), c.z).project(cam);
-        const rect = state.gl.domElement.getBoundingClientRect();
+        const rect = gl.domElement.getBoundingClientRect();
         return {x: rect.left + (p.x + 1) / 2 * rect.width, y: rect.top + (1 - p.y) / 2 * rect.height};
-      }};
+      },
+    });
+  }, [geo, spaces, cam, gl, scene]);
+
+  useFrame((state, dt) => {
+    applyLens(cam as THREE.PerspectiveCamera, size.width, size.height, frame, lens.current);
+    // test hook: window.__board3dPoke(ids) looks at these spaces for 2.6 s, as a placement would
+    const poke = (window as unknown as {__board3dPoked?: {ids: string[]; until: number}}).__board3dPoked;
+    // a fresh placement keeps the camera while its model builds, after the brief has let go
+    const held = cameraHold.until > performance.now() ? focusOf(cameraHold.ids) : [];
+    // board life's gentle visit to a vignette (the mild story zoom), after placements and the brief have let go
+    const visiting = lifeVisit.until > performance.now() && !briefPts.length && !held.length && !(poke && poke.until > performance.now());
+    const focusPts = poke && poke.until > performance.now() ? focusOf(poke.ids) : briefPts.length ? briefPts : held.length ? held : visiting ? focusOf(lifeVisit.ids) : [];
+    // experimental: Fly over Mars takes the camera while flying, and eases it back to the resting view after
+    const phase = useFly.getState().phase;
+    let target: View = rest;
+    if (phase !== 'off' || flyRef.current.state) {
+      flyFrame(phase, dt);
+      // moments that arrive while flying are not flown later: by then they are old news
+      if (camera?.moment) flight.current = {seen: camera.moment.at, start: null, strength: flight.current.strength};
+      freeSince.current = performance.now();
+      view.current = rest; vel.current = {...ZERO_VEL};
+    } else {
+      target = focusView(focusPts, rest, {enabled: moves, mode: visiting ? 'visit' : mode, R: geo.discR});
+      // a big moment flies over once the board is free; a placement in focus takes precedence
+      const m = camera?.moment;
+      const nowMs = Date.now();
+      if (m && m.at !== flight.current.seen) {
+        if (nowMs - m.at > MOMENT.maxDelayMs) flight.current.seen = m.at;
+        // the moment's cinematic takes a beat to cover the board: wait for it, then fly once the board is free
+        else if (moves && !focusPts.length && nowMs - m.at > MOMENT.settleMs && performance.now() - freeSince.current > MOMENT.settleMs) {
+          flight.current = {seen: m.at, start: state.clock.elapsedTime, strength: m.strength};
+        }
+      }
+      // (test hook: window.__board3dFly('max' | 'step') starts a big-moment pass now, as a real moment would)
+      const fly = (window as unknown as {__board3dFly?: 'max' | 'step' | null});
+      if (fly.__board3dFly && moves) { flight.current = {seen: flight.current.seen, start: state.clock.elapsedTime, strength: fly.__board3dFly}; fly.__board3dFly = null; }
+      if (!moves) freeSince.current = performance.now();
+      if (flight.current.start !== null && moves && !focusPts.length) {
+        const mv = momentView(rest, state.clock.elapsedTime - flight.current.start, flight.current.strength, ref);
+        if (mv) target = mv; else flight.current.start = null;
+      } else if (flight.current.start !== null) {
+        // cut short (a cinematic or a placement took over): fly again once the board is free
+        flight.current = {seen: 0, start: null, strength: flight.current.strength};
+      }
+      if (!view.current) view.current = rest;
+      if (moves || Math.abs(view.current.dist - rest.dist) > 1e-3 || Math.abs(view.current.polar - rest.polar) > 1e-4) {
+        const r = stepView(view.current, vel.current, target, dt);
+        view.current = r.view; vel.current = r.vel;
+      } else { view.current = target; vel.current = {...ZERO_VEL}; }
+      const v = view.current;
+      cam.position.set(...cameraPosition(v));
+      cam.lookAt(v.tx, 0, v.tz);
+      // a placement lands with a small bounce of the camera
+      if (moves) cam.position.y += kickOffset() * v.dist / 10;
+      // fog: thickest while the camera travels, a light haze while it holds close, clear at rest
+      const amt = moveAmount(v, rest, mode, ref);
+      const speed = Math.min(1, Math.abs(vel.current.dist) / (rest.dist * 0.55));
+      fogState.amount = Math.min(1, speed * 0.9 + amt * 0.18);
+      // painted tops fade out as the camera dives past the default view: close-ups show models, not text
+      world.topFade = Math.max(0, Math.min(1, (rest.dist / v.dist - 1.15) / 0.5));
+      // How far down in the world the camera is (0 at rest, 1 at a placement close-up); while down, a distance
+      // haze softens what lies far behind the tile (near tiles stay crisp), on top of the travel fog
+      const zoom = rest.dist / v.dist;
+      fogState.dive = Math.max(0, Math.min(1, (zoom - 1.25) / 2.6));
+      fogState.focus = v.dist;
+      // (test hook: window.__board3dFx = false turns the atmosphere off, for comparisons; the quality ladder's effects
+      // level does too: no fog decks, mist or light shafts, which cover much of the screen during a dive)
+      fogState.enabled = (window as unknown as {__board3dFx?: boolean}).__board3dFx !== false && effects;
+      fogState.camY = cam.position.y;
+      fogState.flying = false;
+      fog.density = (fogState.amount * 0.45 + fogState.dive * 0.2) / v.dist;
+      // the fog decks hang at fractions of the reference camera's height (where a plate-framing camera would stand), so a
+      // dive passes through them however close the resting view stands
+      fogState.restY = ref * Math.cos(REST_POLAR);
+      fogState.tint.copy(FOG_DAY).lerp(FOG_NIGHT, fogState.night * 0.85);
+      fog.color.copy(fogState.tint);
+    }
+
+    // Each tile's level of detail ('full' when focused or large on screen, 'lite' at the resting view)
+    if (tileSet() !== 'classic') updateLod(focusPts.length ? (poke && poke.until > performance.now() ? poke.ids : camera?.focus?.length ? camera.focus : cameraHold.ids) : [], cam, allCells, spaces, lod.current, lite);
+
+    // labels follow their anchors on screen
+    const put = (id: string, x: number, y: number, z: number, below: number, centre = false) => {
+      const el = labels.current.get(id);
+      if (!el) return;
+      v3.set(x, y, z).project(cam);
+      if (v3.z > 1) { el.style.transform = 'translate(-9999px, 0)'; return; }
+      const px = (v3.x + 1) / 2 * size.width, py = (1 - v3.y) / 2 * size.height;
+      el.style.transform = `translate(${px.toFixed(1)}px, ${(py + below).toFixed(1)}px) translate(-50%, ${centre ? '-50%' : '0'})`;
+    };
+    for (const o of geo.offMap) put(`off-${o.id}`, o.x, 0.32, o.z + PRISM_R * 1.3, 4);
+    const v = view.current!;
+    // special names show only in a dive, small, under the tile's front edge (the model names it at the default view);
+    // a name whose spot a model in front hides fades out (tagOccluded), so it never shows through a tower
+    const nameOp = Math.max(0, world.topFade * 1.4 - 0.4);
+    const tags = tagState.current;
+    const check = nameOp > 0 && performance.now() - tags.at > 100;
+    if (check) tags.at = performance.now();
+    const kf = 1 - Math.exp(-dt * 9);
+    for (const c of allCells) {
+      const sp = spaces.get(c.id);
+      if (!sp || tileKind(sp.tileType) !== 'special') continue;
+      // in the hex's front band, at the height of its top
+      const ax = c.x, ay = ('label' in c ? 0.32 : 0) + prismHeight(sp), az = c.z + PRISM_R * 0.92;
+      put(`sp-${c.id}`, ax, ay, az, 6);
+      if (check) tags.hidden.set(c.id, tagOccluded(cam, c.id, ax, ay, az, tags.boxes));
+      const want = nameOp > 0 && !tags.hidden.get(c.id) ? 1 : 0;
+      const vis = (tags.vis.get(c.id) ?? want) + (want - (tags.vis.get(c.id) ?? want)) * kf;
+      tags.vis.set(c.id, vis);
+      const op = (nameOp * vis).toFixed(3);
+      const el = labels.current.get(`sp-${c.id}`);
+      if (el && el.style.opacity !== op) el.style.opacity = op;
+    }
+    for (const hv of hovers) {
+      const c = geo.cells.find((x) => x.id === hv.spaceId) ?? geo.offMap.find((x) => x.id === hv.spaceId);
+      if (c) put(`ghost-${hv.playerId}`, c.x, ('label' in c ? 0.32 : 0) + prismHeight(spaces.get(c.id) ?? c.space), c.z + PRISM_R, 6);
+    }
+
+    // frame-time watch: the quality ladder steps down when frames stay slow and back up when there is room (quality.ts)
+    const now = performance.now();
+    const w = window as unknown as {__board3dFakeFrameMs?: number; __board3dNoFallback?: boolean; __board3dSlowWindows?: number; __board3dLadderCfg?: Partial<LadderConfig>};
+    const cfg = w.__board3dLadderCfg ? {...LADDER, ...w.__board3dLadderCfg} : LADDER;
+    // (test hook: window.__board3dFakeFrameMs stands in for the measured frame time, to drive the ladder)
+    if (document.visibilityState === 'visible' && watch) frames.current.push(typeof w.__board3dFakeFrameMs === 'number' ? w.__board3dFakeFrameMs : dt * 1000);
+    if (now - windowStart.current >= cfg.windowMs) {
+      // (test hook: window.__board3dNoFallback holds the level for measuring and screenshot runs, which stall frames themselves)
+      if (!w.__board3dNoFallback) {
+        const r = ladderStep(ladderState(), frames.current, {sinceStartMs: now - mounted.current, focused: document.hasFocus(), applicable, cfg});
+        if (r.stats && r.stats.p95 > cfg.budgetP95) w.__board3dSlowWindows = (w.__board3dSlowWindows ?? 0) + 1;
+        // (test hook: the latest judged windows, for checks of what the ladder saw)
+        const log = ((window as unknown as {__board3dWindows?: unknown[]}).__board3dWindows ??= []);
+        log.push({t: Math.round(now - mounted.current), level: r.state.level, p95: r.stats?.p95 ?? null, slow: r.stats?.slow ?? null, n: frames.current.length});
+        if (log.length > 60) log.shift();
+        judged.current({...r, render: `${gl.domElement.width}x${gl.domElement.height}`});
+      }
+      frames.current = [];
+      windowStart.current = now;
+    }
+    // test hook (like window.__cam): the 3D camera's state and a projector for overlays and checks; one object, its
+    // fields updated in place (nothing allocated per frame)
+    const h = hook.current;
+    h.view = v; h.target = target; h.rest = rest; h.moves = moves; h.mode = mode; h.fog = fogState.amount; h.dive = fogState.dive; h.textures = textures;
+    h.flying = flight.current.start !== null;
+    // experimental: Fly over Mars (the phase, the flight, the room under the camera and the near plane)
+    const fl = h.fly;
+    fl.phase = phase; fl.state = flyRef.current.state; fl.over = flyRef.current.floor; fl.near = (cam as THREE.PerspectiveCamera).near; cam.position.toArray(fl.cam);
+    const hw = window as unknown as {__board3d?: unknown};
+    if (hw.__board3d !== h) hw.__board3d = h;
   });
   return null;
 }

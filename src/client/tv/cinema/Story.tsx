@@ -14,6 +14,7 @@ import {Rolling} from '../../ui/Rolling';
 import {Board} from '../full/Board';
 import {TrRace} from './TrRace';
 import {tvt} from '../settings';
+import {useDisplayName} from '../../names';
 
 export type FinalScore = {color: Color; name: string; total: number; parts: Array<{label: string; value: number}>};
 
@@ -138,7 +139,8 @@ function Timelapse({history}: {history: GameHistory}) {
 }
 
 function Race({history}: {history: GameHistory}) {
-  const series = trRace(history).map((s) => ({...s, name: history.players.find((p) => p.color === s.color)?.name ?? ''}));
+  const nameFor = useDisplayName();
+  const series = trRace(history).map((s) => ({...s, name: nameFor(s.color, history.players.find((p) => p.color === s.color)?.name ?? '')}));
   return (
     <motion.div initial={{opacity: 0, y: 30}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: -30}} transition={{duration: 0.6}}
       style={{position: 'absolute', left: '7vw', right: '7vw', top: '6vh', bottom: '6vh'}}>
@@ -151,7 +153,8 @@ function Race({history}: {history: GameHistory}) {
 
 function Titles({history}: {history: GameHistory}) {
   const list = titles(history);
-  const nameOf = (c: Color) => history.players.find((p) => p.color === c)?.name ?? '';
+  const nameFor = useDisplayName();
+  const nameOf = (c: Color) => nameFor(c, history.players.find((p) => p.color === c)?.name ?? '');
   return (
     <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.5}}
       style={{position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2vw', padding: '0 4vw', flexWrap: 'wrap'}}>

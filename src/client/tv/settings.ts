@@ -18,6 +18,9 @@ export const DEFAULT_TILE_STYLE: TileStyle = 'detailed';
 /** The tile style this screen draws. */
 export function tileStyleOf(s: Pick<TvSettings, 'tileStyle'>): TileStyle { return s.tileStyle ?? DEFAULT_TILE_STYLE; }
 
+/** Whether board life's characters run on this screen: both "Board life" and its "Terraformers" switch are on. */
+export function terraformersOn(s: Pick<TvSettings, 'boardLife' | 'terraformers'>): boolean { return s.boardLife && s.terraformers; }
+
 export type TvSettings = {
   /** 0..1 */
   master: number;
@@ -31,10 +34,18 @@ export type TvSettings = {
   weather: boolean;
   /** the 3D board; off = the flat board */
   board3d: boolean;
+  /** the TR track: a numbered loop around the board with a marker per player at their terraform rating (on by default) */
+  trTrack: boolean;
   /** the camera moving toward placements and big moments (both boards) */
   cameraMoves: boolean;
   /** the 3D board's tile set, once picked on this screen; null follows DEFAULT_TILE_STYLE (tileStyleOf) */
   tileStyle: TileStyle | null;
+  /** "Board life": tiny animated miniatures, things from the sky and ambient life on the 3D board's empty land (on by default) */
+  boardLife: boolean;
+  /** "Terraformers", under Board life: its two little characters, their vignettes and reactions (on by default). Board
+   *  life is the master switch: off, nothing of it runs; on with Terraformers off, only the sky drops and the ambient
+   *  rover, drone, dust devils and lichen run, and no character is built (terraformersOn) */
+  terraformers: boolean;
   /** the TV radio: the server's YouTube playlist (RADIO_PLAYLIST) during a game; off until switched on here */
   radio: boolean;
   radioVolume: number;
@@ -51,7 +62,7 @@ export type TvSettings = {
   flyBank: boolean;
 };
 
-export const DEFAULT_SETTINGS: TvSettings = {master: 1, hum: true, humVolume: 1, effects: 1, voice: 1, textSize: 'large', weather: true, board3d: true, cameraMoves: true, tileStyle: null, radio: false, radioVolume: 0.5,
+export const DEFAULT_SETTINGS: TvSettings = {master: 1, hum: true, humVolume: 1, effects: 1, voice: 1, textSize: 'large', weather: true, board3d: true, trTrack: true, cameraMoves: true, tileStyle: null, boardLife: true, terraformers: true, radio: false, radioVolume: 0.5,
   boardView: false, boardZoom: null, boardTilt: null, fly: false, flyBank: true};
 export const SETTINGS_KEY = 'mars-ledger-tv-settings';
 
@@ -72,8 +83,11 @@ export function parseSettings(raw: string | null): TvSettings {
     textSize: TEXT_SIZES.includes(o.textSize as TextSize) ? o.textSize as TextSize : d.textSize,
     weather: typeof o.weather === 'boolean' ? o.weather : d.weather,
     board3d: typeof o.board3d === 'boolean' ? o.board3d : d.board3d,
+    trTrack: typeof o.trTrack === 'boolean' ? o.trTrack : d.trTrack,
     cameraMoves: typeof o.cameraMoves === 'boolean' ? o.cameraMoves : d.cameraMoves,
     tileStyle: TILE_STYLES.includes(o.tileStyle as TileStyle) ? o.tileStyle as TileStyle : d.tileStyle,
+    boardLife: typeof o.boardLife === 'boolean' ? o.boardLife : d.boardLife,
+    terraformers: typeof o.terraformers === 'boolean' ? o.terraformers : d.terraformers,
     radio: typeof o.radio === 'boolean' ? o.radio : d.radio,
     radioVolume: unit(o.radioVolume, d.radioVolume),
     boardView: typeof o.boardView === 'boolean' ? o.boardView : d.boardView,

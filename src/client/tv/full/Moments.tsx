@@ -14,6 +14,7 @@ import type {AttackTarget} from './diff';
 import type {Resource} from '../../../shared/types';
 import {tvt} from '../settings';
 import {useNet} from '../../net';
+import {useDisplayName} from '../../names';
 import {Art} from '../../ui/CardFace';
 import {usePipeline} from './pipeline/store';
 import {tickerItems} from './pipeline/ticker';
@@ -56,6 +57,7 @@ export function Podium({players}: {players: PublicPlayerModel[]}) {
   const rows = [...players].sort((a, b) => (b.victoryPointsBreakdown?.total ?? 0) - (a.victoryPointsBreakdown?.total ?? 0));
   const solo = useSolo();
   const verdict = solo && rows.length === 1 ? soloVerdict(solo) : null;
+  const nameFor = useDisplayName();
   return (
     <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 1.2}}
       style={{position: 'absolute', inset: 0, zIndex: 30, display: 'grid', placeItems: 'center',
@@ -71,7 +73,7 @@ export function Podium({players}: {players: PublicPlayerModel[]}) {
               style={{display: 'grid', gridTemplateColumns: '4vw 1fr repeat(5, 7vw) 8vw', alignItems: 'center', padding: '1.4vh 1.6vw', marginBottom: '1vh', borderRadius: '1vw',
                 background: 'rgba(12,5,3,.62)', boxShadow: `inset 0.4vw 0 0 ${PLAYER_HEX[p.color]}`, fontSize: '1.3vw'}}>
               <span className="num" style={{fontSize: '2.4vw'}}>{verdict ? '' : i + 1}</span>
-              <span style={{fontWeight: 750, fontSize: '1.9vw'}}>{p.name}<BotMarkFor color={p.color} /></span>
+              <span style={{fontWeight: 750, fontSize: '1.9vw'}}>{nameFor(p.color, p.name)}<BotMarkFor color={p.color} /></span>
               <span><span className="faint cond">TR </span>{b?.terraformRating ?? p.terraformRating}</span>
               <span><span className="faint cond">Greenery </span>{b?.greenery ?? 0}</span>
               <span><span className="faint cond">City </span>{b?.city ?? 0}</span>
@@ -140,7 +142,7 @@ export function LogTicker({logs: incoming, players}: {logs: LogLine[]; players: 
         <motion.div key={it.key} data-ticker-item={i === 0 ? 'newest' : 'trail'} layout={reduce ? false : 'position'}
           initial={reduce || burst.current.on || i > 0 ? false : {opacity: 0, x: '-0.8vw'}} animate={{opacity: ITEM_OPACITY[i] ?? 0.3, x: 0}}
           transition={{opacity: {duration: 0.35, delay: i === 0 ? 0.15 : 0}, x: {duration: 0.35}, layout: {type: 'spring', stiffness: 170, damping: 26}}}
-          style={{flex: 'none', display: 'flex', alignItems: 'center'}}>
+          style={{flex: 'none', display: 'flex', alignItems: 'center', maxWidth: '100%', minWidth: 0}}>
           <TickerMove it={it} players={players} />
         </motion.div>
       ))}
@@ -151,22 +153,24 @@ export function LogTicker({logs: incoming, players}: {logs: LogLine[]; players: 
 /** One move in the ticker: [colour][picture] Name → [what it did]. */
 function TickerMove({it, players}: {it: TickerItem; players: PublicPlayerModel[]}) {
   const color = PLAYER_HEX[it.by] ?? 'var(--ice)';
-  const name = players.find((p) => p.color === it.by)?.name ?? it.by;
+  const name = useDisplayName()(it.by, players.find((p) => p.color === it.by)?.name);
   const def = it.card ? findCard(it.card) : undefined;
   const h = `calc(2.1vw * var(--tvt, 1))`;
   const icon = Math.round(window.innerWidth * 0.0145 * (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tvt')) || 1));
   return (
-    <span aria-label={`${name}: ${it.label}`} style={{display: 'inline-flex', alignItems: 'center', gap: '0.5vw'}}>
+    <span aria-label={`${name}: ${it.label}`} style={{display: 'inline-flex', alignItems: 'center', gap: '0.5vw', maxWidth: '100%', minWidth: 0}}>
       <span aria-hidden="true" style={{width: '0.75vw', height: h, borderRadius: '0.25vw', background: color, flex: 'none'}} />
       {def
         ? <span aria-hidden="true" style={{height: h, aspectRatio: '4 / 3', borderRadius: '0.35vw', overflow: 'hidden', position: 'relative', flex: 'none', containerType: 'inline-size',
           boxShadow: `0 0 0 0.1vw color-mix(in oklab, ${color} 60%, transparent)`}}><Art card={def} /></span>
         : <MoveGlyph how={it.how} label={it.label} size={icon} color={color} h={h} />}
-      <span style={{fontWeight: 650, maxWidth: '13vw', overflow: 'hidden', textOverflow: 'ellipsis', color: it.how === 'passed' ? 'var(--ice-dim)' : 'var(--ice)'}}>{it.label}</span>
-      {it.icons.length > 0 && <span aria-hidden="true" className="faint" style={{fontWeight: 500}}>→</span>}
-      {it.icons.map((x, i) => <ResultIcon key={i} x={x} size={icon} />)}
+      {/* the name takes the room it needs: it is cut only when this move alone is wider than the whole lane (older moves
+          are cut first, at the lane's faded right edge) */}
+      <span data-ticker-label="" style={{fontWeight: 650, flex: '0 1 auto', minWidth: '4vw', overflow: 'hidden', textOverflow: 'ellipsis', color: it.how === 'passed' ? 'var(--ice-dim)' : 'var(--ice)'}}>{it.label}</span>
+      {it.icons.length > 0 && <span aria-hidden="true" className="faint" style={{fontWeight: 500, flex: 'none'}}>→</span>}
+      {it.icons.map((x, i) => <span key={i} style={{flex: 'none', display: 'inline-flex'}}><ResultIcon x={x} size={icon} /></span>)}
       {it.hit.length > 0 && (
-        <span aria-hidden="true" style={{display: 'inline-flex', alignItems: 'center', gap: '0.25vw', marginLeft: '0.2vw'}}>
+        <span aria-hidden="true" style={{display: 'inline-flex', alignItems: 'center', gap: '0.25vw', marginLeft: '0.2vw', flex: 'none'}}>
           <svg width={icon} height={icon} viewBox="0 0 24 24"><path d="M13.5 2 5 13.5h5.5L9 22l9-12h-5.6z" fill="var(--ember)" /></svg>
           {it.hit.map((c) => <span key={c} style={{width: '0.75vw', height: '0.75vw', borderRadius: '0.2vw', background: PLAYER_HEX[c] ?? '#999'}} />)}
         </span>
@@ -224,7 +228,8 @@ function ResultIcon({x, size}: {x: TickerIcon; size: number}) {
 const RES_WORD: Record<string, string> = {megacredits: 'M€', steel: 'steel', titanium: 'titanium', plants: 'plants', energy: 'energy', heat: 'heat'};
 
 export function AttackMoment({m, players}: {m: Extract<Moment, {kind: 'attack'}>; players: PublicPlayerModel[]}) {
-  const nameOf = (c: string) => players.find((p) => p.color === c)?.name ?? c;
+  const nameFor = useDisplayName();
+  const nameOf = (c: string) => nameFor(c, players.find((p) => p.color === c)?.name);
   const icon = Math.round(window.innerWidth * 0.018);
   return (
     <motion.div

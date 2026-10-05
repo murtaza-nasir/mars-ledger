@@ -50,6 +50,9 @@ import {hapticFor, TvLinkDesk} from './tvlinks';
 import type {Buzz} from '../shared/tvlinks';
 import {registerPerf} from './perf';
 import {handleTvMoment, primaryTv, readTvMoment} from './tvMoments';
+import {Tv3dDesk} from './tv3d';
+import {relabelFeed, seatNames} from '../shared/names';
+import type {NoticeFeed} from '../shared/notices';
 
 // Load .env when present (dev); in Docker the environment is set directly.
 for (const f of ['.env']) {
@@ -129,7 +132,7 @@ const full = new FullBridge(new EngineClient(), () => state, () => sockets, send
 // Bot seats: the server answers their engine questions through the same bridge as the phones.
 // BOT_DELAY_SCALE scales their human-feeling waits (0 in tests); BOT_LOG appends every decision as a JSON line.
 const bots = new BotDesk({
-  player: (engineId) => full.engine.player(engineId),
+  player: (engineId) => full.playerModel(engineId),
   table: () => botTable(state),
   input: (playerId, response) => full.input(playerId, response, true),
   // the TV's generation recap starts 0.3 s after the show and runs 8.6 s (src/client/tv/cinema/queue.ts)
@@ -246,8 +249,10 @@ function buzz(bs: Buzz[]) {
 setInterval(() => buzz(links.tick(Date.now())), 500).unref();
 
 // Table sense: what happened to each seat (hits, cards in and out, gifts), told to that seat's phones only.
+// A notice keeps the colour of whoever did it; the name it shows is the seat's current one (src/shared/names.ts).
+const noticesMsg = (feed: NoticeFeed, fresh: string[]): ServerMsg => ({type: 'notices', feed: relabelFeed(feed, seatNames(state)), fresh});
 const notices = new NoticeDesk(store.db, (playerId, feed, fresh) => {
-  for (const ws of sockets) if (full.playerOf(ws) === playerId) send(ws, {type: 'notices', feed, fresh});
+  for (const ws of sockets) if (full.playerOf(ws) === playerId) send(ws, noticesMsg(feed, fresh));
   // a new hit buzzes its phones when the TV resolves it (or now, with no TV)
   const color = fresh.length && state.mode === 'full' ? state.full?.players[playerId]?.color : undefined;
   if (color) buzz(links.hits(playerId, color, feed.notices.filter((n) => fresh.includes(n.id)), Date.now(), tvCount()));
@@ -301,11 +306,52 @@ function commit(command: Command): Tick {
   return tick;
 }
 
+/**
+ * A profile was renamed on a phone. Its seat at the table takes the new name through a command (kept in the game's log,
+ * so it survives a restart and replays), and every TV and phone hears it now.
+ */
+async function renameProfileSeats(profileId: string) {
+  const p = profiles.get(profileId);
+  if (!p) return;
+  const seats = state.players.filter((x) => x.profileId === p.id && x.name !== p.name);
+  for (const seat of seats) {
+    try {
+      const tick = commit({t: 'rename', playerId: seat.id, name: p.name, color: seat.color});
+      broadcast({type: 'tick', tick, state});
+    } catch (e) { console.warn(`names: ${seat.name} could not become ${p.name}: ${(e as Error).message}`); }
+  }
+  if (lastUnlocks) {
+    const players = lastUnlocks.players.map((u) => ({...u, name: profiles.get(u.profileId)?.name ?? u.name}));
+    if (players.some((u, i) => u.name !== lastUnlocks!.players[i].name)) { lastUnlocks = {...lastUnlocks, players}; broadcast({type: 'unlocks', unlocks: lastUnlocks}); }
+  }
+  if (seats.length) await namesChanged();
+}
+
+/**
+ * A seat's name changed mid-game. Names are resolved from the seats wherever they are shown (src/shared/names.ts), so the
+ * stored story and notices need no rewriting: every device just gets them again, with the views, the story and the
+ * last production show, without a reload.
+ */
+async function namesChanged() {
+  if (state.mode === 'full' && state.full) {
+    const link = state.full;
+    for (const ws of sockets) {
+      const seat = full.playerOf(ws);
+      if (seat && link.players[seat]) send(ws, noticesMsg(notices.feed(link.gameId, seat), []));
+    }
+    await full.renamed();
+  } else {
+    const m = companionStory();
+    if (m) broadcast(m);
+  }
+}
+
 function undo(playerId: string): string | null {
   const last = ticks[ticks.length - 1];
   if (!last) return 'Nothing to undo';
   if ('playerId' in last.command && last.command.playerId !== playerId) return 'Only the last move can be undone, by the player who made it';
-  if (last.command.t === 'start' || last.command.t === 'join') return 'That cannot be undone';
+  // a name change (a profile edit on a phone) is not a move: undo never takes it back instead of the player's last move
+  if (last.command.t === 'start' || last.command.t === 'join' || last.command.t === 'rename') return 'That cannot be undone';
   store.removeLast(gameId, last.seq);
   ({state, ticks} = store.replay(gameId));
   if (state.mode !== 'full' && profiles.isRecorded(state.id)) {
@@ -323,6 +369,8 @@ const reactions = new ReactionDesk();
 /** The TV radio: remote presses from phones, what the TV is playing (in memory). */
 const radio = new RadioDesk();
 const fly = new FlyRelay();
+/** TVs' 3D board quality levels (logged, and the latest per TV in /api/health). */
+const tv3d = new Tv3dDesk();
 /** Companion mode: when production last paid out (the TV plays its production moment then). */
 let companionProductionAt: number | null = null;
 
@@ -382,7 +430,8 @@ app.get('/ws', {websocket: true}, (ws) => {
         send(ws, {type: 'ack', id});
         broadcast({type: 'tick', tick, state});
         pushClock();
-        if (state.mode === 'full') await full.pushAll();
+        if (command.t === 'rename' && before.players.find((p) => p.id === command.playerId)?.name !== state.players.find((p) => p.id === command.playerId)?.name) await namesChanged();
+        else if (state.mode === 'full') await full.pushAll();
         else if (tick.events.some((e) => STORY_EVENTS.has(e.kind))) { const m = companionStory(); if (m) broadcast(m); }
       };
       run().catch((e) => {
@@ -394,7 +443,7 @@ app.get('/ws', {websocket: true}, (ws) => {
       send(ws, {type: 'flyStatus', status: fly.status()});
       // this seat's notices so far (a reload or another phone sees the same hits until they are cleared)
       const seat = full.playerOf(ws);
-      if (seat && state.mode === 'full' && state.full?.players[seat]) send(ws, {type: 'notices', feed: notices.feed(state.full.gameId, seat), fresh: []});
+      if (seat && state.mode === 'full' && state.full?.players[seat]) send(ws, noticesMsg(notices.feed(state.full.gameId, seat), []));
       // A phone coming back (visible) to a seat that was away long enough hears what it missed.
       tellAway(ws, away.update(ws, msg.role === 'phone' ? msg.playerId : null, msg.visible !== false, Date.now(), generationNow()));
       broadcastPhones();
@@ -417,11 +466,13 @@ app.get('/ws', {websocket: true}, (ws) => {
       tellAway(ws, away.update(ws, away.playerOf(ws), !!msg.visible, Date.now(), generationNow()));
     } else if (msg.type === 'seatPref') {
       // A personal setting, not a move: stored beside the game, never in its command log.
-      if (!state.players.some((p) => p.id === msg.playerId) || typeof msg.hints !== 'boolean') {
+      const flag = (v: unknown) => v === undefined || typeof v === 'boolean';
+      if (!state.players.some((p) => p.id === msg.playerId) || !flag(msg.hints) || !flag(msg.showVp) || !flag(msg.confirmBuy)) {
         send(ws, {type: 'nack', id: msg.id, error: 'That seat is not at the table'});
         return;
       }
-      store.setSeatHints(gameId, msg.playerId, msg.hints);
+      if (msg.hints !== undefined) store.setSeatHints(gameId, msg.playerId, msg.hints);
+      store.setSeatFlags(gameId, msg.playerId, {showVp: msg.showVp, confirmBuy: msg.confirmBuy});
       send(ws, {type: 'ack', id: msg.id});
       broadcast(prefsMsg());
     } else if (msg.type === 'input') {
@@ -505,6 +556,9 @@ app.get('/ws', {websocket: true}, (ws) => {
       if (m) { handleTvMoment(m); buzz(links.moment(m, Date.now())); }
     } else if (msg.type === 'narrationSeen') {
       if (full.isTv(ws)) narrator?.tvReport(msg.report);
+    } else if (msg.type === 'tv3d') {
+      const line = full.isTv(ws) ? tv3d.report(msg.report, Date.now()) : null;
+      if (line) console.log(line);
     } else if (msg.type === 'radioLog') {
       const line = full.isTv(ws) ? radio.logLine(msg.text, Date.now()) : null;
       if (line) console.log(line);
@@ -518,6 +572,7 @@ app.get('/ws', {websocket: true}, (ws) => {
         send(ws, {type: 'ack', id: msg.id});
         broadcastProfiles();
         broadcastFame();
+        if (msg.op === 'update') void renameProfileSeats(msg.profileId).catch((e) => console.warn('names: renaming the seat failed:', (e as Error).message));
       } catch (e) {
         send(ws, {type: 'nack', id: msg.id, error: e instanceof ProfileError ? e.message : 'The profile could not be saved'});
         if (!(e instanceof ProfileError)) console.warn('profiles:', (e as Error).message);
@@ -576,9 +631,10 @@ app.get('/ws', {websocket: true}, (ws) => {
 
 // Health: the app, and whether the engine answers (cached 10 s). Companion-only setups report the engine as off.
 const engineConfigured = process.env.FULL_GAME !== 'false' && !!process.env.ENGINE_URL;
-// Mission control's health rides along as `narrator` (LLM and paid voices reachable, credits, last line, last error, what the TVs saw).
+// Mission control's health rides along as `narrator` (LLM and paid voices reachable, credits, last line, last error, what the TVs saw),
+// and each TV's latest 3D board quality level as `tv3d`.
 registerHealth(app, new HealthCheck({probe: engineConfigured ? (ms) => full.engine.ping(ms) : null, build: () => serverBuild() ?? process.env.BUILD_SHA ?? null,
-  extra: narrator ? async () => ({narrator: await narrator.health()}) : undefined}));
+  extra: async () => ({...(narrator ? {narrator: await narrator.health()} : {}), tv3d: tv3d.health()})}));
 
 app.get('/api/config', async (req) => ({
   vision: visionEnabled(),

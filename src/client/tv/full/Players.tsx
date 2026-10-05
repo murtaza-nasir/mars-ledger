@@ -1,6 +1,6 @@
 // Player strips and the milestone/award panel for the full-game TV.
 import {AnimatePresence, motion} from 'motion/react';
-import {useEffect, useState} from 'react';
+import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 /** Icon size that tracks the TV's width (the SVG icons take pixel sizes). */
 export function useVwPx(vw: number): number {
@@ -17,6 +17,7 @@ import {OverTimeNote, PortraitClock} from '../StripClock';
 import type {Resource} from '../../../shared/types';
 import {tvt} from '../settings';
 import {BotMarkFor} from '../../ui/BotMark';
+import {useDisplayName} from '../../names';
 
 export function tagMap(t: PublicPlayerModel['tags']): Record<string, number> {
   if (Array.isArray(t)) return Object.fromEntries((t as TagCount[]).map((x) => [x.tag, x.count]));
@@ -56,6 +57,7 @@ export function PlayerStrip({p, passed, sweep, index, fold = 0, hit, override, p
   const tags = Object.entries(tagMap(p.tags)).filter(([t, n]) => n > 0 && t !== 'event').sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   const actions = actionCards(p);
   const corp = corporationOf(p);
+  const name = useDisplayName()(p.color, p.name);
   // after the name (folded) or the corporation: "passed" once the player has passed (their actions wait for the next
   // generation, so the dots give way to it), else the action dots once the tag row has folded away (the arrow alone
   // there: the word "actions" stays on the tag row, where it takes nobody's room)
@@ -89,9 +91,9 @@ export function PlayerStrip({p, passed, sweep, index, fold = 0, hit, override, p
           <PortraitClock color={p.color} sizeVw={avatar}><Portrait corporation={corp} color={color} size={avatar} /></PortraitClock>
         </div>
         <div data-name-row="" style={{gridColumn: 2, gridRow: 1, display: 'flex', alignItems: 'center', gap: tight ? '0.5vw' : '0.7vw', minWidth: 0, alignSelf: tight ? 'center' : 'end'}}>
-          <span data-player-name="" title={p.name} style={{fontSize: compact ? '1.3vw' : '1.45vw', fontWeight: 750, fontVariationSettings: "'wdth' 85", lineHeight: 1.15, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-            flex: '0 1 auto', minWidth: keepChars(p.name, tight ? 13 : 14, 0.5)}}>
-            {p.name}<BotMarkFor color={p.color} />
+          <span data-player-name="" title={name} style={{fontSize: compact ? '1.3vw' : '1.45vw', fontWeight: 750, fontVariationSettings: "'wdth' 85", lineHeight: 1.15, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            flex: '0 1 auto', minWidth: keepChars(name, tight ? 13 : 14, 0.5)}}>
+            {name}<BotMarkFor color={p.color} />
           </span>
           <HandCount n={p.cardsInHandNbr} />
           {tight && <OverTimeNote color={p.color} sizeVw={0.88} />}
@@ -267,10 +269,58 @@ const STANDING_THEME: Record<string, Theme> = {
   Celebrity: tag('earth', '#4F8FD8'), Industrialist: res('steel'), 'Desert Settler': res('heat'), 'Estate Dealer': tag('city', '#9AA0AE'), Benefactor: res('tr'),
 };
 
+/** Font steps a chip name tries, as shares of its full size, before it wraps (two words) or is cut. */
+const CHIP_FIT = [1, 0.92, 0.85, 0.78];
+
+/**
+ * A milestone or award name that fits its chip: the full size when there is room, a step or three smaller when not, then
+ * two lines for a two-word name ("Polar Explorer"), and only then an ellipsis. Refitted when the chip changes size.
+ */
+function ChipName({name}: {name: string}) {
+  const el = useRef<HTMLSpanElement>(null);
+  const [fit, setFit] = useState<{step: number; wrap: boolean}>({step: 0, wrap: false});
+  useLayoutEffect(() => {
+    const e = el.current;
+    if (!e) return;
+    const refit = () => {
+      const words = name.trim().split(/\s+/).length;
+      let step = 0;
+      let wrap = false;
+      e.style.whiteSpace = 'nowrap';
+      for (; step < CHIP_FIT.length; step++) {
+        e.style.fontSize = `calc(${(0.78 * CHIP_FIT[step]).toFixed(4)}vw * var(--tvt, 1))`;
+        if (e.scrollWidth <= e.clientWidth + 0.5) break;
+      }
+      if (step === CHIP_FIT.length) {
+        step = CHIP_FIT.length - 1;
+        // two words on two lines, a size up from the smallest single line
+        if (words > 1) { wrap = true; step = Math.min(step, 1); }
+      }
+      // leave the element as React draws it for this fit (the state may not change, and then React does not redraw)
+      e.style.fontSize = `calc(${(0.78 * CHIP_FIT[step]).toFixed(4)}vw * var(--tvt, 1))`;
+      e.style.whiteSpace = wrap ? 'normal' : 'nowrap';
+      setFit((f) => (f.step === step && f.wrap === wrap ? f : {step, wrap}));
+    };
+    refit();
+    const ro = new ResizeObserver(refit);
+    if (e.parentElement) ro.observe(e.parentElement);
+    return () => ro.disconnect();
+  }, [name]);
+  return (
+    <span ref={el} className="cond" data-chip-name="" data-fit={fit.step} data-wrap={fit.wrap ? '' : undefined}
+      style={{fontSize: `calc(${(0.78 * CHIP_FIT[fit.step]).toFixed(4)}vw * var(--tvt, 1))`, fontVariationSettings: "'wdth' 58", fontWeight: 650, lineHeight: 1.05,
+        color: 'var(--ice)', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0,
+        ...(fit.wrap
+          ? {whiteSpace: 'normal', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflowWrap: 'normal'}
+          : {whiteSpace: 'nowrap'})}}>{name}</span>
+  );
+}
+
 /** Milestones and awards together, as two rows of small chips tinted by what each one is about. A claimed milestone or
  *  funded award turns the owner's colour; otherwise the chip shows the current leader and their score. */
 export function Standings({game, players, compact}: {game: GameModel; players: PublicPlayerModel[]; compact?: boolean}) {
-  const nameOf = (c?: string) => players.find((p) => p.color === c)?.name;
+  const nameFor = useDisplayName();
+  const nameOf = (c?: string) => (c ? nameFor(c, players.find((p) => p.color === c)?.name) : undefined);
   const row = (label: string, list: GameModel['milestones'], verb: string) => (
     <div style={{display: 'grid', gap: '0.45vh'}} aria-label={label}>
       {!compact && <div className="cond" style={{fontSize: tvt(0.8), color: 'var(--ice-faint)', lineHeight: 1}}>{label}</div>}
@@ -283,17 +333,17 @@ export function Standings({game, players, compact}: {game: GameModel; players: P
           const tied = top.length > 1 && top[0].score === top[1].score;
           const lead = top[0];
           return (
-            <div key={m.name} data-standing={m.name} title={owner ? `${m.name}: ${verb} by ${m.playerName ?? nameOf(owner)}` : m.name}
+            <div key={m.name} data-standing={m.name} title={owner ? `${m.name}: ${verb} by ${nameOf(owner) ?? m.playerName}` : m.name}
               style={{position: 'relative', minWidth: 0, padding: compact ? '0.35vh 0.4vw 0.4vh' : '0.5vh 0.4vw 0.55vh', borderRadius: '0.55vw', display: 'grid', gap: compact ? '0.2vh' : '0.3vh',
                 background: ownerHex ? `color-mix(in oklab, ${ownerHex} 34%, rgba(12,5,3,.9))` : `color-mix(in oklab, ${th.accent} 13%, rgba(12,5,3,.82))`,
                 boxShadow: `inset 0 0 0 ${ownerHex ? 2 : 1}px color-mix(in oklab, ${ownerHex ?? th.accent} ${ownerHex ? 90 : 38}%, transparent)`}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '0.2vw', minWidth: 0}}>
                 <span style={{flex: 'none', display: 'grid', placeItems: 'center', width: 14}}>{th.icon}</span>
-                <span className="cond" style={{fontSize: 'calc(0.78vw * var(--tvt, 1))', fontVariationSettings: "'wdth' 58", fontWeight: 650, lineHeight: 1.05, color: 'var(--ice)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{m.name}</span>
+                <ChipName name={m.name} />
               </div>
               <div className="cond" style={{fontSize: tvt(0.8), lineHeight: 1, display: 'flex', alignItems: 'center', gap: '0.25vw', minWidth: 0, whiteSpace: 'nowrap'}}>
                 {ownerHex ? (
-                  <span style={{color: '#fff', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis'}}>✓ {m.playerName ?? nameOf(owner)}</span>
+                  <span style={{color: '#fff', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis'}}>✓ {nameOf(owner) ?? m.playerName}</span>
                 ) : lead ? (
                   <>
                     <span style={{width: '0.5vw', height: '0.5vw', minWidth: 7, minHeight: 7, borderRadius: '50%', flex: 'none', background: tied ? 'var(--ice-faint)' : PLAYER_HEX[lead.color]}} />

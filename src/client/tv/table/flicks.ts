@@ -2,7 +2,10 @@
 // checks here and stands aside so a card is never announced twice.
 import {useNet} from '../../net';
 
-const WINDOW_MS = 30_000;
+import {FLICK_STALE_MS} from './flickQueue';
+
+const WINDOW_MS = FLICK_STALE_MS;
+
 
 export function wasFlicked(color: string, card: string): boolean {
   const {flicks, cancelledFlicks} = useNet.getState();

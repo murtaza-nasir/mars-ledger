@@ -37,7 +37,8 @@ export default function LavaFlows(p: ModelProps) {
   const R = p.radius;
   const sh = useMemo(shared, []);
   const ownerHex = PLAYER_HEX[p.color ?? 'red'] ?? '#ffffff';
-  const rotY = useMemo(() => seeded(p.id, 7)() * 6.283, [p.id]);
+  // whole hex turns only (60 degrees), matching the detailed set; the round ground itself looks the same at any yaw
+  const rotY = useMemo(() => Math.floor(seeded(p.id, 7)() * 6) * (Math.PI / 3), [p.id]);
   const emb = useMemo(() => lavaEmberGeometry(44, 30, BEACON, seeded(p.id, 8)), [p.id]);
   const smk = useMemo(() => lavaSmokeGeometry(26, seeded(p.id, 9)), [p.id]);
   const fx = useMemo(() => ({ground: lavaGroundMaterial(), beacon: makeRigMaterial(), emb: lavaEmberMaterial(), smk: lavaSmokeMaterial(), halo: lavaHaloMaterial(), dome: lavaDomeMaterial()}), []);

@@ -10,6 +10,7 @@ import {CardArt} from './CardArt';
 import {seatSeconds, type RevealSeat} from './queue';
 import {TYPE_COLOR} from '../../ui/CardFace';
 import {tvt} from '../settings';
+import {useDisplayName} from '../../names';
 
 const RES: Resource[] = ['megacredits', 'steel', 'titanium', 'plants', 'energy', 'heat'];
 
@@ -40,6 +41,8 @@ export function Reveal({seats, t}: {seats: RevealSeat[]; t: number}) {
 }
 
 function Seat({seat}: {seat: RevealSeat}) {
+  // queued when the corporations were chosen: the name is the seat's current one when it plays (src/client/names.ts)
+  const name = useDisplayName()(seat.color, seat.name);
   const def = findCard(seat.corporation);
   const color = PLAYER_HEX[seat.color] ?? '#F2C230';
   const [shown, setShown] = useState(false);
@@ -75,7 +78,7 @@ function Seat({seat}: {seat: RevealSeat}) {
         <motion.div initial={{opacity: 0, letterSpacing: '0.5em', filter: 'blur(10px)'}} animate={{opacity: 1, letterSpacing: '-0.01em', filter: 'blur(0px)'}}
           transition={{delay: 0.55, duration: 0.8, ease: [0.2, 0.9, 0.25, 1]}}
           style={{fontSize: '7vw', lineHeight: 0.95, fontWeight: 900, fontVariationSettings: "'wdth' 120", color, textShadow: `0 0 4vw color-mix(in oklab, ${color} 40%, transparent)`}}>
-          {seat.name}
+          {name}
         </motion.div>
         <motion.div initial={{scaleX: 0}} animate={{scaleX: 1}} transition={{delay: 0.9, duration: 0.6, ease: [0.2, 0.9, 0.25, 1]}}
           style={{height: '0.35vw', width: '22vw', background: color, transformOrigin: 'left', margin: '2vh 0'}} />

@@ -33,6 +33,9 @@ import {ProfileChooser} from './profile/Join';
 import {UnlockReveal} from './profile/Unlocks';
 import {Avatar} from '../ui/Avatar';
 import {Sheet} from '../ui/Sheet';
+import {usePhonePrefs} from '../ui/PhonePrefs';
+import {ConfirmStep} from '../ui/ConfirmBuy';
+import {buyQuestion} from '../../shared/confirmBuy';
 
 export function PhoneApp() {
   useRenderCount('PhoneApp');
@@ -512,6 +515,18 @@ function Research({state, me}: {state: GameState; me: PlayerState}) {
   const [n, setN] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const max = Math.min(4, Math.floor(me.stock.megacredits / CARD_BUY_COST));
+  const {confirmBuy} = usePhonePrefs(state, me.id);
+  const [asking, setAsking] = useState(false);
+  const buy = () => send({t: 'research', playerId: me.id, cardsBought: n}).catch((e) => setError(e.message));
+  if (asking && confirmBuy) {
+    return (
+      <div style={{padding: '48px 20px'}}>
+        <ConfirmStep question={buyQuestion(n, n * CARD_BUY_COST)} detail={n ? `You will have ${me.stock.megacredits - n * CARD_BUY_COST} M€ left.` : undefined}
+          onConfirm={() => void buy()} onBack={() => setAsking(false)} />
+        {error && <p role="alert" style={{color: 'var(--ember)'}}>{error}</p>}
+      </div>
+    );
+  }
   return (
     <div style={{padding: '48px 20px'}}>
       <p className="faint" style={{margin: 0}}>Generation {state.generation}</p>
@@ -520,7 +535,7 @@ function Research({state, me}: {state: GameState; me: PlayerState}) {
       <Stepper label={`Cards bought (${CARD_BUY_COST} M€ each)`} value={n} set={setN} max={max} />
       <p>You have <span className="num" style={{fontSize: 22, color: 'var(--mc)'}}>{me.stock.megacredits - n * CARD_BUY_COST}</span> M€ after buying.</p>
       {error && <p role="alert" style={{color: 'var(--ember)'}}>{error}</p>}
-      <button className="btn warm" style={{width: '100%'}} onClick={() => send({t: 'research', playerId: me.id, cardsBought: n}).catch((e) => setError(e.message))}>
+      <button className="btn warm" style={{width: '100%'}} onClick={() => (confirmBuy ? setAsking(true) : void buy())}>
         {n ? `Buy ${n} card${n > 1 ? 's' : ''}` : 'Buy nothing'}
       </button>
     </div>
