@@ -409,7 +409,7 @@ export class FullBridge {
     this.noteTakeBack({kind: 'bots', color: seat.color, actors});
     const notice: UndoNotice = {id: `${link.gameId}:${this.boot}:${this.epoch}`, gameId: link.gameId, playerId, name, color: seat.color, at: Date.now(), epoch: this.epoch, bots: plan.bots};
     this.lastUndo = notice;
-    console.info(`full: ${name} took back their move and ${plan.bots} bot moves (engine ${fresh.game.gameAge} -> ${after.game.gameAge} in ${steps} steps, planned ${plan.steps}, epoch ${this.epoch})`);
+    console.info(`full: ${name} ${plan.bots ? `took back their move and ${plan.bots} bot moves` : 'undid their last move (nobody had moved since)'} (engine ${fresh.game.gameAge} -> ${after.game.gameAge} in ${steps} steps, planned ${plan.steps}, epoch ${this.epoch})`);
     return {take: {kind: 'bots', playerId, bots: plan.bots, steps, humanTurn: seatNow(after).active} as TakeBack, notice};
   }
 

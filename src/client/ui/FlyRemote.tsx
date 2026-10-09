@@ -10,6 +10,7 @@ import {FLY_HZ, isIdle, packFly} from '../../shared/fly';
 import type {FlyInput} from '../../shared/fly';
 import {useNet} from '../net';
 import {PLAYER_HEX} from './Icons';
+import {rowAside, rowMain} from './rowText';
 import type {Color} from '../../shared/full';
 
 const useFlyRemote = create<{open: boolean}>(() => ({open: false}));
@@ -17,9 +18,9 @@ const useFlyRemote = create<{open: boolean}>(() => ({open: false}));
 /** The game menu's entry. */
 export function FlyRemoteItem({onDone}: {onDone: () => void}) {
   return (
-    <button className="btn ghost" data-fly-remote-open="" style={{justifyContent: 'space-between'}}
+    <button className="btn ghost" data-fly-remote-open="" style={{justifyContent: 'space-between', gap: 12, width: '100%'}}
       onClick={() => { onDone(); useFlyRemote.setState({open: true}); }}>
-      <span>Fly the TV camera</span><span className="faint" style={{fontSize: 14}}>experimental</span>
+      <span style={rowMain}>Fly the TV camera</span><span className="faint" style={rowAside}>experimental</span>
     </button>
   );
 }

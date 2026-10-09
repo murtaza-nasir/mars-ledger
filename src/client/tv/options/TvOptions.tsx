@@ -4,6 +4,7 @@
 import {AnimatePresence, motion} from 'motion/react';
 import {Fragment, useEffect, useRef, useState, useSyncExternalStore} from 'react';
 import {director} from '../sound/director';
+import {DOCK_BOTTOM, DOCK_LEFT} from '../dock';
 import {setSettings, TEXT_SIZE_LABEL, TEXT_SIZES, TILE_STYLE_LABEL, TILE_STYLES, tileStyleOf, tvt, useTvSettings} from '../settings';
 import type {TvSettings} from '../settings';
 import {clearBoardFallback, fallbackReason, useBoardFallback} from '../full/board3d/fallback';
@@ -72,7 +73,7 @@ export function TvOptions() {
   }, [open]);
 
   return (
-    <div data-tv-options="" style={{position: 'fixed', left: '0.7vw', bottom: '1.2vh', zIndex: 210}}>
+    <div data-tv-options="" style={{position: 'fixed', left: DOCK_LEFT, bottom: DOCK_BOTTOM, zIndex: 210}}>
       <motion.button ref={gear} aria-label="TV options" aria-haspopup="dialog" aria-expanded={open}
         onClick={(e) => { e.stopPropagation(); setOpen((o) => !o); }}
         animate={{opacity: open || awake ? 0.95 : 0.22}} transition={{duration: 0.4}}
@@ -121,7 +122,7 @@ function Panel({onClose}: {onClose: () => void}) {
       text: 'Reset to full', disabled: !s.board3d || (quality.level === 0 && !fellBack), note: qualityNote(quality.level, quality.reason, fellBack),
       run: () => { resetLadder(); clearBoardFallback(); reportTv3d({level: 0, dir: 'reset', p95: null, median: null, slow: null, render: null,
         size: `${window.innerWidth}x${window.innerHeight}@${Math.round(window.devicePixelRatio * 100) / 100}`}); }},
-    {kind: 'switch', id: 'trTrack', label: 'TR track', on: s.trTrack, set: (v) => set({trTrack: v}), note: 'A numbered track around the board with a marker for each player'},
+    {kind: 'switch', id: 'trTrack', label: 'TR track', on: s.trTrack, set: (v) => set({trTrack: v}), note: 'Numbered squares round the edge of the screen, a token for each player'},
     {kind: 'switch', id: 'cameraMoves', label: 'Camera moves', on: s.cameraMoves, set: (v) => set({cameraMoves: v})},
     // Board life is the master switch; Terraformers (its characters) sits under it: the sky drops and the ambient life run without them
     {kind: 'switch', id: 'boardLife', label: 'Board life', on: s.boardLife, set: (v) => set({boardLife: v}), disabled: no3d,

@@ -10,7 +10,8 @@ import {wasFlicked} from '../table/flicks';
 import {buildBus, levelsFor, play, production} from './synth';
 import type {Sfx} from './synth';
 import {tvt} from '../settings';
-import {DOCK_BUTTON, SOUND_BOTTOM, SOUND_LEFT} from '../dock';
+import {DOCK_BUTTON, SOUND_BOTTOM, SOUND_CHIP_INSET, SOUND_LEFT} from '../dock';
+import {clearOfFrame} from '../full/trTrack';
 
 /** Whether the "tap for sound" chip is on screen (other bottom-lane content keeps clear of it). */
 export function useSoundChipVisible(): boolean {
@@ -20,7 +21,7 @@ export function useSoundChipVisible(): boolean {
 /** Right inset for bottom-lane content: clear of the "tap for sound" chip while it shows (the speaker button sits in
  *  the bottom-left dock, beside the options gear, so otherwise the lane runs to the right edge). */
 export function useBottomLaneRight(): string {
-  return useSoundChipVisible() ? '22vw' : '2vw';
+  return useSoundChipVisible() ? '22vw' : clearOfFrame('2vw');
 }
 
 export function SoundLayer() {
@@ -85,7 +86,7 @@ export function SoundLayer() {
   return (
     <>
     {/* until the first tap or key: a chip in the bottom-right corner (the lane keeps clear of it meanwhile) */}
-    <div style={{position: 'fixed', right: '1.6vw', bottom: '1.6vw', zIndex: 200, pointerEvents: 'none'}}>
+    <div style={{position: 'fixed', right: SOUND_CHIP_INSET, bottom: SOUND_CHIP_INSET, zIndex: 200, pointerEvents: 'none'}}>
       <AnimatePresence>
         {!unlocked && !muted && (
           <motion.div key="chip" initial={{opacity: 0, y: 10}} animate={{opacity: 0.85, y: 0}} exit={{opacity: 0, y: 10}} transition={{duration: 0.5}}

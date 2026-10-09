@@ -15,7 +15,7 @@ import {director} from '../sound/director';
 import {DUCK_DEPTH, radioMix} from '../radio/mix';
 import {useStage} from '../stage';
 import {useRadio} from '../radio/store';
-import {LANE_LEFT} from '../dock';
+import {FOOT_SHIFT, LANE_LEFT} from '../dock';
 import {getSettings, tvt} from '../settings';
 import {gateNames, pickLine, silentReason, stageHolds} from './gate';
 import type {NarrationReport} from '../../../shared/narrator';
@@ -182,7 +182,7 @@ export function NarratorLayer() {
   // (the radio deck in the bottom-left corner pushes the caption's start past it)
   const lane = fullGame ? {left: deckRight ? `max(17vw, calc(${deckRight}px + 1.4vw))` : '17vw', right: '33vw'} : {left: LANE_LEFT, right: soundChip ? '22vw' : '2.4vw'};
   return (
-    <div aria-live="polite" data-narrator-lane style={{position: 'fixed', ...lane, bottom: '1.4vh', zIndex: 60, pointerEvents: 'none'}}>
+    <div aria-live="polite" data-narrator-lane style={{position: 'fixed', ...lane, bottom: `calc(1.4vh + ${FOOT_SHIFT})`, zIndex: 60, pointerEvents: 'none'}}>
       <AnimatePresence mode="wait">
         {(notice || showLine) && (
           <motion.div key={notice ? `notice-${notice.mode}-${notice.until}` : current!.line.id}

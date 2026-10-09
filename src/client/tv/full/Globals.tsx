@@ -6,8 +6,8 @@ import {RADIO_SLOT_H} from '../radio/Radio';
 import {useRadio} from '../radio/store';
 import {useSolo} from '../../ui/useSolo';
 
-const TEMP = Array.from({length: 19}, (_, i) => -28 + i * 2); // raised values
-const OXY = Array.from({length: 14}, (_, i) => i + 1);
+import {level, OXY_STEPS, TANK_INSET, TEMP_STEPS, THERMO_INSET, tubeBottom} from './gauge';
+
 const TEMP_MARK: Record<number, string> = {[-24]: 'heat', [-20]: 'heat', 0: 'ocean'};
 const OXY_MARK: Record<number, string> = {8: 'temp'};
 /** Numbers beside the tubes: the bonus steps in their reward's colour, a few round values faint between them. */
@@ -26,15 +26,16 @@ function Mark({kind}: {kind: string}) {
 }
 
 /** A slim thermometer: a tube filled to the current value with a tick per step, the bonus steps marked beside it,
- *  and the value above. Narrow enough that two sit side by side in the left column. */
+ *  and the value above. The fill, the ticks, the numbers and the marks all take their height from gauge.ts's level(),
+ *  against the tube's own span, so a number sits on the fill's top when the parameter reads it. Narrow enough that two sit side by side in the left column. */
 function Gauge({values, current, marks, labels, color, label, unit, tank}: {
   values: number[]; current: number; marks: Record<number, string>; labels: number[]; color: string; label: string; unit: string;
   /** oxygen: a gas cylinder (valve on top, a foot below, bubbles rising) instead of a second thermometer */
   tank?: boolean;
 }) {
   const reduced = useReducedMotion();
-  const n = values.length;
-  const filled = values.filter((v) => v <= current).length;
+  const fill = level(values, current);
+  const inset = tank ? TANK_INSET : THERMO_INSET;
   return (
     <div data-gauge={label} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8vh', height: '100%', minWidth: 0}}>
       <div style={{textAlign: 'center'}}>
@@ -57,16 +58,16 @@ function Gauge({values, current, marks, labels, color, label, unit, tank}: {
           {/* the tube (the tank's cylinder: rounder shoulders, a metal rim) */}
           <div style={{position: 'absolute', left: 0, right: 0, top: tank ? '1.1vw' : 0, bottom: '1.1vw', borderRadius: tank ? '0.65vw 0.65vw 0.4vw 0.4vw' : '0.5vw', background: 'rgba(255,255,255,0.07)',
             boxShadow: tank ? 'inset 0 0 0 1.5px rgba(200,210,220,.32), inset 0.3vw 0 0.4vw -0.2vw rgba(255,255,255,.12)' : 'inset 0 0 0 1px rgba(255,196,160,.14)', overflow: 'hidden'}}>
-            <motion.div initial={false} animate={{height: `${(filled / n) * 100}%`}} transition={{type: 'spring', stiffness: 90, damping: 18}}
+            <motion.div data-fill="" initial={false} animate={{height: `${fill * 100}%`}} transition={{type: 'spring', stiffness: 90, damping: 18}}
               style={{position: 'absolute', left: 0, right: 0, bottom: 0, background: `linear-gradient(0deg, ${color}, color-mix(in oklab, ${color} 70%, white))`,
                 boxShadow: `0 0 1vw color-mix(in oklab, ${color} 50%, transparent)`}} />
-            {values.slice(0, -1).map((v, i) => (
-              <div key={v} style={{position: 'absolute', left: 0, right: 0, bottom: `${((i + 1) / n) * 100}%`, height: tank ? 2 : 1, background: 'rgba(16,7,4,.55)'}} />
+            {values.slice(0, -1).map((v) => (
+              <div key={v} style={{position: 'absolute', left: 0, right: 0, bottom: `${level(values, v) * 100}%`, height: tank ? 2 : 1, background: 'rgba(16,7,4,.55)'}} />
             ))}
             {/* bubbles rising through the oxygen */}
-            {tank && filled > 0 && !reduced && [0.25, 0.6, 0.42].map((x, i) => (
+            {tank && fill > 0 && !reduced && [0.25, 0.6, 0.42].map((x, i) => (
               <motion.span key={i} aria-hidden="true" initial={{bottom: '0%', opacity: 0}}
-                animate={{bottom: [`0%`, `${(filled / n) * 100 - 4}%`], opacity: [0, 0.8, 0]}}
+                animate={{bottom: [`0%`, `${fill * 100 - 4}%`], opacity: [0, 0.8, 0]}}
                 transition={{duration: 2.6 + i * 0.7, repeat: Infinity, delay: i * 1.1, ease: 'easeIn'}}
                 style={{position: 'absolute', left: `${x * 100}%`, width: '0.22vw', height: '0.22vw', minWidth: 3, minHeight: 3, borderRadius: '50%',
                   background: 'rgba(235,255,240,.85)'}} />
@@ -81,17 +82,17 @@ function Gauge({values, current, marks, labels, color, label, unit, tank}: {
           ) : (
             /* the bulb */
             <div style={{position: 'absolute', left: '50%', bottom: 0, width: '1.7vw', height: '1.7vw', transform: 'translateX(-50%)', borderRadius: '50%',
-              background: filled ? color : 'rgba(255,255,255,0.1)', boxShadow: filled ? `0 0 1vw color-mix(in oklab, ${color} 50%, transparent)` : 'none'}} />
+              background: fill > 0 ? color : 'rgba(255,255,255,0.1)', boxShadow: fill > 0 ? `0 0 1vw color-mix(in oklab, ${color} 50%, transparent)` : 'none'}} />
           )}
-          {values.map((v, i) => labels.includes(v) && (
-            <div key={`l${v}`} data-scale={v} className="num" style={{position: 'absolute', right: '150%', bottom: `calc(1.1vw + (100% - ${tank ? 3.7 : 2.6}vw) * ${(i + 0.5) / n})`,
+          {values.map((v) => labels.includes(v) && (
+            <div key={`l${v}`} data-scale={v} className="num" style={{position: 'absolute', right: '150%', bottom: tubeBottom(level(values, v), inset),
               transform: 'translateY(50%)', fontSize: 'calc(0.8vw * var(--tvt, 1))', fontWeight: marks[v] ? 750 : 600, letterSpacing: '-0.02em', lineHeight: 1, whiteSpace: 'nowrap',
               color: marks[v] ? (marks[v] === 'ocean' ? 'var(--ocean)' : 'var(--heat)') : 'var(--ice-faint)', opacity: v <= current ? 0.45 : 1}}>
               {v < 0 ? `−${-v}` : v}
             </div>
           ))}
-          {values.map((v, i) => marks[v] && (
-            <div key={v} data-mark={v} style={{position: 'absolute', left: '135%', bottom: `calc(1.1vw + (100% - ${tank ? 3.7 : 2.6}vw) * ${(i + 0.5) / n})`, width: '1.15vw', height: '1.15vw',
+          {values.map((v) => marks[v] && (
+            <div key={v} data-mark={v} style={{position: 'absolute', left: '135%', bottom: tubeBottom(level(values, v), inset), width: '1.15vw', height: '1.15vw',
               transform: 'translateY(50%)', opacity: v <= current ? 0.35 : 1}}>
               <Mark kind={marks[v]} />
             </div>
@@ -124,8 +125,8 @@ export function Globals({generation, temperature, oxygen, oceans}: {generation: 
         )}
       </div>
       <div style={{flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6vw', minHeight: 0}}>
-        <Gauge values={TEMP} current={temperature} marks={TEMP_MARK} labels={TEMP_LABEL} color="var(--heat)" label="Temp" unit="°C" />
-        <Gauge tank values={OXY} current={oxygen} marks={OXY_MARK} labels={OXY_LABEL} color="var(--plants)" label="Oxygen" unit="%" />
+        <Gauge values={TEMP_STEPS} current={temperature} marks={TEMP_MARK} labels={TEMP_LABEL} color="var(--heat)" label="Temp" unit="°C" />
+        <Gauge tank values={OXY_STEPS} current={oxygen} marks={OXY_MARK} labels={OXY_LABEL} color="var(--plants)" label="Oxygen" unit="%" />
       </div>
       <div>
         <div className="cond" style={{fontSize: tvt(1.05), color: 'var(--ice-dim)', marginBottom: '0.6vh', whiteSpace: 'nowrap'}}>Oceans <span className="num" style={{color: 'var(--ice)'}}>{oceans}</span><span className="faint">/9</span></div>

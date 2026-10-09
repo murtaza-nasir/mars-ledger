@@ -12,6 +12,7 @@ import {ECHO_MS} from '../../../shared/tvlinks';
 import type {Echo, EchoTarget, Replay} from '../../../shared/tvlinks';
 import {useNet} from '../../net';
 import {PLAYER_HEX} from '../../ui/Icons';
+import {topClear} from '../dock';
 import {tvt} from '../settings';
 import {prefersReducedMotion} from '../../ui/tokens';
 import {useCinemaCovering} from '../cinema/CinemaLayer';
@@ -111,7 +112,7 @@ export function EchoLayer() {
       <AnimatePresence>
         {caption && (
           <motion.div key={caption.key} data-testid="tv-asked" initial={{opacity: 0, y: -6}} animate={{opacity: 1, y: 0}} exit={{opacity: 0}} transition={{duration: reduced ? 0.15 : 0.3}}
-            style={{position: 'absolute', left: '50%', top: '1.6vh', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: '0.5vw', whiteSpace: 'nowrap',
+            style={{position: 'absolute', left: '50%', top: topClear('1.6vh'), transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: '0.5vw', whiteSpace: 'nowrap',
               padding: '0.45vh 0.9vw', borderRadius: 999, background: 'rgba(12,5,3,.72)', color: 'var(--ice-dim)', fontSize: tvt(0.95), fontWeight: 600}}>
             <span style={{width: '0.6vw', height: '0.6vw', borderRadius: '0.15vw', background: hexOf(caption.color)}} />
             {caption.text}

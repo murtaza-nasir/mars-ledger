@@ -7,7 +7,8 @@ import type {PublicPlayerModel, SpectatorModel} from '../../../shared/full';
 import {useNet} from '../../net';
 import {BoardView} from './BoardView';
 import {useBoardRegion} from './boardRegion';
-import {insetBox, TrTrack} from './TrTrack';
+import {TrTrack, useTrFrame} from './TrTrack';
+import {clearOfFrame} from './trTrack';
 import type {TrSeat} from './TrTrack';
 import {diffModels} from './diff';
 import {Globals} from './Globals';
@@ -41,7 +42,7 @@ import {TILE} from '../../../shared/full';
 import {VersionTag} from '../../ui/VersionTag';
 import {UndoNotice} from '../../ui/UndoNotice';
 import {useRadio} from '../radio/store';
-import {LANE_LEFT} from '../dock';
+import {COLUMN_BOTTOM, COLUMN_TOP, LANE_BOTTOM, LANE_LEFT, SOUND_CHIP_INSET} from '../dock';
 import {summarizeAction} from './actions';
 import {CardStage, cardTextLength, PanelPulse, StageDim, travelDistance} from './pipeline/CardStage';
 import {actionMs, attackMs, holdDeadline, planCard, skipBehind} from './pipeline/pacing';
@@ -382,6 +383,8 @@ export function FullTv({state}: {state: GameState}) {
   // also unfolds once the room is back. While the "tap for sound" chip shows, the column ends above it.
   const columnRef = useRef<HTMLDivElement>(null);
   const {textSize, trTrack} = useTvSettings();
+  // the TR track's frame round the screen's edge (TrTrack): everything below sits inside it
+  const trFrame = useTrFrame(trTrack);
   const profiles = useNet((s) => s.profiles);
   const chip = useSoundChipVisible();
   const [screen, setScreen] = useState(() => `${window.innerWidth}x${window.innerHeight}`);
@@ -400,15 +403,14 @@ export function FullTv({state}: {state: GameState}) {
   const deckRight = useRadio((s) => s.deckRight);
   const hoverList = useMemo(() => Object.values(hovers).filter((h) => h.spaceId), [hovers]);
   // the board's box: all the room between the columns, above the log lane (measured from the page)
-  const region = useBoardRegion(columnRef, [!!model]);
-  // the TR track runs round the room's edge (TrTrack); the board takes what is inside it
+  const region = useBoardRegion(columnRef, [!!model, trFrame?.band ?? 0]);
   const trNames = useDisplayName();
   const trKey = JSON.stringify((model?.players ?? []).map((p) => {
     const seat = state.players.find((x) => x.color === p.color);
     return {color: p.color, name: trNames(p.color, p.name), tr: p.terraformRating, avatar: profiles.find((x) => x.id === seat?.profileId)?.avatar ?? null};
   }));
   const trSeats = useMemo<TrSeat[]>(() => JSON.parse(trKey), [trKey]);
-  const boardBox = region && trTrack ? insetBox(region, window.innerWidth) : region;
+  const boardBox = region;
   // tiles waiting for their card's drop phase stay off the board (and out of the oceans count) until then
   const rawSpaces = model?.game.spaces;
   const shownSpaces = useMemo(() => {
@@ -454,15 +456,15 @@ export function FullTv({state}: {state: GameState}) {
         {weather.now.mist && <Mist key={`m${weather.now.mist.at}`} at={weather.now.mist.at} />}
         {weather.now.storm && <DustStorm key={`s${weather.now.storm.at}`} at={weather.now.storm.at} mode={weather.now.storm.mode} />}
       </div>
-      {region && trTrack && trSeats.length > 0 && <TrTrack room={region} seats={trSeats} vw={window.innerWidth} />}
       {/* the gauges have no panels of their own: a soft shade keeps the planet's rim from showing through their numbers */}
       {region && <div aria-hidden="true" data-board-shade="" style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: region.left,
         background: 'linear-gradient(90deg, rgba(16,7,4,.82), rgba(16,7,4,.72) 70%, rgba(16,7,4,0))', pointerEvents: 'none'}} />}
       {/* and the log lane keeps a dark floor when a dive fills the screen behind it */}
       {region && <div aria-hidden="true" data-board-shade="" style={{position: 'absolute', left: 0, right: 0, bottom: 0, top: region.top + region.height - 8,
         background: 'linear-gradient(180deg, rgba(16,7,4,0), rgba(16,7,4,.62) 45%, rgba(16,7,4,.72))', pointerEvents: 'none'}} />}
+      {trFrame && <TrTrack frame={trFrame} seats={trSeats} />}
 
-      <div style={{position: 'absolute', left: '2.4vw', top: '4vh', bottom: '9vh', width: '8.6vw'}}>
+      <div style={{position: 'absolute', left: clearOfFrame('2.4vw'), top: COLUMN_TOP, bottom: COLUMN_BOTTOM, width: '8.6vw'}}>
         <Globals generation={g.generation} temperature={g.temperature} oxygen={g.oxygenLevel} oceans={Math.max(0, g.oceans - heldOceans)} />
       </div>
 
@@ -470,7 +472,7 @@ export function FullTv({state}: {state: GameState}) {
       <StageDim />
 
       {/* the chip ("tap for sound") sits at 1.6vw from the bottom-right corner, about 1vw + 1.25 lines of tvt(0.95) tall */}
-      <div style={{position: 'absolute', right: '2vw', top: '4vh', bottom: chip ? 'max(9vh, calc(3.4vw + 1.3vw * var(--tvt, 1)))' : '9vh', width: '30vw'}}>
+      <div style={{position: 'absolute', right: clearOfFrame('2vw'), top: COLUMN_TOP, bottom: chip ? `max(${COLUMN_BOTTOM}, calc(${SOUND_CHIP_INSET} + 1.8vw + 1.3vw * var(--tvt, 1)))` : COLUMN_BOTTOM, width: '30vw'}}>
         <div ref={columnRef} data-side-column="" style={{position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', gap: fold >= 3 ? '0.7vh' : '1.1vh'}}>
           {model.players.map((p, i) => { const held = heldPanel(actionHolds, p, Date.now()); return (
             <div key={p.color} data-strip-color={p.color} ref={(el) => { stripRefs.current[p.color] = el; }} style={{flexShrink: 0, position: 'relative'}}>
@@ -489,7 +491,7 @@ export function FullTv({state}: {state: GameState}) {
 
       {/* the log lane starts clear of the options gear and stops clear of the sound controls */}
       {/* the newest line is never masked: only the older lines trailing after it fade out (LogTicker) */}
-      <div data-log-lane="" style={{position: 'absolute', left: deckRight ? `max(${LANE_LEFT}, calc(${deckRight}px + 1.4vw))` : LANE_LEFT, right: laneRight, bottom: '2.6vh', overflow: 'hidden'}}>
+      <div data-log-lane="" style={{position: 'absolute', left: deckRight ? `max(${LANE_LEFT}, calc(${deckRight}px + 1.4vw))` : LANE_LEFT, right: laneRight, bottom: LANE_BOTTOM, overflow: 'hidden'}}>
         <TickerFade><LogTicker logs={logs} players={model.players} /></TickerFade>
       </div>
 

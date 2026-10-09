@@ -1,5 +1,5 @@
 // The full-game TV's free region: the room between the instrument column on the left and the player column on the
-// right, above the log lane. The board's box takes all of it (the resting board fills the box); the planet behind
+// right, above the log lane, and inside the TR track's frame when it shows. The board's box takes all of it (the resting board fills the box); the planet behind
 // the board reaches under the columns, which sit on top. Measured from the page, so it follows the columns as they
 // change; anything else that pokes into the region (the radio deck) is reported for the board to keep out of.
 import {useEffect, useState} from 'react';
@@ -28,7 +28,10 @@ export function measureRegion(column: HTMLElement | null): BoardRegion | null {
     const tvt = parseFloat(getComputedStyle(laneEl).getPropertyValue('--tvt')) || 1;
     bottom = Math.min(lane.top, lane.bottom - (LANE_LINES_VW * tvt * vw) / 100);
   }
-  const r = {left: left.right + REGION_GAP.side * vw, right: right.left - REGION_GAP.side * vw, top: REGION_GAP.top * vh, bottom: bottom - REGION_GAP.bottom * vh};
+  // the TR track's frame (TrTrack: --trb on the root, px) runs round the screen's edge; the board stays inside it
+  const band = parseFloat(document.documentElement.style.getPropertyValue('--trb')) || 0;
+  const top = band ? Math.max(REGION_GAP.top * vh, band + REGION_GAP.bottom * vh) : REGION_GAP.top * vh;
+  const r = {left: left.right + REGION_GAP.side * vw, right: right.left - REGION_GAP.side * vw, top, bottom: Math.min(bottom, vh - band) - REGION_GAP.bottom * vh};
   if (r.right - r.left < vw * 0.2 || r.bottom - r.top < vh * 0.3) return null;
   // the radio deck (bottom-left corner) can reach into the region; rounded out to 1% of the screen so a new track
   // name does not move the board

@@ -56,7 +56,7 @@ export function GameDetails({state, generation, seats}: {state: GameState; gener
   const row = (label: string, value: React.ReactNode) => (
     <div style={{display: 'flex', gap: 12, padding: '9px 0', borderTop: '1px solid var(--rim)'}}>
       <span className="muted" style={{width: 110, flex: 'none', fontSize: 14.5}}>{label}</span>
-      <span style={{flex: 1, fontSize: 15.5}}>{value}</span>
+      <span style={{flex: 1, minWidth: 0, overflowWrap: 'anywhere', fontSize: 15.5}}>{value}</span>
     </div>
   );
   return (

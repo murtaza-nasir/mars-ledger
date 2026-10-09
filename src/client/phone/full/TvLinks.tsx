@@ -14,6 +14,7 @@ import {cardLabel, groupLog, headline, plain} from './logMoves';
 import type {LogEntry} from './logMoves';
 import {echoTargets, lastReplayable, replayable, replayOf} from './logLinks';
 import {useSeatNames} from '../../names';
+import {rowMain} from '../../ui/rowText';
 
 type Move = Extract<LogEntry, {kind: 'move'}>;
 type SendState = {kind: 'idle'} | {kind: 'busy'} | {kind: 'sent'} | {kind: 'error'; text: string};
@@ -119,9 +120,14 @@ export function LastMoveMenuItem() {
   const sub = tvs <= 0 ? 'No TV is connected' : !last ? 'No move to show yet' : send.st.kind === 'idle' ? what! : label(send.st, '');
   return (
     <button className="btn ghost" data-testid="menu-replay-last" data-state={send.st.kind} disabled={!last || tvs <= 0 || send.st.kind === 'busy'}
-      style={{justifyContent: 'space-between', gap: 12}} onClick={() => last && send.run(useNet.getState().askReplay(seat, replayOf(last, nameOf)))}>
-      <span style={{display: 'inline-flex', alignItems: 'center', gap: 10, whiteSpace: 'nowrap'}}><TvGlyph size={18} replay />Show last move on the TV</span>
-      <span className="faint" style={{fontSize: 13.5, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{sub}</span>
+      style={{justifyContent: 'flex-start', gap: 12, width: '100%', padding: '7px 22px', textAlign: 'left'}}
+      onClick={() => last && send.run(useNet.getState().askReplay(seat, replayOf(last, nameOf)))}>
+      <TvGlyph size={18} replay />
+      {/* two lines, so the move (a long card or player name) has the row's whole width and ends in an ellipsis */}
+      <span style={{display: 'grid', minWidth: 0, flex: 1}}>
+        <span style={rowMain}>Show last move on the TV</span>
+        <span className="faint" data-testid="menu-replay-sub" style={{...rowMain, fontSize: 13.5, lineHeight: 1.3}}>{sub}</span>
+      </span>
     </button>
   );
 }

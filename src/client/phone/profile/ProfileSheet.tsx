@@ -171,7 +171,7 @@ function Loaded({detail, own}: {detail: ProfileDetail; own: boolean}) {
       <section aria-label="Recent games">
         <h3 className="cond" style={{margin: '0 0 8px', fontWeight: 600, color: 'var(--ice-dim)'}}>Recent games</h3>
         {detail.recent.length === 0 ? <p className="muted" style={{margin: 0}}>Finished games appear here.</p> : (
-          <ol style={{listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 6}}>
+          <ol style={{listStyle: 'none', margin: 0, padding: 0, display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 6}}>
             {detail.recent.map((r) => (
               <li key={r.gameId} style={{display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,.04)',
                 boxShadow: `inset 3px 0 0 ${r.placement === 1 && r.players > 1 ? 'var(--mc)' : 'var(--rim-strong)'}`}}>

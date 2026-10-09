@@ -19,7 +19,8 @@ import type {RadioAction, RadioNow} from '../../../shared/radio';
 import {DUCK_DEPTH, errorKind, errorText, gameKeyOf, glide, parseResume, playerVolume, RESUME_KEY, radioStage, SkipGuard, StageLatch, startPoint} from './logic';
 import {radioMix} from './mix';
 import {useRadio} from './store';
-import {DOCK_END} from '../dock';
+import {COLUMN_BOTTOM, DOCK_BOTTOM, DOCK_END, topClear} from '../dock';
+import {clearOfFrame} from '../full/trTrack';
 import type {Track} from './store';
 import {loadYouTube, YT_HOST, YT_STATE} from './youtube';
 import type {YTPlayer} from './youtube';
@@ -56,9 +57,9 @@ const PLACE: Record<'full' | 'companion', Place> = {
  * reveal): the bottom-right corner above the speaker button.
  */
 const ASIDE: Record<string, {right: string; top?: string; bottom?: string}> = {
-  recap: {right: '42.6vw', top: '1.5vh'},
-  milestone: {right: '2vw', top: '3vh'},
-  other: {right: '4.2vw', bottom: '5.2vw'},
+  recap: {right: '42.6vw', top: topClear('1.5vh')},
+  milestone: {right: clearOfFrame('2vw'), top: topClear('3vh')},
+  other: {right: clearOfFrame('4.2vw'), bottom: clearOfFrame('5.2vw')},
 };
 /** The transform that carries the deck (its window's bottom-right corner) from home to a cinematic's spot. */
 function asideTransform(home: Place, kind: string): string {
@@ -77,9 +78,9 @@ function asideTransform(home: Place, kind: string): string {
  * 1280–1536 CSS px.
  */
 const DECK_LEFT = `calc(${DOCK_END} + 0.6vw)`;
-const DECK_BOTTOM = '1.2vh';
-/** The instrument column ends 9vh above the screen's foot and keeps a 1.6vh gap: what the window takes above that. */
-export const RADIO_SLOT_H = `max(0px, calc(${DECK_BOTTOM} + 200px + 1.4vh - 9vh - 1.6vh))`;
+const DECK_BOTTOM = DOCK_BOTTOM;
+/** The instrument column ends COLUMN_BOTTOM (9vh) above the screen's foot and keeps a 1.6vh gap: what the window takes above that. */
+export const RADIO_SLOT_H = `max(0px, calc(${DECK_BOTTOM} + 200px + 1.4vh - ${COLUMN_BOTTOM} - 1.6vh))`;
 
 const latch = new StageLatch();
 function savedGame(): string | null {

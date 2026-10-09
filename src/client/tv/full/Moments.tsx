@@ -10,6 +10,7 @@ import {findCard} from '../../../shared/cards';
 import type {Color, LogLine, PublicPlayerModel} from '../../../shared/full';
 import type {Flight} from './actions';
 import {PLAYER_HEX, ResIcon} from '../../ui/Icons';
+import {topClear} from '../dock';
 import type {AttackTarget} from './diff';
 import type {Resource} from '../../../shared/types';
 import {tvt} from '../settings';
@@ -44,7 +45,7 @@ export function Banner({m}: {m: Extract<Moment, {kind: 'banner'}>}) {
   const color = m.tone === 'production' ? 'var(--mc)' : m.tone === 'terraformed' ? 'var(--ocean)' : 'var(--ice)';
   return (
     <motion.div initial={{opacity: 0, y: -30}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: -20}} transition={{type: 'spring', stiffness: 140, damping: 18}}
-      style={{position: 'absolute', left: '50%', top: '4vh', transform: 'translateX(-50%)', zIndex: 6, textAlign: 'center', padding: '1.4vh 3vw',
+      style={{position: 'absolute', left: '50%', top: topClear('4vh'), transform: 'translateX(-50%)', zIndex: 6, textAlign: 'center', padding: '1.4vh 3vw',
         borderRadius: '1.2vw', background: 'rgba(12,5,3,.72)', backdropFilter: 'blur(14px)', boxShadow: '0 0 0 1px var(--rim-strong)'}}>
       <motion.div initial={{letterSpacing: '0.25em', opacity: 0}} animate={{letterSpacing: '0em', opacity: 1}} transition={{duration: 0.9}}
         style={{fontSize: '3.4vw', fontWeight: 850, fontVariationSettings: "'wdth' 120", color, lineHeight: 1}}>{m.title}</motion.div>

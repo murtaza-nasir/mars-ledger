@@ -1,9 +1,6 @@
 import {describe, expect, it} from 'vitest';
-import {hopAt, hopPlan, lapOf, leaderOf, perimeter, pointAt, PUFF_FROM, slotOf, slotPoint, spreadSlots, TRACK_LEN} from '../src/client/tv/full/trTrack';
-import type {TrackShape} from '../src/client/tv/full/trTrack';
+import {bandFor, cellCenter, clearOfFrame, frameLayout, hopAt, hopPlan, inward, lapOf, leaderOf, MARKER, PUFF_FROM, slotOf, stackPlaces, TRACK_LEN} from '../src/client/tv/full/trTrack';
 import {DEFAULT_SETTINGS, parseSettings} from '../src/client/tv/settings';
-
-const SHAPE: TrackShape = {x: 100, y: 50, w: 800, h: 500, r: 60};
 
 describe('slots and laps', () => {
   it('maps a rating to its space on the 0..99 loop', () => {
@@ -21,68 +18,111 @@ describe('slots and laps', () => {
   });
 });
 
-describe('the loop', () => {
-  it('has a perimeter of two straights, two sides and four quarter arcs', () => {
-    expect(perimeter(SHAPE)).toBeCloseTo(2 * 680 + 2 * 380 + 2 * Math.PI * 60, 6);
-  });
-  it('starts on the top edge right of the corner, runs clockwise and closes', () => {
-    const p0 = pointAt(SHAPE, 0), P = perimeter(SHAPE);
-    expect(p0).toMatchObject({x: 160, y: 50, ny: -1});
-    const q = pointAt(SHAPE, 100); expect(q.x).toBeCloseTo(260); expect(q.y).toBeCloseTo(50);
-    const right = pointAt(SHAPE, 680 + (Math.PI * 60) / 2 + 100);
-    expect(right.x).toBeCloseTo(900); expect(right.y).toBeCloseTo(50 + 60 + 100);
-    expect(right.nx).toBeCloseTo(1);
-    const wrap = pointAt(SHAPE, P + 100); expect(wrap.x).toBeCloseTo(260);
-    const back = pointAt(SHAPE, -1); expect(back.x).toBeLessThan(160); expect(back.y).toBeLessThan(120);
-  });
-  it('is continuous around every corner and keeps unit normals', () => {
-    const P = perimeter(SHAPE); let prev = pointAt(SHAPE, 0);
-    for (let d = 1; d <= P; d += 1) {
-      const p = pointAt(SHAPE, d);
-      expect(Math.hypot(p.x - prev.x, p.y - prev.y)).toBeLessThan(1.02);
-      expect(Math.hypot(p.nx, p.ny)).toBeCloseTo(1, 6);
-      prev = p;
+const SCREENS: Array<[number, number]> = [[1536, 729], [1920, 1080], [3840, 2016], [6144, 2916], [1280, 1024], [800, 1280]];
+
+describe('the frame of cells', () => {
+  it('has 100 cells numbered 0..99, the four corners square', () => {
+    for (const [W, H] of SCREENS) {
+      const f = frameLayout(W, H);
+      expect(f.cells.length).toBe(TRACK_LEN);
+      expect(f.cells.map((c) => c.i)).toEqual(Array.from({length: 100}, (_, i) => i));
+      expect(f.across + f.down).toBe(48);
+      const corners = f.cells.filter((c) => c.corner);
+      expect(corners.map((c) => c.i)).toEqual([0, f.across + 1, f.across + f.down + 2, 2 * f.across + f.down + 3]);
+      for (const c of corners) { expect(c.w).toBe(f.band); expect(c.h).toBe(f.band); }
     }
   });
-  it('places the 100 spaces as equal arcs, space 0 half a space in', () => {
-    const P = perimeter(SHAPE), a = slotPoint(SHAPE, 0);
-    expect(a.x).toBeCloseTo(160 + P / TRACK_LEN / 2); expect(a.y).toBeCloseTo(50);
-    const full = slotPoint(SHAPE, 100), start = slotPoint(SHAPE, 0);
-    expect(full.x).toBeCloseTo(start.x); expect(full.y).toBeCloseTo(start.y);
+  it('closes the loop: each cell meets the next edge to edge, clockwise from the top-left corner', () => {
+    for (const [W, H] of SCREENS) {
+      const f = frameLayout(W, H);
+      expect(f.cells[0]).toMatchObject({x: 0, y: 0, side: 'top'});
+      for (let i = 0; i < 100; i++) {
+        const a = f.cells[i], b = f.cells[(i + 1) % 100];
+        // their boxes share an edge exactly: no gap, no overlap
+        const ox = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x), oy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+        expect(Math.min(ox, oy)).toBe(0); expect(Math.max(ox, oy)).toBeGreaterThan(0);
+      }
+    }
+  });
+  it('fills the edge of the screen exactly and leaves the inside alone', () => {
+    for (const [W, H] of SCREENS) {
+      const f = frameLayout(W, H);
+      const area = f.cells.reduce((s, c) => s + c.w * c.h, 0);
+      expect(area).toBe(W * H - (W - 2 * f.band) * (H - 2 * f.band));
+      for (const c of f.cells) {
+        expect(c.x).toBeGreaterThanOrEqual(0); expect(c.y).toBeGreaterThanOrEqual(0);
+        expect(c.x + c.w).toBeLessThanOrEqual(W); expect(c.y + c.h).toBeLessThanOrEqual(H);
+        const inBand = c.x + c.w <= f.band || c.x >= W - f.band || c.y + c.h <= f.band || c.y >= H - f.band;
+        expect(inBand).toBe(true);
+      }
+    }
+  });
+  it('keeps the cells near square on every screen: as deep as the band, at most a third longer', () => {
+    for (const [W, H] of SCREENS) {
+      const f = frameLayout(W, H);
+      for (const c of f.cells) {
+        const long = Math.max(c.w, c.h), deep = Math.min(c.w, c.h);
+        expect(deep).toBe(f.band);
+        expect(long / deep).toBeLessThan(1.34);
+      }
+    }
+  });
+  it('takes a thin band: under 3 % of the width at 16:9, the same share on every TV of one shape', () => {
+    expect(bandFor(1920, 1080) / 1920).toBeGreaterThan(0.022);
+    expect(bandFor(1920, 1080) / 1920).toBeLessThan(0.03);
+    expect(bandFor(1536, 729) / 1536).toBeCloseTo(bandFor(6144, 2916) / 6144, 3);
+  });
+  it('centres a rating on its cell and runs between cells mid-hop, across the 99 to 0 seam too', () => {
+    const f = frameLayout(1920, 1080);
+    const c20 = f.cells[20], p = cellCenter(f, 20);
+    expect(p.x).toBeCloseTo(c20.x + c20.w / 2); expect(p.y).toBeCloseTo(c20.y + c20.h / 2);
+    const mid = cellCenter(f, 20.5), p21 = cellCenter(f, 21);
+    expect(mid.x).toBeCloseTo((p.x + p21.x) / 2); expect(mid.y).toBeCloseTo(p.y);
+    const seam = cellCenter(f, 99.5), p99 = cellCenter(f, 99), p0 = cellCenter(f, 0);
+    expect(seam.x).toBeCloseTo((p99.x + p0.x) / 2); expect(seam.y).toBeCloseTo((p99.y + p0.y) / 2);
+    expect(cellCenter(f, 100)).toEqual(cellCenter(f, 0));
+  });
+  it('points each cell in towards the middle of the screen', () => {
+    const f = frameLayout(1920, 1080);
+    for (const c of f.cells) {
+      const v = inward(c), m = {x: 960 - (c.x + c.w / 2), y: 540 - (c.y + c.h / 2)};
+      expect(v.x * m.x + v.y * m.y).toBeGreaterThan(0);
+      expect(Math.hypot(v.x, v.y)).toBeCloseTo(1, 6);
+    }
+  });
+  it('keeps edge offsets clear of the band only while it shows (no --trb: the original offset)', () => {
+    expect(clearOfFrame('2vw')).toBe('max(2vw, calc(var(--trb, 0px) + 0.6vw))');
+    expect(clearOfFrame('4vh', '1.1vh')).toBe('max(4vh, calc(var(--trb, 0px) + 1.1vh))');
   });
 });
 
-describe('markers on one number', () => {
-  it('leaves lone markers on their own spaces', () => {
-    expect(spreadSlots([20, 35, 60], 1)).toEqual([20, 35, 60]);
+describe('tokens on one cell', () => {
+  it('leaves lone tokens alone, full size, in the middle of their cells (neighbouring ratings too)', () => {
+    expect(stackPlaces([20, 35, 60])).toEqual([0, 1, 2].map(() => ({dx: 0, dy: 0, size: MARKER})));
+    expect(stackPlaces([34, 35])).toEqual([{dx: 0, dy: 0, size: MARKER}, {dx: 0, dy: 0, size: MARKER}]);
   });
-  it('fans equal ratings about their space, one gap apart, in seat order', () => {
-    expect(spreadSlots([40, 40], 1)).toEqual([39.5, 40.5]);
-    expect(spreadSlots([40, 40, 40], 1)).toEqual([39, 40, 41]);
-    const four = spreadSlots([10, 10, 10, 10], 0.8); expect(four.map((x) => +x.toFixed(3))).toEqual([8.8, 9.6, 10.4, 11.2]);
+  it('shares a cell between equal ratings, smaller as there are more, inside or just over the cell', () => {
+    let last = MARKER;
+    for (let n = 2; n <= 5; n++) {
+      const ps = stackPlaces(Array(n).fill(44));
+      expect(new Set(ps.map((p) => `${p.dx},${p.dy}`)).size).toBe(n);
+      expect(ps[0].size).toBeLessThan(last); last = ps[0].size;
+      for (const p of ps) { expect(Math.abs(p.dx) + p.size / 2).toBeLessThan(0.56); expect(Math.abs(p.dy) + p.size / 2).toBeLessThan(0.56); }
+    }
   });
-  it('spreads neighbours that would touch and leaves a clear one alone', () => {
-    const r = spreadSlots([34, 35, 50], 1);
-    expect(r[2]).toBe(50);
-    expect(r[1] - r[0]).toBeCloseTo(1); expect((r[0] + r[1]) / 2).toBeCloseTo(34.5);
+  it('stacks only the tokens on the same cell, in seat order', () => {
+    const ps = stackPlaces([40, 52, 40, 40]), three = stackPlaces([1, 1, 1]);
+    expect(ps[1]).toEqual({dx: 0, dy: 0, size: MARKER});
+    expect([ps[0], ps[2], ps[3]]).toEqual(three);
   });
-  it('pushes a run of three neighbours apart and keeps its middle', () => {
-    const r = spreadSlots([30, 31, 32], 1.5);
-    expect(r[1] - r[0]).toBeCloseTo(1.5); expect(r[2] - r[1]).toBeCloseTo(1.5); expect(r[1]).toBeCloseTo(31);
+  it('leaves a token in mid-hop alone at full size', () => {
+    const ps = stackPlaces([null, 40, 40]);
+    expect(ps[0]).toEqual({dx: 0, dy: 0, size: MARKER});
+    expect(ps[1].size).toBeLessThan(MARKER);
   });
-  it('spreads a cluster over the 99 to 0 seam', () => {
-    const r = spreadSlots([99, 0, 0], 1);
-    // the cluster's mean (99.67 on the unwrapped loop) is kept; its members stand one apart across the seam
-    expect(r.map((x) => +x.toFixed(3))).toEqual([98.667, 99.667, 0.667]);
-    expect(r.every((x) => x >= 0 && x < TRACK_LEN)).toBe(true);
-  });
-  it('keeps the order of the spaces and the order given for equal ones', () => {
-    const r = spreadSlots([41, 40, 40], 1);
-    expect(r[1]).toBeLessThan(r[2]); expect(r[2]).toBeLessThan(r[0]);
-  });
-  it('lets lapped ratings share a space with the others (110 and 10 stand on 10)', () => {
-    const r = spreadSlots([slotOf(110), slotOf(10)], 1);
-    expect(r).toEqual([9.5, 10.5]);
+  it('lets lapped ratings share a cell with the others (110 and 10 stand on 10)', () => {
+    const ps = stackPlaces([slotOf(110), slotOf(10)]);
+    expect(ps[0].size).toBeLessThan(MARKER); expect(ps[0]).not.toEqual(ps[1]);
   });
 });
 

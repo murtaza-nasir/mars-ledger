@@ -82,6 +82,15 @@ describe('planBotUndo: the undo window reaches through bot moves', () => {
     const moves = [mv('a', 'action', {pre: pre(10), midAfter: true}), mv('a', 'followUp'), mv('bot1', 'action', {pre: pre(14)}), mv('bot2', 'pass', {pre: pre(16)})];
     expect(planBotUndo(moves, 'a', {phase: 'action', generation: 1})).toMatchObject({ok: true, bots: 2, botNames: ['Ares', 'Deimos'], steps: 3});
   });
+  it('my turn passed to a person who has not moved yet: the window stays open with no bot moves', () => {
+    const moves = [mv('a', 'action', {pre: pre(10)}), mv('a', 'action', {pre: pre(12, 1)})];
+    expect(planBotUndo(moves, 'a', {phase: 'action', generation: 1, active: false})).toEqual({ok: true, target: {...pre(12, 1), color: 'red'}, bots: 0, botNames: [], steps: 1});
+    // a pass hands the turn on too
+    expect(planBotUndo([mv('a', 'pass', {pre: pre(10)})], 'a', {phase: 'action', generation: 1, active: false})).toMatchObject({ok: true, bots: 0, steps: 1});
+    // once that person answers anything, it closes
+    expect(planBotUndo([...moves, mv('b', 'action', {pre: pre(13), midAfter: true})], 'a', {phase: 'action', generation: 1, active: false}))
+      .toEqual({ok: false, code: 'undoWindow', reason: undoWindowText('Vera')});
+  });
   it('refused when another person moved in between, as before', () => {
     const moves = [mv('a', 'action', {pre: pre(10)}), mv('bot1', 'action', {pre: pre(12)}), mv('b', 'action', {pre: pre(13)}), mv('bot1', 'action', {pre: pre(15)})];
     expect(planBotUndo(moves, 'a', {phase: 'action', generation: 1})).toEqual({ok: false, code: 'undoWindow', reason: undoWindowText('Vera')});
@@ -90,8 +99,10 @@ describe('planBotUndo: the undo window reaches through bot moves', () => {
     const moves = [mv('a', 'pass', {pre: pre(10)}), mv('bot1', 'pass', {pre: pre(12)})];
     expect(planBotUndo(moves, 'a', {phase: 'research', generation: 2})).toEqual({ok: false, code: 'undoWindow', reason: NEW_GENERATION_TEXT});
   });
-  it('does not apply when nobody moved after me (the engine\'s own Undo), or I have no move', () => {
+  it('does not apply while it is still my turn (the engine\'s own Undo), mid-move (Back), or with no move of mine', () => {
     expect(planBotUndo([mv('a', 'action', {pre: pre(10)})], 'a', {phase: 'action', generation: 1})).toBeNull();
+    expect(planBotUndo([mv('a', 'action', {pre: pre(10)})], 'a', {phase: 'action', generation: 1, active: true})).toBeNull();
+    expect(planBotUndo([mv('a', 'action', {pre: pre(10), midAfter: true})], 'a', {phase: 'action', generation: 1, active: false})).toBeNull();
     expect(planBotUndo([mv('bot1', 'action', {pre: pre(10)})], 'a', {phase: 'action', generation: 1})).toBeNull();
   });
   it('knows when a rollback reached the target', () => {

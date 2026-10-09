@@ -8,6 +8,7 @@ import type {Flick, Nudge} from '../../../shared/social';
 import {useNet} from '../../net';
 import {TvCard} from '../TvCard';
 import {PLAYER_HEX} from '../../ui/Icons';
+import {topClear} from '../dock';
 import {director} from '../sound/director';
 import {stripRect} from './flicks';
 import {FLICK_SETTLE_MAX_MS, nextFlick} from './flickQueue';
@@ -244,7 +245,7 @@ function NudgeRing() {
               transition={{type: 'spring', stiffness: 260, damping: 20}}
               style={rect
                 ? {position: 'fixed', top: rect.top + rect.height / 2, right: window.innerWidth - rect.left + window.innerWidth * 0.012, transform: 'translateY(-50%)'}
-                : {position: 'fixed', top: '5vh', left: '50%', transform: 'translateX(-50%)'}}>
+                : {position: 'fixed', top: topClear('5vh'), left: '50%', transform: 'translateX(-50%)'}}>
               <motion.div animate={{rotate: [0, -3, 3, -2, 2, 0]}} transition={{duration: 0.6, delay: 0.2}}
                 style={{display: 'flex', alignItems: 'center', gap: '0.7vw', padding: '0.8vw 1.4vw', borderRadius: '99vw', whiteSpace: 'nowrap',
                   background: 'rgba(12,5,3,.82)', backdropFilter: 'blur(10px)', boxShadow: `inset 0 0 0 0.12vw ${to}`, fontSize: '1.35vw', fontWeight: 650}}>

@@ -230,7 +230,7 @@ export function backOutLine(what: {card: string; play: boolean} | null): string 
 
 /** "Also takes back 2 bot moves" (the bots' moves after yours go with it). */
 export function undoMineLine(bots: number): string {
-  return bots > 0 ? `Also takes back ${bots === 1 ? 'the bot move' : `${bots} bot moves`} after it` : 'Also takes back what the bots did after it';
+  return bots > 0 ? `Also takes back ${bots === 1 ? 'the bot move' : `${bots} bot moves`} after it` : 'Before the next player moves';
 }
 
 /**

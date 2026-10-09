@@ -34,7 +34,7 @@ export type TvSettings = {
   weather: boolean;
   /** the 3D board; off = the flat board */
   board3d: boolean;
-  /** the TR track: a numbered loop around the board with a marker per player at their terraform rating (on by default) */
+  /** the TR track: 100 numbered squares round the screen's edge with a token per player at their terraform rating (on by default) */
   trTrack: boolean;
   /** the camera moving toward placements and big moments (both boards) */
   cameraMoves: boolean;

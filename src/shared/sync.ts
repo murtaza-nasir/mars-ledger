@@ -383,15 +383,17 @@ export type BotUndoPlan =
  * their last move and everything the bots did after it. The target is the save before the player's last move (a move
  * that ended with End Turn goes back to before the action it ended). `steps` is how many engine saves lie after the
  * target: one per finished turn-menu answer from the target on (the save the next turn menu makes); a move still in
- * its follow-ups has made none yet. null when this does not apply (nothing of yours to undo, or no bot moved after it:
- * the engine's own Undo covers that).
+ * its follow-ups has made none yet. It also applies when nobody has moved since and the turn has passed to someone else
+ * (a person who has not answered anything yet): the undo window stays open until the next person actually moves.
+ * null when this does not apply (nothing of yours to undo; your move is still in its follow-ups, where Back covers it;
+ * or it is still your turn, where the engine's own Undo covers it).
  */
-export function planBotUndo(moves: MoveRecord[], playerId: string, now: {phase: string; generation: number}): BotUndoPlan | null {
+export function planBotUndo(moves: MoveRecord[], playerId: string, now: {phase: string; generation: number; active?: boolean}): BotUndoPlan | null {
   let h = moves.length - 1;
   while (h >= 0 && moves[h].playerId !== playerId) h--;
   if (h < 0) return null;
   const after = moves.slice(h + 1);
-  if (!after.length) return null;
+  if (!after.length && (now.active !== false || moves[h].midAfter)) return null;
   const human = after.find((m) => !m.bot);
   if (human) return {ok: false, code: 'undoWindow', reason: undoWindowText(human.name)};
   let s = h;

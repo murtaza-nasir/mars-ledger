@@ -35,7 +35,7 @@ export function TableNotice({id, text, line, color, tv, testId}: {id: string | n
         <motion.div key={id} role="status" aria-live="polite" data-testid={testId}
           initial={{opacity: 0, y: -14}} animate={{opacity: 1, y: 0}} exit={{opacity: 0, y: -10}} transition={{type: 'spring', stiffness: 380, damping: 30}}
           style={tv
-            ? {position: 'absolute', left: '50%', top: '3vh', x: '-50%', zIndex: 65, display: 'flex', alignItems: 'center', gap: '0.8vw',
+            ? {position: 'absolute', left: '50%', top: 'max(3vh, calc(var(--trb, 0px) + 0.8vh))', x: '-50%', zIndex: 65, display: 'flex', alignItems: 'center', gap: '0.8vw',
               padding: '1.2vh 1.6vw', borderRadius: 999, background: 'rgba(20,9,6,.94)', pointerEvents: 'none',
               boxShadow: `inset 0 0 0 0.12vw ${color ?? 'var(--rim-strong)'}, 0 1.4vw 3vw rgba(0,0,0,.5)`, whiteSpace: 'nowrap'}
             : {position: 'fixed', left: 12, right: 12, top: 'calc(10px + env(safe-area-inset-top))', zIndex: 90, padding: '11px 14px', borderRadius: 16,

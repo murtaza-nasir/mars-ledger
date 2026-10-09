@@ -18,6 +18,7 @@ import {RadioRemote} from '../tv/radio/RadioRemote';
 import {PerfPick} from '../perf/PerfMenu';
 import {FlyRemoteHost, FlyRemoteItem} from './FlyRemote';
 import {LastMoveMenuItem} from '../phone/full/TvLinks';
+import {rowAside, rowMain} from './rowText';
 
 export function GameMenuButton({state, playerId}: {state: GameState; playerId: string}) {
   const [open, setOpen] = useState(false);
@@ -35,6 +36,10 @@ export function GameMenuButton({state, playerId}: {state: GameState; playerId: s
   );
 }
 
+/** One column that never grows past the sheet: an `auto` grid column takes its widest row's min-content width,
+ *  and a row of unwrapped text (the last move) then pushed every row past the screen's edge. */
+const COLUMN: React.CSSProperties = {display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)'};
+
 export function GameMenu({state, playerId, onDone, gameOver}: {state: GameState; playerId: string; onDone: () => void; gameOver?: boolean}) {
   const {send, newGame} = useNet();
   const [error, setError] = useState<string | null>(null);
@@ -44,10 +49,10 @@ export function GameMenu({state, playerId, onDone, gameOver}: {state: GameState;
   const radio = useNet((s) => !!s.config?.radioPlaylist);
   const profileId = state.players.find((p) => p.id === playerId)?.profileId;
   return (
-    <div style={{display: 'grid', gap: 10}}>
+    <div style={{...COLUMN, gap: 10}}>
       {profileId && (
         <button className="btn ghost" style={{justifyContent: 'space-between'}} onClick={() => { onDone(); useProfileSheet.getState().open(profileId); }}>
-          <span>Your profile</span><span className="faint" style={{fontSize: 14}}>stats and achievements</span>
+          <span style={rowMain}>Your profile</span><span className="faint" style={rowAside}>stats and achievements</span>
         </button>
       )}
       <SwitchPlayer state={state} playerId={playerId} />
@@ -59,13 +64,13 @@ export function GameMenu({state, playerId, onDone, gameOver}: {state: GameState;
         <div style={{paddingBottom: 12, borderBottom: '1px solid var(--rim)'}}><FlyRemoteItem onDone={onDone} /></div>
       )}
       {!ended && state.players.some((p) => p.id === playerId) && (
-        <div style={{paddingBottom: 12, borderBottom: '1px solid var(--rim)', display: 'grid', gap: 12}}>
+        <div style={{paddingBottom: 12, borderBottom: '1px solid var(--rim)', ...COLUMN, gap: 12}}>
           <HintsPick state={state} playerId={playerId} />
           {full && <PhonePrefPick state={state} playerId={playerId} which="showVp" />}
           <PhonePrefPick state={state} playerId={playerId} which="confirmBuy" />
         </div>
       )}
-      <div style={{paddingBottom: 12, marginBottom: 4, borderBottom: '1px solid var(--rim)', display: 'grid', gap: 12}}>
+      <div style={{paddingBottom: 12, marginBottom: 4, borderBottom: '1px solid var(--rim)', ...COLUMN, gap: 12}}>
         <NarratorPick state={state} playerId={playerId} />
         {!ended && <TurnClockPick state={state} playerId={playerId} />}
         {!ended && full && state.players.some((p) => p.bot) && <BotSpeedPick state={state} playerId={playerId} />}
@@ -119,19 +124,19 @@ function SwitchPlayer({state, playerId}: {state: GameState; playerId: string}) {
   const others = state.players.filter((p) => p.id !== playerId && !p.bot);
   if (!others.length) return null;
   return (
-    <div style={{paddingBottom: 12, borderBottom: '1px solid var(--rim)', display: 'grid', gap: 10}}>
+    <div style={{paddingBottom: 12, borderBottom: '1px solid var(--rim)', ...COLUMN, gap: 10}}>
       <button className="btn ghost" data-testid="switch-player" aria-expanded={open} style={{justifyContent: 'space-between'}} onClick={() => setOpen((o) => !o)}>
-        <span style={{display: 'inline-flex', alignItems: 'center', gap: 10}}>
-          {me && <span style={{width: 12, height: 12, borderRadius: 3, background: PLAYER_HEX[me.color]}} />}
-          {me ? `Playing as ${me.name}` : 'Not seated'}
+        <span style={{display: 'inline-flex', alignItems: 'center', gap: 10, minWidth: 0}}>
+          {me && <span style={{width: 12, height: 12, flex: 'none', borderRadius: 3, background: PLAYER_HEX[me.color]}} />}
+          <span style={rowMain}>{me ? `Playing as ${me.name}` : 'Not seated'}</span>
         </span>
-        <span className="faint" style={{fontSize: 14}}>{open ? 'Cancel' : 'Switch player'}</span>
+        <span className="faint" style={{flex: 'none', fontSize: 14}}>{open ? 'Cancel' : 'Switch player'}</span>
       </button>
       {open && (
-        <div style={{display: 'grid', gap: 8}}>
+        <div style={{...COLUMN, gap: 8}}>
           {others.map((p) => (
             <button key={p.id} className="btn ghost" data-testid={`switch-to-${p.id}`} style={{justifyContent: 'flex-start', gap: 12}} onClick={() => switchTo(p.id)}>
-              <span style={{width: 14, height: 14, borderRadius: 4, background: PLAYER_HEX[p.color]}} />Play as {p.name}
+              <span style={{width: 14, height: 14, flex: 'none', borderRadius: 4, background: PLAYER_HEX[p.color]}} /><span style={rowMain}>Play as {p.name}</span>
             </button>
           ))}
           <p className="faint" style={{margin: 0, fontSize: 14}}>This phone becomes that player. Their own phone keeps working too.</p>

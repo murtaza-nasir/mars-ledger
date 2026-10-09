@@ -18,7 +18,7 @@ export function VersionTag() {
   const behind = !!heard && (!v || compareVersions(v, heard) < 0);
   return (
     <span data-sync-version="" data-behind={behind ? '' : undefined} className="num"
-      style={{position: 'fixed', right: 4, bottom: 'calc(env(safe-area-inset-bottom) + 2px)', zIndex: 2147483000, pointerEvents: 'none',
+      style={{position: 'fixed', right: 'calc(var(--trb, 0px) + 4px)', bottom: 'calc(env(safe-area-inset-bottom) + var(--trb, 0px) + 2px)', zIndex: 2147483000, pointerEvents: 'none',
         fontSize: 10, lineHeight: 1.2, padding: '1px 5px', borderRadius: 6, letterSpacing: 0,
         background: 'rgba(0,0,0,.55)', color: behind ? '#F2C230' : 'rgba(234,242,244,.8)'}}>
       {versionTag(v)}{behind ? ' ↻' : ''}

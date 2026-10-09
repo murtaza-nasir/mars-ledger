@@ -33,12 +33,13 @@ export function Sheet({open, onClose, children, title, tall, aside}: {open: bool
               <div style={{width: 44, height: 5, borderRadius: 3, background: 'var(--rim-strong)', margin: '0 auto'}} />
               {(title || aside) && (
                 <div style={{display: 'flex', alignItems: 'center', gap: 12, margin: '12px 20px 0'}}>
-                  {title && <h2 style={{margin: 0, flex: 1, fontSize: 22, fontWeight: 700, fontVariationSettings: "'wdth' 80"}}>{title}</h2>}
+                  {title && <h2 style={{margin: 0, flex: 1, minWidth: 0, overflowWrap: 'anywhere', fontSize: 22, fontWeight: 700, fontVariationSettings: "'wdth' 80"}}>{title}</h2>}
                   {aside && <div style={{marginLeft: 'auto'}}>{aside}</div>}
                 </div>
               )}
             </div>
-            <div style={{overflowY: 'auto', padding: '8px 20px 20px', flex: 1}}>{children}</div>
+            {/* never wider than the screen: a row that cannot shrink is cut at the sheet's edge, not panned to sideways */}
+            <div style={{overflowY: 'auto', overflowX: 'hidden', minWidth: 0, padding: '8px 20px 20px', flex: 1}}>{children}</div>
           </motion.section>
         </>
       )}

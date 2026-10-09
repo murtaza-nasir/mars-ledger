@@ -1,10 +1,11 @@
-// The TR track's pure logic: where a terraform rating sits on the loop around the board, how markers on near or equal
-// ratings fan out, how a marker hops from one rating to another, and who leads. No DOM and no React here (trTrack.test.ts).
+// The TR track's pure logic: the frame of 100 square cells round the edge of the screen, which cell a terraform rating
+// stands on, how markers on one cell share it, how a marker hops from cell to cell, and who leads. No DOM and no React
+// here (trTrack.test.ts).
 
 /** Spaces on the loop: the physical board's track runs 0 to 99, and a rating of 100 or more laps it (100 sits on 0). */
 export const TRACK_LEN = 100;
-/** A number every this many spaces; the spaces between carry ticks only. */
-export const LABEL_EVERY = 5;
+/** Every cell carries its number; every this many it is bolder and the cell a shade warmer. */
+export const MAJOR_EVERY = 5;
 
 /** The space a rating stands on: 0..99. Ratings below 0 and fractions are clamped and rounded (a rating is a whole number). */
 export function slotOf(tr: number): number {
@@ -17,101 +18,119 @@ export function lapOf(tr: number): number {
   return Math.floor(t / TRACK_LEN);
 }
 
-// ---- the loop: a rounded rectangle, clockwise from the top edge -----------------------------------------------------------
+// ---- the frame: 100 cells round the edge of the screen, clockwise from the top-left corner ---------------------------------
 
-export type TrackShape = {
-  /** centre line's box, px, relative to the overlay */
+/** How much longer than deep the cells along the edges are, at most about (the corners are square). */
+export const CELL_RATIO = 1.1;
+
+export type Side = 'top' | 'right' | 'bottom' | 'left';
+export type Cell = {
+  /** the number on the cell, 0..99 */
+  i: number;
+  /** its box, px, in screen coordinates */
   x: number; y: number; w: number; h: number;
-  /** corner radius of the centre line */
-  r: number;
+  /** the edge it runs along; a corner belongs to the edge it starts */
+  side: Side;
+  corner: boolean;
 };
-export type TrackPoint = {x: number; y: number; /** unit outward normal */ nx: number; ny: number};
+export type Frame = {
+  /** the screen */
+  W: number; H: number;
+  /** the band's depth, px: everything else on the TV sits inside it */
+  band: number;
+  /** cells between the corners along the top (and the bottom), and down the right (and the left) */
+  across: number; down: number;
+  cells: Cell[];
+};
 
-/** Total length of the centre line. */
-export function perimeter(s: TrackShape): number {
-  const r = Math.min(s.r, s.w / 2, s.h / 2);
-  return 2 * (s.w - 2 * r) + 2 * (s.h - 2 * r) + 2 * Math.PI * r;
+/** The band's depth for a screen: deep enough that 100 cells of about CELL_RATIO by 1 close the loop (whole px). */
+export function bandFor(W: number, H: number): number {
+  if (!(W > 0) || !(H > 0)) return 0;
+  // 4 corners of band x band, and 96 edge cells of about CELL_RATIO x band: 2(W - 2b) + 2(H - 2b) = 96 * CELL_RATIO * b
+  return Math.max(8, Math.floor((W + H) / (48 * CELL_RATIO + 4)));
 }
 
 /**
- * The point `d` px along the centre line (any real number; it wraps). Zero is where the top edge's straight part begins,
- * just right of the top-left corner; the loop runs clockwise as seen on screen.
+ * The 100 cells for a W x H screen. The four corners are square (band x band); the 96 others share the edges, so many
+ * along the top and bottom and the rest down the sides, as near the screen's own proportions as whole cells allow.
+ * Cell 0 is the top-left corner; the numbers run clockwise. Edges are whole px, so neighbours meet exactly.
  */
-export function pointAt(s: TrackShape, d: number): TrackPoint {
-  const r = Math.min(s.r, s.w / 2, s.h / 2);
-  const top = s.w - 2 * r, side = s.h - 2 * r, arc = (Math.PI * r) / 2;
-  const P = 2 * top + 2 * side + 4 * arc;
-  let t = ((d % P) + P) % P;
-  const x0 = s.x, y0 = s.y, x1 = s.x + s.w, y1 = s.y + s.h;
-  if (t < top) return {x: x0 + r + t, y: y0, nx: 0, ny: -1};
-  t -= top;
-  if (t < arc) { const a = t / r; return {x: x1 - r + Math.sin(a) * r, y: y0 + r - Math.cos(a) * r, nx: Math.sin(a), ny: -Math.cos(a)}; }
-  t -= arc;
-  if (t < side) return {x: x1, y: y0 + r + t, nx: 1, ny: 0};
-  t -= side;
-  if (t < arc) { const a = t / r; return {x: x1 - r + Math.cos(a) * r, y: y1 - r + Math.sin(a) * r, nx: Math.cos(a), ny: Math.sin(a)}; }
-  t -= arc;
-  if (t < top) return {x: x1 - r - t, y: y1, nx: 0, ny: 1};
-  t -= top;
-  if (t < arc) { const a = t / r; return {x: x0 + r - Math.sin(a) * r, y: y1 - r + Math.cos(a) * r, nx: -Math.sin(a), ny: Math.cos(a)}; }
-  t -= arc;
-  if (t < side) return {x: x0, y: y1 - r - t, nx: -1, ny: 0};
-  t -= side;
-  const a = t / r;
-  return {x: x0 + r - Math.cos(a) * r, y: y0 + r - Math.sin(a) * r, nx: -Math.cos(a), ny: -Math.sin(a)};
+export function frameLayout(W: number, H: number, band = bandFor(W, H)): Frame {
+  const b = band;
+  const iw = Math.max(1, W - 2 * b), ih = Math.max(1, H - 2 * b);
+  const half = (TRACK_LEN - 4) / 2;   // 48 cells: one top run and one side run
+  const across = Math.min(half - 1, Math.max(1, Math.round((half * iw) / (iw + ih))));
+  const down = half - across;
+  const xs = (k: number) => Math.round(b + (k * iw) / across);   // the k-th edge along the top, k = 0..across
+  const ys = (k: number) => Math.round(b + (k * ih) / down);
+  const cells: Cell[] = [];
+  const add = (x: number, y: number, x2: number, y2: number, side: Side, corner: boolean) =>
+    cells.push({i: cells.length, x, y, w: x2 - x, h: y2 - y, side, corner});
+  add(0, 0, b, b, 'top', true);
+  for (let k = 0; k < across; k++) add(xs(k), 0, xs(k + 1), b, 'top', false);
+  add(W - b, 0, W, b, 'right', true);
+  for (let k = 0; k < down; k++) add(W - b, ys(k), W, ys(k + 1), 'right', false);
+  add(W - b, H - b, W, H, 'bottom', true);
+  for (let k = across - 1; k >= 0; k--) add(xs(k), H - b, xs(k + 1), H, 'bottom', false);
+  add(0, H - b, b, H, 'left', true);
+  for (let k = down - 1; k >= 0; k--) add(0, ys(k), b, ys(k + 1), 'left', false);
+  return {W, H, band: b, across, down, cells};
 }
 
-/** The point at the middle of space `slot` (a real number: 2.5 is between spaces 2 and 3 as drawn); spaces are equal arcs of the loop. */
-export function slotPoint(s: TrackShape, slot: number): TrackPoint {
-  const P = perimeter(s);
-  return pointAt(s, ((slot + 0.5) * P) / TRACK_LEN);
+/** The centre of cell `slot` (a real number: 2.5 is half way from the centre of 2 to the centre of 3; 99.5 is half way to 0). */
+export function cellCenter(f: Frame, slot: number): {x: number; y: number} {
+  const n = f.cells.length;
+  const s = ((slot % n) + n) % n;
+  const a = f.cells[Math.floor(s) % n], b = f.cells[(Math.floor(s) + 1) % n], t = s - Math.floor(s);
+  const ax = a.x + a.w / 2, ay = a.y + a.h / 2, bx = b.x + b.w / 2, by = b.y + b.h / 2;
+  return {x: ax + (bx - ax) * t, y: ay + (by - ay) * t};
 }
 
-// ---- markers on one number or close numbers ---------------------------------------------------------------------------
+/** The unit vector from a cell towards the middle of the screen (a corner points along its diagonal). */
+export function inward(c: Pick<Cell, 'side' | 'corner' | 'i'>): {x: number; y: number} {
+  if (c.corner) {
+    const k = Math.SQRT1_2;
+    if (c.i === 0) return {x: k, y: k};
+    if (c.side === 'right') return {x: -k, y: k};
+    if (c.side === 'bottom') return {x: -k, y: -k};
+    return {x: k, y: -k};
+  }
+  return c.side === 'top' ? {x: 0, y: 1} : c.side === 'right' ? {x: -1, y: 0} : c.side === 'bottom' ? {x: 0, y: -1} : {x: 1, y: 0};
+}
+
+/** A CSS length that keeps an edge-anchored offset clear of the frame: the original offset, or the band plus `gap`, whichever is more. */
+export function clearOfFrame(orig: string, gap = '0.6vw'): string {
+  return `max(${orig}, calc(var(--trb, 0px) + ${gap}))`;
+}
+
+// ---- markers on one cell ----------------------------------------------------------------------------------------------
+
+/** A marker's place in its cell: offset from the cell's centre and diameter, both as fractions of the band. */
+export type StackPlace = {dx: number; dy: number; size: number};
+/** A lone marker's diameter, as a fraction of the band. */
+export const MARKER = 0.8;
+const PILES: StackPlace[][] = [
+  [{dx: 0, dy: 0, size: MARKER}],
+  [{dx: -0.17, dy: -0.15, size: 0.62}, {dx: 0.17, dy: 0.15, size: 0.62}],
+  [{dx: 0, dy: -0.19, size: 0.54}, {dx: -0.21, dy: 0.17, size: 0.54}, {dx: 0.21, dy: 0.17, size: 0.54}],
+  [{dx: -0.2, dy: -0.2, size: 0.5}, {dx: 0.2, dy: -0.2, size: 0.5}, {dx: -0.2, dy: 0.2, size: 0.5}, {dx: 0.2, dy: 0.2, size: 0.5}],
+  [{dx: -0.22, dy: -0.22, size: 0.46}, {dx: 0.22, dy: -0.22, size: 0.46}, {dx: -0.22, dy: 0.22, size: 0.46}, {dx: 0.22, dy: 0.22, size: 0.46}, {dx: 0, dy: 0, size: 0.46}],
+];
 
 /**
- * Where each marker is drawn, in track spaces (real numbers on the loop), given the spaces they stand on. A marker
- * keeps its own space unless another is closer than `gap` spaces; neighbours then spread symmetrically about their
- * common centre, `gap` apart, in the order of their spaces (equal spaces keep the order given). Pure, and circular:
- * a cluster across the 99 to 0 seam is spread like any other.
+ * Where each marker sits, given the cells they stand on (a marker in mid-hop passes `null`: it sits alone at full size).
+ * Markers on one cell share it: two side by side on a diagonal, three in a triangle, four in a square, five in a square
+ * with one on top, smaller as there are more, in the order given. Six or more (not a real game) pile on the five.
  */
-export function spreadSlots(slots: readonly number[], gap: number): number[] {
-  const n = slots.length;
-  if (n < 2 || gap <= 0) return slots.slice();
-  const order = slots.map((_, i) => i).sort((a, b) => slots[a] - slots[b] || a - b);
-  // cut the circle at its widest gap so a cluster over the seam sits in one run
-  let cut = 0, widest = -1;
-  for (let k = 0; k < n; k++) {
-    const a = slots[order[k]], b = slots[order[(k + 1) % n]];
-    const d = k === n - 1 ? b + TRACK_LEN - a : b - a;
-    if (d > widest) { widest = d; cut = (k + 1) % n; }
-  }
-  const seq = Array.from({length: n}, (_, k) => order[(cut + k) % n]);
-  // unwrapped, rising along the run: the values after the seam get a lap added
-  const base: number[] = [];
-  seq.forEach((idx, k) => { let v = slots[idx]; if (k > 0) while (v < base[k - 1]) v += TRACK_LEN; base.push(v); });
-  // clusters: runs closer than gap, merged until none overlap
-  type C = {from: number; to: number; at: number};
-  let cl: C[] = base.map((b, k) => ({from: k, to: k, at: b}));
-  const place = (c: C) => { const m = c.to - c.from + 1; return Array.from({length: m}, (_, j) => c.at + (j - (m - 1) / 2) * gap); };
-  for (let guard = 0; guard < n * n + 4; guard++) {
-    let merged = false;
-    for (let i = 0; i + 1 < cl.length; i++) {
-      const a = place(cl[i]), b = place(cl[i + 1]);
-      if (b[0] - a[a.length - 1] < gap - 1e-9) {
-        const from = cl[i].from, to = cl[i + 1].to;
-        // the centre that keeps the merged run as close as possible to where its members really stand
-        let sum = 0; const m = to - from + 1;
-        for (let k = from; k <= to; k++) sum += base[k] - (k - from - (m - 1) / 2) * gap;
-        cl.splice(i, 2, {from, to, at: sum / m});
-        merged = true; break;
-      }
-    }
-    if (!merged) break;
-  }
-  const out = new Array<number>(n);
-  for (const c of cl) place(c).forEach((v, j) => { out[seq[c.from + j]] = ((v % TRACK_LEN) + TRACK_LEN) % TRACK_LEN; });
-  return out;
+export function stackPlaces(slots: ReadonlyArray<number | null>): StackPlace[] {
+  const groups = new Map<number, number[]>();
+  slots.forEach((s, i) => { if (s === null) return; const g = groups.get(s) ?? []; g.push(i); groups.set(s, g); });
+  return slots.map((s, i) => {
+    if (s === null) return PILES[0][0];
+    const g = groups.get(s)!;
+    const pile = PILES[Math.min(PILES.length, g.length) - 1];
+    return pile[Math.min(g.indexOf(i), pile.length - 1)];
+  });
 }
 
 // ---- a hop from one rating to another ---------------------------------------------------------------------------------
